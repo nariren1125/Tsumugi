@@ -148,3 +148,8 @@ Tsumugi では、日々の投稿として写真と思い出を記録しておく
 - **ペア結成**：`Pair`（user_id, partner_id, status）, LINE OAuthで招待/承認
 - **撮影/被写体タグ**：`photos.photographer_id` と `appearances (photo_id, user_id)`
 - **通知**：月1の集計ジョブ→LINE push（枚数/進捗/アルバム案リンク(年1くらいを想定)）
+
+⬜ 画面遷移図
+⬜ [画面遷移図（Figma）](https://www.figma.com/design/H0jLEutahF4QQCpRY55NG4/%E5%8D%92%E5%88%B6%E3%82%A2%E3%83%97%E3%83%AA%EF%BC%88Tsumugi%EF%BC%89-%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=l015hS7XYP1kOoO1-1)
+
+---
