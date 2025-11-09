@@ -1,0 +1,29 @@
+require:
+  - rubocop-rails
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+
+Layout/LineLength:
+  Max: 120  # 一行120文字までOKに設定
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Rails:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: false  # 毎行の `# frozen_string_literal: true` を不要に
