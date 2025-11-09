@@ -33,3 +33,17 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# --- Tsumugi setup additions ---
+.env
+.env.*
+/config/master.key
+/config/credentials.yml.enc
+
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+/storage/*
+!/storage/.keep
