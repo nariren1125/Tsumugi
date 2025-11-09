@@ -1,0 +1,26 @@
+# =====================================================
+# Tsumugi: Dockerfile.dev (Rails 7.2 / Ruby 3.2 / PostgreSQL)
+# =====================================================
+
+FROM ruby:3.2.2
+
+# Node.js & Yarn をインストール（Rails7系で必要）
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get update -qq && apt-get install -y nodejs postgresql-client && \
+    npm install --global yarn
+
+# 作業ディレクトリ
+WORKDIR /app
+
+# Gemfile をコピーして bundle install
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# アプリ全体をコピー
+COPY . .
+
+# ポート指定
+EXPOSE 3000
+
+# Rails起動コマンド（pid削除→サーバー起動）
+CMD ["bash", "-c", "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"]
