@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-  belongs_to :family_group, optional: true
+  belongs_to :family_group
 end
