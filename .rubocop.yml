@@ -1,6 +1,4 @@
-require:
-  - rubocop-rails
-require:
+plugins:
   - rubocop-rails
 
 AllCops:
@@ -27,3 +25,7 @@ Rails:
 
 Style/FrozenStringLiteralComment:
   Enabled: false  # 毎行の `# frozen_string_literal: true` を不要に
+
+# クラスやモジュールのドキュメントコメントを不要にします
+Style/Documentation:
+  Enabled: false
