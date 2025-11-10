@@ -61,4 +61,4 @@ gem 'rubocop-rails', '~> 2.33', groups: %i[development test]
 
 gem 'dotenv-rails', '~> 3.1', groups: %i[development test]
 
-gem "cssbundling-rails", "~> 1.4"
+gem 'cssbundling-rails', '~> 1.4'
