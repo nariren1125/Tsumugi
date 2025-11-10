@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  family_group: one
+  token: MyString
+  expires_at: 2025-11-10 11:12:17
+
+two:
+  family_group: two
+  token: MyString
+  expires_at: 2025-11-10 11:12:17

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  album: one
+  user: one
+  child: one
+  title: MyString
+  content: MyText
+  photo_date: 2025-11-10
+
+two:
+  album: two
+  user: two
+  child: two
+  title: MyString
+  content: MyText
+  photo_date: 2025-11-10
