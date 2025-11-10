@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  line_uid: MyString
+  email: MyString
+  family_group: one
+
+two:
+  name: MyString
+  line_uid: MyString
+  email: MyString
+  family_group: two
