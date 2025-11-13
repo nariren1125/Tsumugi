@@ -1,15 +1,26 @@
+<!-- app/views/home/index.html.erb -->
 <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 to-white text-center">
   <div class="max-w-2xl p-8">
-    <h1 class="text-5xl font-bold text-amber-800 mb-6 tracking-wide">
-      Tsumugi
-    </h1>
+
+    <!-- ロゴ -->
+    <%= image_tag "tsumugi_logo.png", alt: "Tsumugi ロゴ", class: "mx-auto mb-[6px] w-48 h-auto" %>
+
+    <!-- サブテキスト -->
     <p class="text-lg text-gray-700 leading-relaxed mb-8">
       撮る人も、写る人も。<br>
       家族の思い出を、ふたりで紡ぐアルバムアプリ。
     </p>
+
+    <!-- はじめるボタン -->
     <a href="#"
-       class="inline-block bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-8 rounded-full shadow-md transition">
+       class="inline-block bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-10 rounded-full shadow-md transition mb-4">
       はじめる
     </a>
+
+    <!-- ログイン・使い方リンク -->
+    <div class="flex justify-center space-x-5">
+      <%= link_to 'ログイン', login_path, class: "px-6 py-2 bg-white border border-amber-400 text-amber-600 rounded-xl hover:bg-amber-50 transition shadow-sm" %>
+      <%= link_to '使い方', about_path, class: "px-6 py-2 bg-white border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 transition" %>
+    </div>
   </div>
 </div>
