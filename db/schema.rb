@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_10_021357) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_14_081135) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -92,6 +92,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_10_021357) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_group_id"], name: "index_users_on_family_group_id"
+    t.index ["line_uid"], name: "index_users_on_line_uid", unique: true
   end
 
   add_foreign_key "albums", "children"
