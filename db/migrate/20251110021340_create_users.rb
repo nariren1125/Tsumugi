@@ -5,10 +5,9 @@ class CreateUsers < ActiveRecord::Migration[7.2]
       t.string :line_uid
       t.string :email
       t.references :family_group, null: true, foreign_key: true
+      t.index :line_uid, unique: true
 
       t.timestamps
     end
-
-    add_index :users, :line_uid, unique: true
   end
 end
