@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_14_081135) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_15_081953) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,7 +35,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_14_081135) do
   end
 
   create_table "family_groups", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -88,7 +88,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_14_081135) do
     t.string "name"
     t.string "line_uid"
     t.string "email"
-    t.bigint "family_group_id", null: false
+    t.bigint "family_group_id", null: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_group_id"], name: "index_users_on_family_group_id"

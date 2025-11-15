@@ -2,10 +2,10 @@
 
 one:
   family_group: one
-  token: MyString
+  token: token_1
   expires_at: 2025-11-10 11:12:17
 
 two:
   family_group: two
-  token: MyString
+  token: token_2
   expires_at: 2025-11-10 11:12:17

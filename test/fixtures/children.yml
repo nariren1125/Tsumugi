@@ -2,10 +2,10 @@
 
 one:
   family_group: one
-  name: MyString
+  name: ChildOne
   birth_date: 2025-11-10
 
 two:
   family_group: two
-  name: MyString
+  name: ChildTwo
   birth_date: 2025-11-10
