@@ -3,15 +3,15 @@
 one:
   user: one
   notifiable: one
-  notifiable_type: Notifiable
-  message: MyText
-  notification_type: MyString
+  notifiable_type: Post
+  message: "新しい投稿があります"
+  notification_type: "new_post"
   read: false
 
 two:
   user: two
   notifiable: two
-  notifiable_type: Notifiable
-  message: MyText
-  notification_type: MyString
+  notifiable_type: Post
+  message: "投稿が更新されました"
+  notification_type: "update_post"
   read: false
