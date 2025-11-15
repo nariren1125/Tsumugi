@@ -5,5 +5,5 @@ class FamilyGroup < ApplicationRecord
   has_many :albums, dependent: :destroy
 
   # バリデーション:グループ名は必須
-  varidates :name, presence: true, length: { maximum: 50 }
+  validates :name, presence: true, length: { maximum: 50 }
 end
