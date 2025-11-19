@@ -25,7 +25,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      DATABASE_URL: postgres://postgres:postgres@db:5432/tsumugi_development
+      RAILS_ENV: development
+      LINE_CHANNEL_ID: ${LINE_CHANNEL_ID}
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
 
 volumes:
   postgres_data:

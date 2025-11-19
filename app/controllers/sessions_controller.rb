@@ -1,16 +1,26 @@
 class SessionsController < ApplicationController
-  def callback
+  def create
     auth = request.env['omniauth.auth']
 
-    # 確認用：ログ出力
-    Rails.logger.info auth.inspect
+    # LINE UID
+    line_uid = auth['uid']
+    name = auth.dig('info', 'name')
+    image = auth.dig('info', 'image')
 
-    # 一旦仮でトップへリダイレクト
-    redirect_to root_path
+    # 既存ユーザーを検索 or 作成(仮)
+    user = User.find_or_create_by(line_uid: line_uid) do |u|
+      u.name = name
+      u.email = ""  # LINEログインではメールが取れない
+    end
+
+    # ログイン（セッションにユーザーID保存）
+    session[:user_id] = user.id
+
+    redirect_to root_path, notice: "ログインしました"
   end
 
   def destroy
     reset_session
-    redirect_to root_path
+    redirect_to root_path, notice: "ログアウトしました"
   end
 end
