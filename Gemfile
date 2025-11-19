@@ -62,3 +62,8 @@ gem 'rubocop-rails', '~> 2.33', groups: %i[development test]
 gem 'dotenv-rails', '~> 3.1', groups: %i[development test]
 
 gem 'cssbundling-rails', '~> 1.4'
+
+# LINE Login
+gem 'omniauth'
+gem 'omniauth-line'
+gem 'omniauth-rails_csrf_protection'

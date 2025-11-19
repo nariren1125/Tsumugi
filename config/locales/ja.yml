@@ -1,0 +1,7 @@
+ja:
+  flash:
+    login:
+      success: "ログインしました"
+      failure: "ログインに失敗しました"
+    logout:
+      success: "ログアウトしました"
