@@ -40,8 +40,8 @@ class SessionsController < ApplicationController
     redirect_to root_path, notice: t('flash.login.success')
   end
 
-  def login_failure(_err)
-    Rails.logger.error "LINE Login Error: #{e.message}"
+  def login_failure(err)
+    Rails.logger.error "LINE Login Error: #{err.message}"
     redirect_to root_path, alert: t('flash.login.failure')
   end
 
