@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
 
   # --- 成功/失敗のレスポンス分離 ---
   def login_success
-    redirect_to root_path, notice: t('flash.login.success')
+    redirect_to albums_path, notice: t('flash.login.success')
   end
 
   def login_failure(err)

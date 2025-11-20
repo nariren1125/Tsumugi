@@ -10,14 +10,12 @@ family = FamilyGroup.create!(
 mom = User.create!(
   name: "れんママ",
   email: "ren_mama@example.com",
-  password: "password",
   family_group: family
 )
 
 dad = User.create!(
   name: "れんパパ",
   email: "ren_papa@example.com",
-  password: "password",
   family_group: family
 )
 

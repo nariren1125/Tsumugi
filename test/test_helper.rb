@@ -7,9 +7,22 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-    # Add more helper methods to be used by all tests here...
+    # 全テストで使えるログインメソッド（LINEログイン版）
+    def log_in_as(user)
+      OmniAuth.config.test_mode = true
+
+      OmniAuth.config.mock_auth[:line] = OmniAuth::AuthHash.new({
+                                                                  provider: 'line',
+                                                                  uid: user.line_uid || 'test_uid',
+                                                                  info: {
+                                                                    name: user.name,
+                                                                    email: user.email
+                                                                  }
+                                                                })
+
+      get '/auth/line/callback'
+    end
   end
 end
