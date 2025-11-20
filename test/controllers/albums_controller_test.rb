@@ -1,8 +1,8 @@
-require "test_helper"
+require 'test_helper'
 
 class AlbumsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create!(name: "Test User", line_uid: "test-uid")
+    @user = User.create!(name: 'Test User', line_uid: 'test-uid')
   end
 
   test 'should get index' do
