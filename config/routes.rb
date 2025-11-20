@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
+  get "albums/index"
   get "sessions/callback"
   get "sessions/destroy"
   root "home#index"
+
+  resources :albums, only: [:index]
 
   # 仮リンク用（あとで本実装予定）
   get 'about', to: 'home#about'
