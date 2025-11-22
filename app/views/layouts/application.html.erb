@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="caramellatte">
   <head>
-    <!-- ✅ favicon の指定 -->
     <%= favicon_link_tag 'favicon.png' %>
 
     <title><%= content_for(:title) || "Tsumugi" %></title>
@@ -14,16 +13,16 @@
 
     <link rel="manifest" href="/manifest.json">
 
-    <!-- ✅ CSS / JS 読み込み -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
     <%= render "shared/header" %>
+    <%= render "shared/flash" %>
 
     <main>
-    <%= yield %>
+      <%= yield %>
     </main>
   </body>
 </html>

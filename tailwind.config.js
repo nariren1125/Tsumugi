@@ -5,4 +5,7 @@ module.exports = {
     "./app/javascript/**/*.{js,jsx,ts,tsx}",
     "./app/assets/stylesheets/**/*.css"
   ],
+  daisyui: {
+    themes: ["caramellatte"],
+  },
 };

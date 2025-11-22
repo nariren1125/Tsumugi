@@ -1,44 +1,30 @@
-<header class="w-full bg-base-100 shadow-sm px-4 py-3 flex justify-between items-center">
+<header class="w-full bg-base-300 shadow-sm px-4 py-3 flex justify-between items-center">
   <h1 class="text-xl font-bold">
     <%= link_to "Tsumugi", root_path %>
   </h1>
 
-  <!-- Dropdown + Swap -->
+  <!-- ▼▼▼ これを header の中に置く ▼▼▼ -->
   <div class="dropdown dropdown-end">
-    <label tabindex="0" class="btn btn-ghost btn-circle swap swap-rotate">
-      <input type="checkbox" class="peer" />
-
-      <!-- hamburger icon -->
-      <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg"
-           width="32" height="32" viewBox="0 0 512 512">
-        <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-      </svg>
-
-      <!-- close icon -->
-      <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg"
-           width="32" height="32" viewBox="0 0 512 512">
-        <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 
-                        112 145.49 222.51 256 112 366.51 145.49 400 
-                        256 289.49 366.51 400 400 366.51 289.49 256 
-                        400 145.49" />
+    <label tabindex="0" class="btn btn-ghost btn-circle">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </label>
 
     <ul tabindex="0"
-        class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow mt-3">
-      
+      class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow mt-3">
       <% if current_user %>
-        <li class="menu-title px-2 py-1">
-          👤 <%= current_user.name %>
-        </li>
+        <li class="menu-title px-2 py-1">👤 <%= current_user.name %></li>
         <li><%= link_to "アルバム一覧", albums_path %></li>
         <li><%= link_to "家族設定", "#" %></li>
-        <li>
-          <%= link_to "ログアウト", logout_path, method: :delete, class: "text-red-600" %>
-        </li>
+        <li><%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "text-red-600" %></li>
       <% else %>
         <li><%= link_to "ログイン", "/auth/line", class: "text-primary" %></li>
       <% end %>
     </ul>
   </div>
+  <!-- ▲▲▲ header 内に置く ▲▲▲ -->
+
 </header>
