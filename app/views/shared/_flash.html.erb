@@ -1,16 +1,16 @@
 <!-- app/views/shared/_flash.html.erb -->
-<div class="toast toast-top toast-end z-50">
-  <% flash.each do |key, message| %>
-    <% css_class =
-        case key.to_sym
-        when :notice then "alert alert-success"
-        when :alert  then "alert alert-error"
-        else "alert"
-        end
-    %>
+<% flash.each do |type, message| %>
+  <% color =
+    case type.to_sym
+    when :notice then "alert-success"
+    when :alert then "alert-error"
+    else "alert-info"
+    end
+  %>
 
-    <div class="<%= css_class %> shadow-lg">
+  <div class="toast toast-end fixed top-4 right-4 z-50">
+    <div class="flash alert <%= color %> shadow-lg transition-opacity duration-500">
       <span><%= message %></span>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
