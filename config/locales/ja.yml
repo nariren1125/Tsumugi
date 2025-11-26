@@ -12,3 +12,5 @@ ja:
       update:
         success: "家族グループを更新しました"
         failure: "家族グループの更新に失敗しました"
+    posts:
+      created: "投稿しました"
