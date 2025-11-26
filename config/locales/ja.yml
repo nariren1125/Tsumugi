@@ -5,3 +5,10 @@ ja:
       failure: "ログインに失敗しました"
     logout:
       success: "ログアウトしました"
+    family_group:
+      create:
+        success: "家族グループを作成しました"
+        failure: "家族グループの作成に失敗しました"
+      update:
+        success: "家族グループを更新しました"
+        failure: "家族グループの更新に失敗しました"

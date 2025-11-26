@@ -2,6 +2,8 @@
 <html data-theme="caramellatte">
   <head>
     <%= favicon_link_tag 'favicon.png' %>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet">
 
     <title><%= content_for(:title) || "Tsumugi" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -24,5 +26,7 @@
     <main>
       <%= yield %>
     </main>
+
+    <%= render "shared/bottom_nav" if current_user %>
   </body>
 </html>
