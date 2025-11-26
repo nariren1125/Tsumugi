@@ -1,10 +1,19 @@
 Rails.application.routes.draw do
+  get "children/new"
+  get "children/create"
+  get "family_settings", to: "family_groups#settings"
+  get "family_groups/update"
+  get "posts/new"
   get "albums/index"
   get "sessions/callback"
   get "sessions/destroy"
+  get "posts/new", to: "posts#new", as: :new_post
   root "home#index"
 
-  resources :albums, only: [:index]
+  resources :albums, only: [:index, :show, :new, :create]
+  resources :family_groups, only: [:new, :create, :edit, :update]
+  resources :children, only: [:new, :create]
+  resources :posts, only: [:new, :create, :show]
 
   # 仮リンク用（あとで本実装予定）
   get 'about', to: 'home#about'

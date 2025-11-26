@@ -1,0 +1,24 @@
+<div class="dock bg-secondary text-secondary-content fixed bottom-0 left-0 w-full z-50 shadow-t"
+     style="padding-bottom: env(safe-area-inset-bottom);">
+
+  <!-- アルバム -->
+  <%= link_to albums_path, class: "dock-item #{current_page?(albums_path) && 'dock-active'} flex flex-col items-center" do %>
+    <span class="material-symbols-outlined text-2xl">photo_library</span>
+    <span class="dock-label text-xs mt-0.5">アルバム</span>
+  <% end %>
+
+  <!-- 投稿 -->
+  <%= link_to "#", class: "dock-item flex flex-col items-center" do %>
+    <span class="material-symbols-outlined text-2xl">add_circle</span>
+    <span class="dock-label text-xs mt-0.5">投稿</span>
+  <% end %>
+
+  <!-- 家族設定 -->
+  <%= link_to family_settings_path,
+      class: "dock-item #{current_page?(family_settings_path) && 'dock-active'} flex flex-col items-center" do %>
+    <span class="material-symbols-outlined text-2xl">group</span>
+    <span class="dock-label text-xs mt-0.5">設定</span>
+  <% end %>
+
+</div>
+
