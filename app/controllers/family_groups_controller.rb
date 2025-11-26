@@ -13,7 +13,7 @@ class FamilyGroupsController < ApplicationController
     @family_group = current_user.family_group
     if @family_group.update(family_group_params)
       redirect_to edit_family_group_path(@family_group),
-            notice: t('flash.login.success')
+                  notice: t('flash.login.success')
     else
       render :edit, status: :unprocessable_entity
     end
