@@ -1,0 +1,14 @@
+<%# 共通フォームエラー表示用パーシャル %>
+<%# 使用例: render "shared/form_errors", object: @post %>
+
+<% if object && object.errors.any? %>
+  <div class="alert alert-error mb-4">
+    <span>入力内容にエラーがあります。</span>
+  </div>
+
+  <ul class="list-disc list-inside text-error text-sm mb-4">
+    <% object.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+<% end %>

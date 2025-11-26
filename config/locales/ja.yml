@@ -14,3 +14,12 @@ ja:
         failure: "家族グループの更新に失敗しました"
     posts:
       created: "投稿しました"
+  activerecord:
+    errors:
+      models:
+        post:
+          attributes:
+            image:
+              blank: "写真を選択してください"
+            content:
+              blank: "メッセージを入力してください"
