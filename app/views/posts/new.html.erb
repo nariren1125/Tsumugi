@@ -1,50 +1,42 @@
 <div class="max-w-xl mx-auto px-4 py-10">
   <h1 class="text-2xl font-semibold text-base-content mb-6">
-    思い出を投稿（準備中）
+    思い出を投稿
   </h1>
 
   <p class="mb-6 text-base-content/70">
     ここでは、写真やひとことメッセージを投稿して、
-    パートナーと一緒にアルバムを作っていきます。<br>
-    今はまだ準備中のため、デザインイメージだけの画面です。
+    パートナーと一緒にアルバムを作っていきます。
   </p>
 
   <div class="space-y-4 bg-base-100 rounded-box shadow p-4">
-    <div>
-      <label class="label">
-        <span class="label-text">年月の選択（ダミー）</span>
-      </label>
-      <input type="month" class="input input-bordered w-full" disabled>
-    </div>
+    <%# ✅ 共通エラーパーツを呼び出し %>
+    <%= render "shared/form_errors", object: @post %>
 
-    <div>
-      <label class="label">
-        <span class="label-text">タイトル（ダミー）</span>
-      </label>
-      <input type="text" class="input input-bordered w-full" placeholder="例）○○公園でお散歩" disabled>
-    </div>
+    <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
+      <%# 写真 %>
+      <div class="mb-4">
+        <%= f.label :image, "写真ファイル", class: "label-text font-semibold" %>
+        <%= f.file_field :image, class: "file-input file-input-bordered w-full" %>
+      </div>
 
-    <div>
-      <label class="label">
-        <span class="label-text">メッセージ（ダミー）</span>
-      </label>
-      <textarea class="textarea textarea-bordered w-full" rows="3" placeholder="今日の思い出をひとことで" disabled></textarea>
-    </div>
+      <%# メッセージ %>
+      <div class="mb-4">
+        <%= f.label :message, "メッセージ", class: "label-text font-semibold" %>
+        <%= f.text_area :content,
+              rows: 3,
+              placeholder: "今日の思い出をひとことで",
+              class: "textarea textarea-bordered w-full" %>
+      </div>
 
-    <div>
-      <label class="label">
-        <span class="label-text">写真ファイル（ダミー）</span>
-      </label>
-      <input type="file" class="file-input file-input-bordered w-full" disabled>
-    </div>
-
-    <button class="btn btn-primary w-full mt-4" disabled>
-      投稿機能は準備中です
-    </button>
+      <%# 送信ボタン %>
+      <div class="mt-6">
+        <%= f.submit "投稿する", class: "btn btn-primary w-full" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="mt-6 text-sm text-base-content/60">
-    ※ まずは画面の導線とレイアウトを確認するための仮ページです。<br>
-    ※ 実際の保存処理やプレビューは後のステップで実装します。
+    ※ 今後、年月やタイトルなどの項目も追加予定です。<br>
+    ※ まずは写真＋ひとことメッセージから投稿できるようにしています。
   </div>
 </div>
