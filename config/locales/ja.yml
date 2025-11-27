@@ -23,3 +23,8 @@ ja:
               blank: "写真を選択してください"
             content:
               blank: "メッセージを入力してください"
+  invite_tokens:
+    invalid: "招待リンクが無効か、期限が切れています"
+    accepted: "招待を受け取りました。LINEログインすると家族に参加できます"
+    family_not_exist: "家族グループがまだ作成されていません"
+    issued: "招待リンクを発行しました"

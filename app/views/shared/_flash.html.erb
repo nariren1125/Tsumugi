@@ -8,8 +8,8 @@
     end
   %>
 
-  <div class="toast toast-end z-50 m-4">
-    <div class="flash alert <%= color %> shadow-lg transition-opacity duration-500">
+  <div class="fixed left-1/2 bottom-24 -translate-x-1/2 z-50 flex justify-center pointer-events-none">
+    <div class="flash alert <%= color %> shadow-lg pointer-events-auto">
       <span><%= message %></span>
     </div>
   </div>
