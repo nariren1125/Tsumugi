@@ -8,12 +8,14 @@ Rails.application.routes.draw do
   get "sessions/callback"
   get "sessions/destroy"
   get "posts/new", to: "posts#new", as: :new_post
+  get "invite/:tokens", to: "invite_tokens#setting", as: :invite
   root "home#index"
 
   resources :albums, only: [:index, :show, :new, :create]
   resources :family_groups, only: [:new, :create, :edit, :update]
   resources :children, only: [:new, :create]
   resources :posts, only: [:new, :create, :show]
+  resources :invite_tokens, only: [:create]
 
   # 仮リンク用（あとで本実装予定）
   get 'about', to: 'home#about'

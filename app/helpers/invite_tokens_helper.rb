@@ -1,0 +1,2 @@
+module InviteTokensHelper
+end
