@@ -28,3 +28,6 @@ ja:
     accepted: "招待を受け取りました。LINEログインすると家族に参加できます"
     family_not_exist: "家族グループがまだ作成されていません"
     issued: "招待リンクを発行しました"
+  children:
+    no_family: "家族がありません"
+    created: "お子さまを登録しました"
