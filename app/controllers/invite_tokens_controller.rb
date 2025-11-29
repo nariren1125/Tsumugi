@@ -19,10 +19,8 @@ class InviteTokensController < ApplicationController
     invite = create_invite_token
     invite_url_full = build_invite_url(invite)
 
-    log_invite_url(invite_url_full)
-    invite_flash(invite_url_full)
-
-    redirect_back fallback_location: family_settings_path
+    message = ERB::Util.url_encode("家族に参加してください🌿\n\n#{invite_url_full}")
+    redirect_to "https://line.me/R/msg/text/?#{message}", allow_other_host: true
   end
 
   private
