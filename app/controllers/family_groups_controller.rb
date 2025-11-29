@@ -3,6 +3,7 @@ class FamilyGroupsController < ApplicationController
 
   def settings
     @family_group = current_user.family_group
+    @family_member = @family_group&.users || []
   end
 
   def new
