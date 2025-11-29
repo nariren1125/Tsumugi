@@ -1,36 +1,78 @@
-<h1>家族設定画面（準備中です）</h1>
+<div class="max-w-xl mx-auto px-4 py-10">
 
-<% if current_user.family_group.present? %>
+  <!-- タイトル -->
+  <h1 class="text-2xl font-semibold text-base-content mb-6">
+    家族設定
+  </h1>
 
-  <p>家族名: <%= current_user.family_group.name %></p>
+  <p class="mb-6 text-base-content/70">
+    家族のメンバーを確認したり、招待リンクを発行します。
+  </p>
 
-  <!-- ✅ 招待ボタン -->
-  <div class="mt-6">
-    <%= button_to "LINEで家族を招待する",
-          invite_tokens_path,
-          method: :post,
-          class: "btn btn-primary w-full" %>
-  </div>
+  <% if current_user.family_group.present? %>
 
-  <!-- ✅ 招待リンク表示 -->
-  <% if flash[:invite_url].present? %>
-    <div class="alert alert-info my-4">
-      <span>📨 招待リンクを発行しました：</span>
-      <a href="<%= flash[:invite_url] %>" class="link link-primary break-all">
-        <%= flash[:invite_url] %>
-      </a>
-      <p class="text-xs mt-1">このリンクを LINE で家族に送ってください。</p>
+    <!-- 家族名 -->
+    <div class="mb-4 text-base-content font-semibold">
+      家族名：<%= current_user.family_group.name %>
     </div>
+
+    <!-- ✅ 家族一覧 -->
+    <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
+      <h2 class="font-semibold text-base">家族一覧</h2>
+
+      <% members = current_user.family_group.users %>
+
+      <% if members.any? %>
+        <ul class="menu bg-base-200 rounded-box">
+          <% members.each do |user| %>
+            <li>
+              <span class="px-2">
+                <%= user.name.presence || "未設定ユーザー" %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm opacity-60">まだ家族が登録されていません。</p>
+      <% end %>
+    </div>
+
+    <!-- ✅ 招待ボタン -->
+    <div class="mt-6">
+      <%= button_to "LINEで家族を招待する",
+            invite_tokens_path,
+            method: :post,
+            class: "btn btn-primary w-full" %>
+    </div>
+
+    <!-- ✅ 招待リンク表示 -->
+    <% if flash[:invite_url].present? %>
+      <div class="alert alert-info my-4 break-all">
+        <div>
+          <span class="font-semibold">📨 招待リンクを発行しました</span>
+          <a
+            href="<%= flash[:invite_url] %>"
+            class="block link link-primary mt-1">
+            <%= flash[:invite_url] %>
+          </a>
+          <p class="text-xs mt-1">
+            このリンクを LINE で家族に送ってください。
+          </p>
+        </div>
+      </div>
+    <% end %>
+
+  <% else %>
+
+    <!-- ✅ 家族が未作成の場合 -->
+    <div class="space-y-4 bg-base-100 rounded-box shadow p-4">
+      <p>まだ家族グループが作成されていません。</p>
+
+      <%= link_to "家族グループを作成する",
+            new_family_group_path,
+            class: "btn btn-primary w-full" %>
+    </div>
+
   <% end %>
 
-<% else %>
-
-  <p>家族グループはまだ作成されていません</p>
-
-  <div class="mt-6">
-    <%= link_to "家族グループを作成する",
-          new_family_group_path,
-          class: "btn btn-primary w-full" %>
-  </div>
-
-<% end %>
+</div>
