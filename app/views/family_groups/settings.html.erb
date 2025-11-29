@@ -1,4 +1,4 @@
-<div class="max-w-xl mx-auto px-4 py-10">
+<div class="max-w-xl mx-auto px-4 py-10 pb-24">
 
   <!-- タイトル -->
   <h1 class="text-2xl font-semibold text-base-content mb-6">
@@ -37,6 +37,53 @@
       <% end %>
     </div>
 
+    <!-- ✅ お子さま一覧 -->
+    <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
+      <h2 class="font-semibold text-base">お子さま一覧</h2>
+
+      <% children = current_user.family_group.children %>
+
+      <% if children.any? %>
+        <ul class="menu bg-base-200 rounded-box">
+          <% children.each do |child| %>
+            <li class="px-2">
+              <div class="flex flex-col">
+                <span class="font-semibold"><%= child.name %></span>
+                <% if child.birth_date.present? %>
+                  <span class="text-sm opacity-60">
+                    <%= child.birth_date.strftime("%Y年%m月%d日") %>
+                  </span>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm opacity-60">まだ登録されていません。</p>
+      <% end %>
+    </div>
+
+    <!-- ✅ お子さま登録フォーム -->
+    <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
+      <h2 class="font-semibold text-base">お子さまを登録</h2>
+
+      <%= form_with model: Child.new, url: children_path, data: { turbo: false } do |f| %>
+        <div class="mb-3">
+          <%= f.label :name, "お名前", class: "label-text font-semibold" %>
+          <%= f.text_field :name, placeholder: "例）たろう", class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :birth_date, "お誕生日", class: "label-text font-semibold" %>
+          <%= f.date_field :birth_date, class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="mt-4">
+          <%= f.submit "登録する", class: "btn btn-primary w-full" %>
+        </div>
+      <% end %>
+    </div>
+
     <!-- ✅ 招待ボタン -->
     <div class="mt-6">
       <%= button_to "LINEで家族を招待する",
@@ -45,23 +92,6 @@
             data: { turbo: false },
             class: "btn btn-primary w-full" %>
     </div>
-
-    <!-- ✅ 招待リンク表示 -->
-    <% if flash[:invite_url].present? %>
-      <div class="alert alert-info my-4 break-all">
-        <div>
-          <span class="font-semibold">📨 招待リンクを発行しました</span>
-          <a
-            href="<%= flash[:invite_url] %>"
-            class="block link link-primary mt-1">
-            <%= flash[:invite_url] %>
-          </a>
-          <p class="text-xs mt-1">
-            このリンクを LINE で家族に送ってください。
-          </p>
-        </div>
-      </div>
-    <% end %>
 
   <% else %>
 
