@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get "sessions/callback"
   get "sessions/destroy"
   get "posts/new", to: "posts#new", as: :new_post
-  get "invite/:token", to: "invite_token#show", as: :invite
+  get "invite/:token", to: "invite_tokens#show", as: :invite
   root "home#index"
 
   resources :albums, only: [:index, :show, :new, :create]
