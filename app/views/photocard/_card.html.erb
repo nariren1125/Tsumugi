@@ -1,0 +1,9 @@
+<div class="card w-full bg-base-100 shadow-xl image-full group">
+  <figure>
+    <img src="<%= photo.image_url %>" alt="<%= photo.post.title %>" class="object-cover w-full h-48" />
+  </figure>
+  <div class="card-body opacity-0 group-hover:opacity-100 transition duration-300">
+    <h2 class="card-title text-white"><%= photo.post.title %></h2>
+    <p class="text-white"><%= photo.created_at.strftime('%Y/%m/%d') %></p>
+  </div>
+</div>

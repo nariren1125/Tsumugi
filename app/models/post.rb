@@ -5,6 +5,7 @@ class Post < ApplicationRecord
 
   # 写真添付機能
   has_one_attached :image
+  has_many :photos, dependent: :destroy
 
   validates :image, presence: true
   validates :content, presence: true, length: { maximum: 500 }
