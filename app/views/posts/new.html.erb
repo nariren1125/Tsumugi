@@ -13,6 +13,15 @@
     <%= render "shared/form_errors", object: @post %>
 
     <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
+
+    <%# タイトル %>
+      <div class="mb-4">
+        <%= f.label :title, "タイトル", class: "label-text font-semibold" %>
+        <%= f.text_field :title,
+              class: "input input-bordered w-full",
+              placeholder: "例：はじめての公園遊び" %>
+      </div>
+
       <%# 写真 %>
       <div class="mb-4">
         <%= f.label :image, "写真ファイル", class: "label-text font-semibold" %>
