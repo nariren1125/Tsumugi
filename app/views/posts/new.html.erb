@@ -12,6 +12,8 @@
     <%# ✅ 共通エラーパーツを呼び出し %>
     <%= render "shared/form_errors", object: @post %>
 
+    <%# local: true を指定して同期通信にする %>
+    <%# multipart: true を指定してファイルアップロードを有効にする %>
     <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
 
     <%# タイトル %>
@@ -22,10 +24,12 @@
               placeholder: "例：はじめての公園遊び" %>
       </div>
 
-      <%# 写真 %>
+      <%# 最大3枚の画像アップロード（ネストフォーム） %>
       <div class="mb-4">
-        <%= f.label :image, "写真ファイル", class: "label-text font-semibold" %>
-        <%= f.file_field :image, class: "file-input file-input-bordered w-full" %>
+        <%= f.fields_for :photos do |pf| %>
+          <%= pf.label :image, "写真ファイル", class: "label-text font-semibold" %>
+          <%= pf.file_field :image, class: "file-input file-input-bordered w-full" %>
+        <% end %>
       </div>
 
       <%# メッセージ %>

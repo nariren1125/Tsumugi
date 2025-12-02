@@ -3,14 +3,22 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
+    @post.photos.build  # ネストフォーム用にPhotoオブジェクトをビルド
   end
 
   def create
-    @post = current_user.posts.build(post_params)
-    @post.album_id = Album.first.id # 仮のアルバムに紐づける
+    @post = Post.new(post_params)
+    @post.user = current_user  # ユーザー紐づけがある場合
+    @post.album = current_user.album  # アルバムとの関連も必要に応じて
 
     if @post.save
-      redirect_to albums_path, notice: t('flash.posts.created')
+      # 複数画像をループで保存
+      if params[:post][:images]
+        params[:post][:images].each do |image|
+          @post.photos.create(image: image)
+        end
+      end
+      redirect_to album_path(@post.album), notice: t('posts.create.success')
     else
       render :new, status: :unprocessable_entity
     end
@@ -19,6 +27,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, :image, :photo_date, :child_id)
+    params.require(:post).permit(:title, :content, :child_id, images: [])
   end
 end

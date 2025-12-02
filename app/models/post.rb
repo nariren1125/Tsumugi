@@ -4,8 +4,9 @@ class Post < ApplicationRecord
   belongs_to :child, optional: true
 
   # 写真添付機能
-  has_one_attached :image
   has_many :photos, dependent: :destroy
+  # PostモデルがPhotoモデルの属性を受け入れるように設定
+  accepts_nested_attributes_for :photos, allow_destroy: true
 
   validates :title, presence: true, length: { maximum: 100 }
   validates :image, presence: true
