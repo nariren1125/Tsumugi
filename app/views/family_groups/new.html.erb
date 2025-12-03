@@ -1,22 +1,22 @@
 <div class="max-w-md mx-auto mt-12 bg-base-100 rounded-box shadow p-6">
 
   <h1 class="text-xl font-bold text-center mb-2">
-    家族アルバムをつくりましょう
+    グループをつくりましょう
   </h1>
 
   <p class="text-center text-sm text-base-content/70 mb-6">
-    思い出を投稿するには、最初に家族グループを作成します
+    アルバムを紡ぐグループを作成します。
   </p>
 
   <%= form_with model: @family_group, local: true do |f| %>
     <div class="form-control mb-4">
-      <%= f.label :name, "家族の名前", class: "label" %>
+      <%= f.label :name, "グループの名前", class: "label" %>
       <%= f.text_field :name,
-            placeholder: "例）Dの一族",
+            placeholder: "例）Dの一族, 磯野家",
             class: "input input-bordered w-full" %>
     </div>
 
-    <%= f.submit "家族アルバムを作成する",
+    <%= f.submit "グループを作成する",
           class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
   <% end %>
 
