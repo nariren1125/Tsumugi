@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_26_140220) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_02_133915) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_140220) do
 
   create_table "albums", force: :cascade do |t|
     t.bigint "family_group_id", null: false
-    t.bigint "child_id", null: false
+    t.bigint "child_id"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
@@ -101,7 +101,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_140220) do
   create_table "posts", force: :cascade do |t|
     t.bigint "album_id", null: false
     t.bigint "user_id", null: false
-    t.bigint "child_id", null: false
+    t.bigint "child_id"
     t.string "title"
     t.text "content"
     t.date "photo_date"

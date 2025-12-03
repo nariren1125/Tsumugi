@@ -10,6 +10,13 @@ class SessionsController < ApplicationController
     redirect_to root_path, notice: t('flash.logout.success')
   end
 
+  # 開発環境用の簡易ログイン
+  def dev_login
+    user = User.find(params[:id])
+    session[:user_id] = user.id
+    redirect_to root_path, notice: "開発用ログイン：#{user.name}"
+  end
+
   private
 
   def process_line_login

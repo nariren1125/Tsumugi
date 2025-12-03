@@ -35,4 +35,9 @@ Rails.application.routes.draw do
   if Rails.env.test?
     post 'test/login', to: 'test_sessions#create'
   end
+
+  # 開発環境用のログイン簡略化ルート
+  if Rails.env.development?
+    get "/dev_login/:id", to: "sessions#dev_login"
+  end
 end
