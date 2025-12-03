@@ -79,7 +79,7 @@
         </div>
 
         <div class="mt-4">
-          <%= f.submit "登録する", class: "btn btn-primary w-full" %>
+          <%= f.submit "登録する", class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
         </div>
       <% end %>
     </div>
@@ -90,7 +90,7 @@
             invite_tokens_path,
             method: :post,
             data: { turbo: false },
-            class: "btn btn-primary w-full" %>
+            class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
     </div>
 
   <% else %>
@@ -101,7 +101,7 @@
 
       <%= link_to "家族グループを作成する",
             new_family_group_path,
-            class: "btn btn-primary w-full" %>
+            class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
     </div>
 
   <% end %>

@@ -6,16 +6,31 @@
     default: false;
     prefersdark: false;
     color-scheme: "light";
+    /* 全体の背景色 */
     --color-base-100: oklch(98% 0.016 73.684);
+
+    /* カードの背景色 */
     --color-base-200: oklch(95% 0.038 75.164);
+
+    /* ヘッダー・フッター・固定バー */
     --color-base-300: oklch(90% 0.076 70.697);
+
+    /* 文字色 */
     --color-base-content: oklch(40% 0.123 38.172);
+
     --color-primary: oklch(0% 0 0);
     --color-primary-content: oklch(100% 0 0);
+
+    /* サブカラー */
     --color-secondary: oklch(22.45% 0.075 37.85);
     --color-secondary-content: oklch(90% 0.076 70.697);
+
+    /* メインボタン */
     --color-accent: oklch(46.44% 0.111 37.85);
+    /* ボタン文字 */
     --color-accent-content: oklch(90% 0.076 70.697);
+
+    /* 補助的な要素 */
     --color-neutral: oklch(55% 0.195 38.402);
     --color-neutral-content: oklch(98% 0.016 73.684);
     --color-info: oklch(42% 0.199 265.638);
