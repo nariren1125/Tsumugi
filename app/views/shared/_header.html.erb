@@ -18,7 +18,7 @@
       <% if current_user %>
         <li class="menu-title px-2 py-1">👤 <%= current_user.name %></li>
         <li><%= link_to "アルバム一覧", albums_path %></li>
-        <li><%= link_to "家族設定", "#" %></li>
+        <li><%= link_to "設定", family_settings_path %></li>
         <li><%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "text-red-600" %></li>
       <% else %>
         <li><%= link_to "ログイン", "/auth/line", class: "text-primary" %></li>
