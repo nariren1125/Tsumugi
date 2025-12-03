@@ -3,22 +3,17 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
-    @post.photos.build  # ネストフォーム用にPhotoオブジェクトをビルド
+    @has_family_group = current_user.family_group.present?
   end
 
   def create
-    @post = Post.new(post_params)
-    @post.user = current_user  # ユーザー紐づけがある場合
-    @post.album = current_user.album  # アルバムとの関連も必要に応じて
+    return render_without_images if no_images?
+
+    build_post
 
     if @post.save
-      # 複数画像をループで保存
-      if params[:post][:images]
-        params[:post][:images].each do |image|
-          @post.photos.create(image: image)
-        end
-      end
-      redirect_to album_path(@post.album), notice: t('posts.create.success')
+      attach_images
+      redirect_to album_path(@post.album), notice: t('.success')
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,5 +23,30 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :content, :child_id, images: [])
+  end
+
+  # ------------------------
+  # 以下：分割メソッド
+  # ------------------------
+
+  def no_images?
+    params[:post][:images].blank?
+  end
+
+  def render_without_images
+    @post = Post.new(post_params.except(:images))
+    @post.errors.add(:base, '写真を1枚以上アップロードしてください')
+    render :new, status: :unprocessable_entity
+  end
+
+  def build_post
+    @post = current_user.posts.build(post_params.except(:images))
+    @post.album = current_user.family_group.album
+  end
+
+  def attach_images
+    params[:post][:images].each do |img|
+      @post.photos.create!(image: img)
+    end
   end
 end

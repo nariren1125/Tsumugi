@@ -5,14 +5,14 @@ class FamilyGroup < ApplicationRecord
   has_one :album, dependent: :destroy
   has_many :invite_tokens, dependent: :destroy
 
-  after_create :create_album
+  after_create :create_default_album
 
   # バリデーション:グループ名は必須
   validates :name, presence: true, length: { maximum: 50 }
 
   private
 
-  def create_album
-    Album.create!(family_group: self, name: "#{self.id}のアルバム")
+  def create_default_album
+    create_album!(name: '家族アルバム')
   end
 end
