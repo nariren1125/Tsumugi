@@ -16,6 +16,15 @@
     <%# multipart: true を指定してファイルアップロードを有効にする %>
     <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
 
+    <%# 撮影日 %>
+    <div class="mb-4">
+      <%= f.label :photo_date, "撮影日", class: "label" %>
+      <%= f.date_field :photo_date,
+            class: "input input-bordered w-full", 
+            required: true %>
+    </div>
+
+
     <%# タイトル %>
       <div class="mb-4">
         <%= f.label :title, "タイトル", class: "label-text font-semibold" %>

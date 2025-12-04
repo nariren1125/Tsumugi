@@ -4,6 +4,7 @@ class FamilyGroup < ApplicationRecord
   has_many :children, dependent: :destroy
   has_many :invite_tokens, dependent: :destroy
   has_many :posts, through: :users
+  has_one :album, dependent: :destroy
 
   after_create :create_default_album
 
