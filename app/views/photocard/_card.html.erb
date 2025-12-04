@@ -1,9 +1,7 @@
-<div class="card w-full bg-base-100 shadow-xl image-full group">
-  <figure>
-    <img src="<%= photo.image_url %>" alt="<%= photo.post.title %>" class="object-cover w-full h-48" />
-  </figure>
-  <div class="card-body">
-    <h2 class="card-title text-white"><%= photo.post.title %></h2>
-    <p class="text-white"><%= photo.created_at.strftime('%Y/%m/%d') %></p>
-  </div>
+<div class="relative rounded-xl overflow-hidden shadow">
+
+  <% if photo.image.attached? %>
+    <%= image_tag photo.image, class: "w-full h-48 object-cover" %>
+  <% end %>
+
 </div>
