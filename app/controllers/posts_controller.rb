@@ -47,8 +47,8 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params.except(:images))
     # 家族グループのアルバムを取得または作成して紐づけ
     family = current_user.family_group
-    # family に album があればそれを使う。 なければ新規作成。
-    album = family.album || family.create_album!(name: family.name)
+    # family に album があればそれを使う、なければ新規作成
+    album = family.album || family.create_album!
     # 上記で取得または作成した album を post に紐づけ
     @post.album = album
   end
