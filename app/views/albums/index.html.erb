@@ -1,17 +1,27 @@
 <div class="max-w-xl mx-auto px-4 py-10 pb-24">
-  <% if @photos_by_year.present? %>
+  <% if @posts_by_year.present? %>
 
-  <% @photos_by_year.each do |year, photos| %>
-    <h2 class="text-xl font-bold text-base-content mt-8 mb-4">
-      <%= year %>年
-    </h2>
+  <% @posts_by_year.each do |year, posts| %>
 
+    <%# ---- 年の表示（未設定だけ特別デザイン） ---- %>
+    <% if year == "撮影日未設定" %>
+      <h2 class="text-xl font-bold text-base-content mt-8 mb-4">
+        <span class="inline-block px-2 py-1 rounded-md bg-base-200 text-base-content/70">
+          撮影日未設定
+        </span>
+      </h2>
+    <% else %>
+      <h2 class="text-xl font-bold text-base-content mt-8 mb-4"><%= year %>年</h2>
+    <% end %>
+
+  <%# ---- 投稿のカード表示 ---- %>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-      <% photos.each do |photo| %>
-        <%= render "photocard/card", photo: photo %>
+      <% posts.each do |post| %>
+        <%= render "postcard/card", post: post %>
       <% end %>
     </div>
-  <% end %>
+
+    <% end %>
 
   <% else %>
     <div class="text-center py-16">

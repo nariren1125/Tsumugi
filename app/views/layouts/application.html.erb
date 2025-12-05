@@ -1,24 +1,42 @@
 <!DOCTYPE html>
+<%# daisyUIのカスタムテーマ「caramellatte」を適用 %>
 <html data-theme="caramellatte">
+  <%# ページの設定エリア %>
   <head>
     <%= favicon_link_tag 'favicon.png' %>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet">
+
+    <%# Google FontsのMaterial Symbols Outlinedを読み込み %>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <%# SwiperのCSSを読み込み 画像スライダー（Swiper）の見た目を定義するCSS %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <title><%= content_for(:title) || "Tsumugi" %></title>
+
+    <%# ビューポートの設定とモバイル対応 %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%# iOSでWebアプリをホーム画面に追加した際のフルスクリーン表示を有効化 %>
     <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <%# フォーム送信時の「CSRF対策トークン」を <meta> に埋め込むヘルパー %>
+    <%# form_with などがここからトークンを読んで、安全にPOSTできるようになる %>
     <%= csrf_meta_tags %>
+
+    <%# コンテンツセキュリティポリシー（CSP）を設定するヘルパー %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
+    <%# PWA（スマホのホーム画面に追加するウェブアプリ）の設定ファイルを指定 %>
     <link rel="manifest" href="/manifest.json">
 
+    <%# application.css と JavaScript のインクルード %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
+  <%# bodyタグにdaisyUIのユーティリティクラスを適用 %>
   <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
     <%= render "shared/header" %>
     <%= render "shared/flash" %>
@@ -28,5 +46,8 @@
     </main>
 
     <%= render "shared/bottom_nav" if current_user %>
+
+    <%# SwiperのJavaScriptを読み込み 画像スライダー（Swiper）の動作を定義するJS %>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>
