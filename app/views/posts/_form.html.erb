@@ -12,15 +12,15 @@
     <%# ✅ 共通エラーパーツを呼び出し %>
     <%= render "shared/form_errors", object: @post %>
 
-    <%# local: true を指定して同期通信にする %>
+    <%# turbo: false を指定してTurboフォーム送信を無効化  Postが複数回送信される問題を回避 %>
     <%# multipart: true を指定してファイルアップロードを有効にする %>
-    <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
+    <%= form_with model: @post, data: { turbo: false }, html: { multipart: true } do |f| %>
 
     <%# 撮影日 %>
     <div class="mb-4">
       <%= f.label :photo_date, "撮影日", class: "label" %>
       <%= f.date_field :photo_date,
-            class: "input input-bordered w-full", 
+            class: "input input-bordered w-full",
             required: true %>
     </div>
 

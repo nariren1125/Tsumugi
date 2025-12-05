@@ -7,6 +7,8 @@ class PostsController < ApplicationController
   end
 
   def create
+    Rails.logger.debug { "POST PARAMS: #{post_params}" }
+
     assign_family_group_flag
     build_and_save_post
   end

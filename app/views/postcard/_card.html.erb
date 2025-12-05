@@ -1,0 +1,23 @@
+<div class="relative rounded-xl overflow-hidden shadow">
+
+  <% if post.photos.any? %>
+
+    <div class="swiper">
+
+      <div class="swiper-wrapper">
+        <% post.photos.each do |photo| %>
+          <% if photo.image.attached? %>
+            <div class="swiper-slide">
+              <%= image_tag photo.image, class: "w-full h-48 object-cover" %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="swiper-pagination"></div>
+
+    </div>
+
+  <% end %>
+
+</div>
