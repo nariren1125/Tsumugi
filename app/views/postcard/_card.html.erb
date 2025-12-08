@@ -1,7 +1,7 @@
 <div class="relative cursor-pointer rounded-xl overflow-hidden shadow"
-     data-controller="modal"
-     data-action="click->modal#open"
-     data-modal-id="<%= post.id %>">
+    data-controller="modal"
+    data-action="click->modal#open"
+    data-modal-id="<%= post.id %>">
 
   <% if post.photos.any? && post.photos.first.image.attached? %>
     <%= image_tag post.photos.first.image, class: "w-full h-48 object-cover" %>
