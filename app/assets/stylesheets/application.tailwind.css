@@ -50,3 +50,18 @@
     --depth: 1;
     --noise: 1;
 }
+
+/* Swiperのカスタムスタイル */
+.swiper-pagination-bullet {
+    width: 6px !important;
+    height: 6px !important;
+    background-color: rgba(0, 0, 0, 0.4);
+    margin: 0 4px;
+    opacity: 0.6;
+    border-radius: 9999px;
+}
+/* アクティブなページネーションのスタイル */
+.swiper-pagination-bullet-active {
+  background-color: #000 !important;
+  opacity: 1;
+}
