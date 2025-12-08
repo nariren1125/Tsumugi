@@ -1,5 +1,7 @@
 class PostsController < ApplicationController
   before_action :require_login
+  before_action :set_post, only: [:edit, :update, :destroy]
+  before_action :authorize_user!, only: [:edit, :update, :destroy]
 
   def new
     @post = Post.new
@@ -11,6 +13,22 @@ class PostsController < ApplicationController
 
     assign_family_group_flag
     build_and_save_post
+  end
+
+  def edit
+  end
+
+  def update
+    if @post.update(post_params)
+      redirect_to albums_path, notice: t('.updated')
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @post.destroy
+    redirect_to albums_path, notice: t('.destroyed')
   end
 
   private
@@ -90,5 +108,27 @@ class PostsController < ApplicationController
     @post = Post.new(post_params.except(:images))
     @post.errors.add(:base, '写真を1枚以上アップロードしてください')
     render :new, status: :unprocessable_entity
+  end
+
+  # ==================================================
+  # Before Actions
+  # ==================================================
+
+  def set_post
+    @post = current_user.posts.find(params[:id])
+  end
+
+  def authorize_user!
+    unless @post.user == current_user
+      redirect_to albums_path, alert: t('flash.authorization.denied')
+    end
+  end
+
+  def delete_selected_photos
+    return unless params[:delete_photos]
+  
+    params[:delete_photos].each do |photo_id|
+      @post.photos.find(photo_id).destroy
+    end
   end
 end
