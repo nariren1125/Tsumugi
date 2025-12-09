@@ -1,9 +1,9 @@
 <!-- モーダル本体 -->
 <div id="modal-<%= post.id %>" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center hidden" data-controller="modal">
-  <div class="relative bg-black w-full max-w-md h-full overflow-y-auto text-white pt-14 pb-24 rounded-lg">
+  <div class="relative bg-base-100 w-full max-w-md h-full overflow-y-auto text-base-content pt-14 pb-24 rounded-lg">
 
-    <!-- 🟥 固定ヘッダー -->
-    <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-black text-white px-4 py-3">
+    <!-- ヘッダー -->
+     <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
       <!-- 戻るボタン -->
       <div class="w-20 flex-shrink-0">
         <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- 投稿者情報（画像の少し上に表示） -->
-      <div class="flex items-center justify-between text-sm text-white px-4 mt-2">
+      <div class="flex items-center justify-between text-sm text-base-content px-4 mt-2">
         <div class="flex items-center space-x-2">
           <!-- アバター実装前なので、画像なし -->
           <!-- <img src="/default-avatar.png" class="w-6 h-6 rounded-full" alt="avatar"> -->
@@ -69,10 +69,10 @@
 
     <!-- メッセージラベル -->
     <div class="px-4 mt-4">
-      <p class="text-sm text-white font-semibold mb-1">思い出のメッセージ</p>
+      <p class="text-sm text-accent font-semibold mb-1">思い出のメッセージ</p>
 
       <!-- 実際のメッセージ内容 -->
-      <p class="text-sm text-gray-300 leading-relaxed"><%= post.content %></p>
+      <p class="text-sm text-base-content leading-relaxed whitespace-pre-wrap break-words"><%= post.content %></p>
     </div>
 
   </div>
