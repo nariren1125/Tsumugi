@@ -39,7 +39,7 @@
               <li>
                 <%= link_to '削除', post_path(post),
                             method: :delete,
-                            data: { confirm: "削除してもよろしいですか？", turbo: false },
+                            data: { turbo_method: :delete, turbo_confirm: "削除してもよろしいですか？"},
                             class: "block px-4 py-2 text-red-600 hover:bg-gray-100" %>
               </li>
             <% end %>
