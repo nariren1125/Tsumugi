@@ -1,0 +1,79 @@
+<!-- モーダル本体 -->
+<div id="modal-<%= post.id %>" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center hidden" data-controller="modal">
+  <div class="relative bg-base-100 w-full max-w-md h-full overflow-y-auto text-base-content pt-14 pb-24 rounded-lg">
+
+    <!-- ヘッダー -->
+     <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
+      <!-- 戻るボタン -->
+      <div class="w-20 flex-shrink-0">
+        <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
+      </div>
+
+      <!-- タイトル -->
+      <h2 class="text-base font-bold text-center flex-grow truncate">
+        <%= post.title %>
+      </h2>
+
+      <!-- 撮影日表示（ヘッダー右端） -->
+      <div class="text-xs text-gray-400 w-20 text-right flex-shrink-0">
+        <%= post.photo_date ? l(post.photo_date) : "撮影日未設定" %>
+      </div>
+    </div>
+
+    <!-- 投稿者情報（画像の少し上に表示） -->
+      <div class="flex items-center justify-between text-sm text-base-content px-4 mt-2">
+        <div class="flex items-center space-x-2">
+          <!-- アバター実装前なので、画像なし -->
+          <!-- <img src="/default-avatar.png" class="w-6 h-6 rounded-full" alt="avatar"> -->
+          <span class="font-medium"><%= post.user.name %></span>
+        </div>
+
+        <!-- ミートボールメニュー -->
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="text-xl cursor-pointer">⋯</div>
+          <ul class="dropdown-content z-[100] menu p-2 shadow bg-white text-black rounded-box w-40">
+            <% if post.user == current_user %>
+              <li>
+                <%= link_to '編集', edit_post_path(post), class: "block px-4 py-2 hover:bg-gray-100" %>
+              </li>
+              <li>
+                <%= link_to '削除', post_path(post),
+                            method: :delete,
+                            data: { confirm: "削除してもよろしいですか？", turbo: false },
+                            class: "block px-4 py-2 text-red-600 hover:bg-gray-100" %>
+              </li>
+            <% end %>
+            <li>
+              <%= link_to '画像を保存', '#',
+                          id: "save-image-#{post.id}",
+                          download: true,
+                          class: "block px-4 py-2 hover:bg-gray-100" %>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    <!-- 写真スライダー -->
+      <div class="swiper my-2">
+        <div class="swiper-wrapper">
+          <% post.photos.each do |photo| %>
+            <% if photo.image.attached? %>
+              <div class="swiper-slide">
+                <%= image_tag photo.image, class: "w-full object-cover" %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="swiper-pagination mt-2"></div>
+      </div>
+
+    <!-- メッセージラベル -->
+    <div class="px-4 mt-4">
+      <p class="text-sm text-accent font-semibold mb-1">思い出のメッセージ</p>
+
+      <!-- 実際のメッセージ内容 -->
+      <p class="text-sm text-base-content leading-relaxed whitespace-pre-wrap break-words"><%= post.content %></p>
+    </div>
+
+  </div>
+</div>

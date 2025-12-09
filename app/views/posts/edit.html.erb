@@ -1,0 +1,71 @@
+<div class="max-w-xl mx-auto px-4 py-10 pb-24">
+
+  <h1 class="text-2xl font-bold text-base-content mb-6">
+    思い出を編集
+  </h1>
+
+  <%= render "shared/form_errors", object: @post %>
+
+  <%# --- 現在登録されている写真（削除不可・閲覧のみ） --- %>
+  <% if @post.photos.any? %>
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold text-base-content mb-3">
+        登録されている写真
+      </h2>
+
+      <div class="swiper rounded-xl overflow-hidden shadow">
+        <div class="swiper-wrapper">
+          <% @post.photos.each do |photo| %>
+            <% if photo.image.attached? %>
+              <div class="swiper-slide">
+                <%= image_tag photo.image, class: "w-full h-64 object-cover" %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# -------------------------------------- %>
+  <%#           編集フォーム本体             %>
+  <%# -------------------------------------- %>
+
+  <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
+
+    <%# --- 撮影日 --- %>
+    <div class="mb-6">
+      <%= f.label :photo_date, "撮影日", class: "label font-medium text-base-content" %>
+      <%= f.date_field :photo_date, class: "input input-bordered w-full", required: true %>
+    </div>
+
+    <%# --- タイトル --- %>
+    <div class="mb-6">
+      <%= f.label :title, "タイトル", class: "label font-medium text-base-content" %>
+      <%= f.text_field :title, class: "input input-bordered w-full" %>
+    </div>
+
+    <%# --- ひとことメッセージ --- %>
+    <div class="mb-6">
+      <%= f.label :content, "ひとことメッセージ", class: "label font-medium text-base-content" %>
+      <%= f.text_area :content, rows: 4, class: "textarea textarea-bordered w-full" %>
+    </div>
+
+    <%# --- 提出ボタン --- %>
+    <div class="flex justify-end mt-8">
+      <%= f.submit "更新する", class: "btn btn-primary px-6" %>
+    </div>
+
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    new Swiper(".swiper", {
+      loop: true,
+      pagination: { el: ".swiper-pagination" },
+    });
+  });
+</script>
