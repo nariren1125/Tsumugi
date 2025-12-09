@@ -1,43 +1,54 @@
-<div id="modal-<%= post.id %>" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center"
-     data-controller="modal">
-  <div class="bg-white rounded-lg p-4 w-11/12 max-w-md relative">
+<!-- モーダル本体 -->
+<div id="modal-<%= post.id %>" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center hidden" data-controller="modal">
+  <div class="relative bg-black w-full max-w-md h-full overflow-y-auto text-white pt-14 pb-24 rounded-lg">
 
-    <!-- 閉じるボタン -->
-    <button class="absolute top-2 right-2 text-gray-500 text-xl" data-action="click->modal#close">×</button>
+    <!-- 🟥 固定ヘッダー -->
+    <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-black text-white px-4 py-3">
+      <!-- 戻るボタン -->
+      <button class="text-xl" data-action="click->modal#close">←</button>
+      <!-- タイトル -->
+      <h2 class="text-base font-bold text-center flex-grow -ml-6">思い出</h2>
+      <!-- 空白スペース（右寄せ調整） -->
+      <div class="w-6"></div>
+    </div>
 
-    <!-- Swiper スライダー -->
+    <!-- 🟦 Swiperスライダー -->
     <% if post.photos.any? %>
       <div class="swiper">
         <div class="swiper-wrapper">
           <% post.photos.each do |photo| %>
             <% if photo.image.attached? %>
-              <div class="swiper-slide">
-                <%= image_tag photo.image, class: "w-full object-cover rounded" %>
+              <div class="swiper-slide relative">
+                <%= image_tag photo.image, class: "w-full h-auto object-cover" %>
+                <!-- ユーザー名 & ミートボール -->
+                <div class="absolute top-2 left-2 text-sm font-semibold">nariren1125</div>
+                <div class="absolute top-2 right-2 text-xl cursor-pointer">⋮</div>
               </div>
             <% end %>
           <% end %>
         </div>
-
-        <!-- ドット型ページネーション -->
         <div class="swiper-pagination mt-2"></div>
       </div>
     <% end %>
 
-    <!-- 投稿情報 -->
-    <h2 class="text-xl font-bold mt-4"><%= post.title %></h2>
-    <p class="text-gray-700 mt-2"><%= post.content %></p>
-    <p class="text-sm text-gray-500 mt-1">
-      <%= post.photo_date.present? ? l(post.photo_date) : "撮影日未設定" %>
-    </p>
+    <!-- 🟨 投稿情報 -->
+    <div class="px-4 py-3">
+      <h2 class="text-lg font-bold"><%= post.title %></h2>
+      <p class="text-sm text-gray-300 mt-1"><%= post.content %></p>
+      <p class="text-xs text-gray-400 mt-1">
+        <%= post.photo_date.present? ? l(post.photo_date) : "撮影日未設定" %>
+      </p>
 
-    <% if post.user == current_user %>
-      <div class="mt-4 text-right space-x-2">
-        <%= link_to "編集", edit_post_path(post), class: "text-blue-600" %>
-        <%= link_to "削除", post_path(post),
-                    method: :delete,
-                    data: { confirm: "削除してもよろしいですか？", turbo: false },
-                    class: "text-red-600" %>
-      </div>
-    <% end %>
+      <% if post.user == current_user %>
+        <div class="mt-3 text-right text-sm space-x-4">
+          <%= link_to "編集", edit_post_path(post), class: "text-blue-400 font-medium" %>
+          <%= link_to "削除", post_path(post),
+                      method: :delete,
+                      data: { confirm: "削除してもよろしいですか？", turbo: false },
+                      class: "text-red-400 font-medium" %>
+        </div>
+      <% end %>
+    </div>
+
   </div>
 </div>

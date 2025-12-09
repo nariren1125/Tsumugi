@@ -65,3 +65,8 @@
   background-color: #000 !important;
   opacity: 1;
 }
+
+/* スライドの高さを自動調整 */
+.swiper-slide {
+  @apply h-auto;
+}
