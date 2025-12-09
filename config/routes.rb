@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   resources :albums, only: [:index, :show, :new, :create]
   resources :family_groups, only: [:new, :create, :edit, :update]
-  resources :children, only: [:new, :create]
+  resources :children, only: [:new, :create, :edit, :update, :destroy]
   resources :posts, only: [:new, :create, :show, :edit, :update, :destroy]
   resources :invite_tokens, only: [:create]
 

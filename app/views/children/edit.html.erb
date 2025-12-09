@@ -1,0 +1,31 @@
+<div class="max-w-xl mx-auto px-4 py-10 space-y-6">
+  <h1 class="text-xl font-semibold text-base-content">お子さま情報の編集</h1>
+
+  <!-- 編集フォーム -->
+  <%= form_with model: @child, url: child_path(@child), method: :patch do |f| %>
+    <div class="mb-3">
+      <%= f.label :name, "お名前", class: "label-text font-semibold" %>
+      <%= f.text_field :name, class: "input input-bordered w-full" %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :birth_date, "お誕生日", class: "label-text font-semibold" %>
+      <%= f.date_field :birth_date, class: "input input-bordered w-full" %>
+    </div>
+
+    <!-- 更新ボタン（左側） -->
+    <div class="flex gap-4 items-center">
+      <%= f.submit "更新する", class: "btn btn-accent" %>
+
+      <!-- 削除ボタンは form_with の外側だが、見た目上は同じ行に配置 -->
+      <%= button_to "削除する",
+            child_path(@child),
+            method: :delete,
+            data: { turbo: false, confirm: "削除してもよろしいですか？" },
+            class: "btn btn-outline btn-error inline-block" %>
+    </div>
+  <% end %>
+
+  <!-- 戻るリンク -->
+  <%= link_to "戻る", family_settings_path, class: "link mt-4 inline-block" %>
+</div>

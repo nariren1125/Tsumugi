@@ -18,6 +18,10 @@ ja:
       deleted: "投稿を削除しました"
     authorization:
       failure: "権限がありません"
+    children:
+      created: "お子さまを登録しました"
+      updated: "お子さま情報を更新しました"
+      deleted: "お子さま情報を削除しました"
 
   activerecord:
     errors:
