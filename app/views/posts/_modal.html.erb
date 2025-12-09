@@ -17,11 +17,34 @@
     <!-- 投稿者情報（画像の少し上に表示） -->
       <div class="flex items-center justify-between text-sm text-white px-4 mt-2">
         <div class="flex items-center space-x-2">
-          <!-- アバター実装前なので、画像なし or ダミー画像を表示 -->
+          <!-- アバター実装前なので、画像なし -->
           <!-- <img src="/default-avatar.png" class="w-6 h-6 rounded-full" alt="avatar"> -->
           <span class="font-medium"><%= post.user.name %></span>
         </div>
-        <div class="text-xl cursor-pointer">⋯</div>
+
+        <!-- ミートボールメニュー -->
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="text-xl cursor-pointer">⋯</div>
+          <ul class="dropdown-content z-[100] menu p-2 shadow bg-white text-black rounded-box w-40">
+            <% if post.user == current_user %>
+              <li>
+                <%= link_to '編集', edit_post_path(post), class: "block px-4 py-2 hover:bg-gray-100" %>
+              </li>
+              <li>
+                <%= link_to '削除', post_path(post),
+                            method: :delete,
+                            data: { confirm: "削除してもよろしいですか？", turbo: false },
+                            class: "block px-4 py-2 text-red-600 hover:bg-gray-100" %>
+              </li>
+            <% end %>
+            <li>
+              <%= link_to '画像を保存', '#',
+                          id: "save-image-#{post.id}",
+                          download: true,
+                          class: "block px-4 py-2 hover:bg-gray-100" %>
+            </li>
+          </ul>
+        </div>
       </div>
 
     <!-- 写真スライダー -->
@@ -51,18 +74,6 @@
       <p class="text-xs text-gray-400">
         <%= post.photo_date.present? ? l(post.photo_date) : "撮影日未設定" %>
       </p>
-    </div>
-
-    <!-- 編集・削除ボタン（投稿者のみ表示） -->
-      <% if post.user == current_user %>
-        <div class="mt-3 text-right text-sm space-x-4">
-          <%= link_to "編集", edit_post_path(post), class: "text-blue-400 font-medium" %>
-          <%= link_to "削除", post_path(post),
-                      method: :delete,
-                      data: { confirm: "削除してもよろしいですか？", turbo: false },
-                      class: "text-red-400 font-medium" %>
-        </div>
-      <% end %>
     </div>
 
   </div>
