@@ -1,13 +1,39 @@
 class ChildrenController < ApplicationController
   before_action :require_login
-  def new; end
+  before_action :set_child, only: %i[edit update destroy]
+
+  def new
+    @child = Child.new
+  end
+
+  def edit
+    @child = current_user.family_group.children.find(params[:id])
+  end
 
   def create
     return redirect_no_family unless current_user.family_group
 
-    child = build_child
+    @child = build_child
 
-    child.save ? redirect_success : redirect_failure(child)
+    if @child.save
+      redirect_success
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @child.update(child_params)
+      redirect_to family_settings_path, notice: t('children.updated')
+    else
+      flash.now[:alert] = @child.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @child.destroy
+    redirect_to family_settings_path, notice: t('children.deleted')
   end
 
   private
@@ -24,9 +50,8 @@ class ChildrenController < ApplicationController
     redirect_to family_settings_path, notice: t('children.created')
   end
 
-  def redirect_failure(child)
-    flash[:errors] = child.errors.full_messages
-    redirect_to family_settings_path
+  def set_child
+    @child = current_user.family_group.children.find(params[:id])
   end
 
   def child_params
