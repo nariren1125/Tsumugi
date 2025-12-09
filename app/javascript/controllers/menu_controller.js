@@ -1,6 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import Swiper from "swiper/bundle"
-import "swiper/css/bundle"
 
 export default class extends Controller {
   static targets = []
@@ -12,17 +10,18 @@ export default class extends Controller {
   open(event) {
     const id = event.currentTarget.dataset.modalId
     const modal = document.getElementById(`modal-${id}`)
+
     if (modal) {
       modal.classList.remove("hidden")
 
-      // Swiper初期化
+      // ✅ Swiper初期化（CDNで読み込み済みのグローバルSwiperを使用）
       if (!modal.dataset.swiperInitialized) {
         const swiper = new Swiper(`#modal-${id} .swiper`, {
           loop: false,
           pagination: {
             el: `#modal-${id} .swiper-pagination`,
-            clickable: true
-          }
+            clickable: true,
+          },
         })
 
         this.swipers[id] = swiper
