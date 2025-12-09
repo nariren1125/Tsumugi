@@ -2,6 +2,8 @@
 // Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
 import "controllers"
+import "@rails/ujs"
+RadioNodeList,start()
 
 // Turbo読み込み完了時に処理
 document.addEventListener("turbo:load", () => {
