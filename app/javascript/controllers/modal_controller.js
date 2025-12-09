@@ -2,7 +2,6 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   open(event) {
-    console.log("✅ modal#open 発火しました")
 
     const id = event.currentTarget.dataset.modalId
     const modal = document.getElementById(`modal-${id}`)
