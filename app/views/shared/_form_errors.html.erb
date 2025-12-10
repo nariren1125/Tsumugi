@@ -2,13 +2,12 @@
 <%# 使用例: render "shared/form_errors", object: @post %>
 
 <% if object && object.errors.any? %>
-  <div class="alert alert-error mb-4">
-    <span>入力内容にエラーがあります。</span>
+  <div class="mb-4 p-3 bg-red-50 border border-red-300 rounded text-red-700 text-sm">
+    <strong>入力内容にエラーがあります。</strong>
+    <ul class="list-disc list-inside mt-2">
+      <% object.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
   </div>
-
-  <ul class="list-disc list-inside text-error text-sm mb-4">
-    <% object.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-  </ul>
 <% end %>

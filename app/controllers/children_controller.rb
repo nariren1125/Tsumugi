@@ -24,7 +24,7 @@ class ChildrenController < ApplicationController
 
   def update
     if @child.update(child_params)
-      redirect_to family_settings_path, notice: t('children.updated')
+      redirect_to family_settings_path, notice: t('flash.children.updated')
     else
       flash.now[:alert] = @child.errors.full_messages.to_sentence
       render :edit, status: :unprocessable_entity
@@ -33,7 +33,7 @@ class ChildrenController < ApplicationController
 
   def destroy
     @child.destroy
-    redirect_to family_settings_path, notice: t('children.deleted')
+    redirect_to family_settings_path, notice: t('flash.children.deleted')
   end
 
   private
@@ -43,11 +43,11 @@ class ChildrenController < ApplicationController
   end
 
   def redirect_no_family
-    redirect_to family_settings_path, alert: t('children.no_family')
+    redirect_to family_settings_path, alert: t('flash.children.no_family')
   end
 
   def redirect_success
-    redirect_to family_settings_path, notice: t('children.created')
+    redirect_to family_settings_path, notice: t('flash.children.created')
   end
 
   def set_child
