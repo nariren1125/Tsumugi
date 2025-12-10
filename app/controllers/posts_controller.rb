@@ -19,7 +19,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      redirect_to albums_path, notice: t('.updated')
+      redirect_to albums_path, notice: t('flash.posts.updated')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to albums_path, notice: t('.destroyed')
+    redirect_to albums_path, notice: t('flash.posts.destroyed')
   end
 
   private

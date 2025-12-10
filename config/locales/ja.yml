@@ -3,8 +3,10 @@ ja:
     login:
       success: "ログインしました"
       failure: "ログインに失敗しました"
+
     logout:
       success: "ログアウトしました"
+
     family_group:
       create:
         success: "家族グループを作成しました"
@@ -12,37 +14,47 @@ ja:
       update:
         success: "家族グループを更新しました"
         failure: "家族グループの更新に失敗しました"
+
     posts:
       created: "投稿しました"
       updated: "投稿を更新しました"
       deleted: "投稿を削除しました"
+
     authorization:
       failure: "権限がありません"
+
     children:
       created: "お子さまを登録しました"
-      updated: "お子さま情報を更新しました"
-      deleted: "お子さま情報を削除しました"
+      updated: "お子さまを更新しました"
+      deleted: "お子さまを削除しました"
+      no_family: "家族がありません"
 
+  # ActiveRecord のバリデーションメッセージ
   activerecord:
+    attributes:
+      post:
+        title: "タイトル"
+        content: "メッセージ"
+
     errors:
       models:
         post:
           attributes:
+            title:
+              blank: "を入力してください"
             image:
-              blank: "写真を選択してください"
+              blank: "を選択してください"
             content:
-              blank: "メッセージを入力してください"
+              blank: "を入力してください"
 
+  # 招待リンク関連
   invite_tokens:
     invalid: "招待リンクが無効か、期限が切れています"
     accepted: "招待を受け取りました。LINEログインすると家族に参加できます"
     family_not_exist: "家族グループがまだ作成されていません"
     issued: "招待リンクを発行しました"
 
-  children:
-    no_family: "家族がありません"
-    created: "お子さまを登録しました"
-
+  # 日付フォーマット
   date:
     formats:
       default: "%Y/%m/%d"

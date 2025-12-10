@@ -14,7 +14,7 @@
 
     <%# turbo: false を指定してTurboフォーム送信を無効化  Postが複数回送信される問題を回避 %>
     <%# multipart: true を指定してファイルアップロードを有効にする %>
-    <%= form_with model: @post, data: { turbo: false }, html: { multipart: true } do |f| %>
+    <%= form_with model: @post, data: { turbo: false }, html: { multipart: true, novalidate: true } do |f| %>
 
     <%# 撮影日 %>
     <div class="mb-4">
