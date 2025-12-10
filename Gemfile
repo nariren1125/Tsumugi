@@ -67,3 +67,6 @@ gem 'cssbundling-rails', '~> 1.4'
 gem 'omniauth'
 gem 'omniauth-line'
 gem 'omniauth-rails_csrf_protection'
+
+# ActiveStorageがS3を使うために必要なgem
+gem 'aws-sdk-s3', require: false
