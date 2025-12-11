@@ -1,41 +1,22 @@
-<!-- app/views/home/index.html.erb -->
 <div class="min-h-screen flex flex-col items-center justify-center bg-base-100 text-center">
-  <div class="max-w-2xl p-8">
+  <div class="max-w-md w-full p-6">
 
     <!-- ロゴ -->
-    <%= image_tag "tsumugi_logo.png", alt: "Tsumugi ロゴ", class: "mx-auto mb-[6px] w-48 h-auto" %>
+    <%= image_tag "tsumugi_logo.png", alt: "Tsumugi ロゴ", class: "mx-auto mb-4 w-40" %>
 
-    <!-- サブテキスト -->
-    <p class="text-lg text-gray-700 leading-relaxed mb-8">
+    <!-- キャッチコピー -->
+    <p class="text-base-content/70 text-base leading-relaxed mb-6">
       撮る人も、写る人も。<br>
-      家族の思い出を、ふたりで紡ぐアルバムアプリ。
+      家族の思い出を、ふたりで紡ぐアルバム。
     </p>
 
-    <!-- はじめるボタン -->
-    <a href="#"
-       class="inline-block bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-10 rounded-full shadow-md transition mb-4">
-      はじめる
-    </a>
+    <!-- メインボタン -->
+    <%= link_to "LINEでログイン / 新規登録", line_login_path,
+          class: "btn btn-accent w-full mb-4 text-base" %>
 
-    <button class="btn">Default</button>
-
-    <!-- ログイン・使い方リンク -->
-    <div class="flex justify-center space-x-5">
-      <%= link_to "LINEで新規登録", line_login_path, class: "text-blue-600 underline" %>
-      <%= link_to '使い方', about_path, class: "px-6 py-2 bg-white border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50 transition" %>
-    </div>
+    <!-- サブリンク -->
+    <%= link_to "使い方を見る", about_path,
+          class: "btn btn-outline w-full text-base-content" %>
   </div>
 
-  <div data-controller="modal">
-  <div data-action="click->modal#open" data-modal-id="test" style="padding: 2rem; background-color: #ddd;">
-    テスト — ここをクリック
-  </div>
-
-  <div id="modal-test" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-4">
-      モーダル開いた！<br>
-        <button data-action="click->modal#close">閉じる</button>
-      </div>
-    </div>
-  </div>
 </div>
