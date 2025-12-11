@@ -6,7 +6,7 @@
   </h1>
 
   <p class="mb-6 text-base-content/70">
-    グループのメンバーを確認したり、招待リンクを発行します。
+    グループメンバーの確認、追加ができます。
   </p>
 
   <% if current_user.family_group.present? %>
@@ -70,12 +70,24 @@
   <% else %>
 
     <!-- ✅ 家族が未作成の場合 -->
-    <div class="space-y-4 bg-base-100 rounded-box shadow p-4">
-      <p>まだ思い出を紡ぐためのグループが作成されていません。</p>
+    <div class="space-y-6 bg-base-100 rounded-box shadow p-6 text-center">
+      <!-- イラスト -->
+      <div class="w-36 mx-auto">
+        <%= image_tag "group_empty.png", alt: "家族未作成の状態", class: "w-full h-auto" %>
+      </div>
 
+      <!-- メッセージ -->
+      <h2 class="text-base-content font-semibold">
+        グループが作成されていません
+      </h2>
+      <p class="text-sm text-base-content/60">
+        アルバムを紡ぐグループを作成しましょう。
+      </p>
+
+      <!-- ボタン -->
       <%= link_to "グループを作成する",
             new_family_group_path,
-            class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
+            class: "btn btn-accent w-full " %>
     </div>
 
   <% end %>
