@@ -1,8 +1,27 @@
-<div class="max-w-xl mx-auto px-4 py-10 pb-24">
+<!-- 編集ページヘッダー抑制 -->
+<% content_for :suppress_header, true %>
+<!-- 編集ページカスタムヘッダー -->
+<div class="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
+  <!-- キャンセル（戻る）ボタン -->
+  <div class="w-20 flex-shrink-0">
+    <%= link_to "キャンセル", "javascript:history.back()", class: "text-sm" %>
+  </div>
 
-  <h1 class="text-2xl font-bold text-base-content mb-6">
+  <!-- タイトル -->
+  <h2 class="text-base font-bold text-center flex-grow truncate">
     思い出を編集
-  </h1>
+  </h2>
+
+  <!-- 完了（保存）ボタン -->
+  <div class="w-20 text-right flex-shrink-0">
+    <button type="submit" form="edit-post-form" class="text-sm text-accent font-semibold">
+      完了
+    </button>
+  </div>
+</div>
+
+<!-- 本体 -->
+<div class="max-w-xl mx-auto px-4 py-14 pb-24">
 
   <%= render "shared/form_errors", object: @post %>
 
@@ -10,7 +29,7 @@
   <% if @post.photos.any? %>
     <div class="mb-8">
       <h2 class="text-lg font-semibold text-base-content mb-3">
-        登録されている写真
+        写真
       </h2>
 
       <div class="swiper rounded-xl overflow-hidden shadow">
@@ -29,11 +48,8 @@
     </div>
   <% end %>
 
-  <%# -------------------------------------- %>
-  <%#           編集フォーム本体             %>
-  <%# -------------------------------------- %>
-
-  <%= form_with model: @post, local: true, html: { multipart: true } do |f| %>
+  <%# --- 投稿編集フォーム --- %>
+  <%= form_with model: @post, local: true, html: { multipart: true, id: "edit-post-form" } do |f| %>
 
     <%# --- 撮影日 --- %>
     <div class="mb-6">
@@ -51,11 +67,6 @@
     <div class="mb-6">
       <%= f.label :content, "ひとことメッセージ", class: "label font-medium text-base-content" %>
       <%= f.text_area :content, rows: 4, class: "textarea textarea-bordered w-full" %>
-    </div>
-
-    <%# --- 提出ボタン --- %>
-    <div class="flex justify-end mt-8">
-      <%= f.submit "更新する", class: "btn btn-accent px-6" %>
     </div>
 
   <% end %>

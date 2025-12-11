@@ -1,3 +1,7 @@
+<%# 共通ヘッダーを抑制するコンテンツが設定されていない場合にのみ表示 %>
+<% unless content_for?(:suppress_header) %>
+
+<!-- 共通ヘッダー部分 -->
 <header class="w-full bg-base-300 text-base-content shadow-sm px-4 h-14 flex justify-between items-center">
   <h1 class="text-xl font-bold">
     <%= link_to "Tsumugi", root_path %>
@@ -26,5 +30,6 @@
     </ul>
   </div>
   <!-- ▲▲▲ header 内に置く ▲▲▲ -->
-
 </header>
+
+<% end %>

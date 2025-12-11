@@ -40,7 +40,8 @@
 
   <%# bodyタグにdaisyUIのユーティリティクラスを適用 %>
   <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
-    <%= render "shared/header" %>
+    <%# 共通ヘッダーを抑制するコンテンツが設定されていない場合にのみ表示 %>
+    <%= render "shared/header" unless content_for(:suppress_header) == true %>
     <%= render "shared/flash" %>
 
     <main>
