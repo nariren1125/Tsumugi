@@ -1,7 +1,22 @@
-<div class="text-center mt-10 space-y-4">
-  <h2 class="text-xl font-bold">まずはグループを作成しましょう</h2>
-  <p class="text-gray-600">
-    思い出を投稿するには、グループが必要です。<br>
-    設定からグループを作成してください。<br/>
+<div class="text-center py-20 space-y-6">
+  <!-- イラスト（同系色で統一感） -->
+  <div class="w-40 mx-auto ">
+    <%= image_tag "家族設定なし投稿画面.png", alt: "グループ未作成のイメージ", class: "w-full h-auto opacity-80" %>
+  </div>
+
+  <!-- メインメッセージ -->
+  <h2 class="text-lg font-semibold text-base-content/80">
+    まずはグループを作成しましょう
+  </h2>
+
+  <!-- サブテキスト -->
+  <p class="text-sm text-base-content/60 leading-relaxed">
+    思い出を投稿するには<br>
+    グループの作成が必要です。
   </p>
+
+  <!-- CTAボタン -->
+  <%= link_to "設定を確認する",
+        family_settings_path,
+        class: "btn btn-accent mt-2" %>
 </div>
