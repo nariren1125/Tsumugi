@@ -1,5 +1,26 @@
-<div class="max-w-xl mx-auto px-4 py-10 space-y-6">
-  <h1 class="text-xl font-semibold text-base-content">お子さま情報の編集</h1>
+<!-- 編集ページヘッダー抑制 -->
+<% content_for :suppress_header, true %>
+
+<!-- カスタムヘッダー -->
+<div class="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
+  <!-- 戻るボタン -->
+  <div class="w-20 flex-shrink-0">
+    <%= link_to "←", family_settings_path, class: "text-xl", aria: { label: "設定に戻る" } %>
+  </div>
+
+  <!-- タイトル -->
+  <h2 class="text-base font-bold text-center flex-grow truncate">
+    お子さま情報の編集
+  </h2>
+
+  <!-- 右端スペース確保 -->
+    <div class="w-20 flex-shrink-0"></div>
+  </div>
+
+<!-- 本体 -->
+<div class="max-w-xl mx-auto px-4 pt-16 pb-24 space-y-6">
+  <!-- エラーメッセージ -->
+  <%= render "shared/form_errors", object: @child %>
 
   <!-- 編集フォーム -->
   <%= form_with model: @child, url: child_path(@child), method: :patch do |f| %>
@@ -26,6 +47,4 @@
     </div>
   <% end %>
 
-  <!-- 戻るリンク -->
-  <%= link_to "戻る", family_settings_path, class: "link mt-4 inline-block" %>
 </div>
