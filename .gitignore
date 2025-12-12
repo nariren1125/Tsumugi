@@ -52,3 +52,8 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# macOS generated files
+.DS_Store
+*/.DS_Store
+**/.DS_Store
