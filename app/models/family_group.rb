@@ -8,5 +8,4 @@ class FamilyGroup < ApplicationRecord
 
   # バリデーション:グループ名は必須
   validates :name, presence: true, length: { maximum: 50 }
-
 end
