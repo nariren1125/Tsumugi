@@ -6,14 +6,6 @@ class FamilyGroup < ApplicationRecord
   has_many :posts, through: :users
   has_one :album, dependent: :destroy
 
-  after_create :create_default_album
-
   # バリデーション:グループ名は必須
   validates :name, presence: true, length: { maximum: 50 }
-
-  private
-
-  def create_default_album
-    create_album!(name: '家族アルバム')
-  end
 end
