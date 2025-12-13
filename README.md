@@ -71,8 +71,7 @@ Tsumugi では、日々の投稿として写真と思い出を記録しておく
 1. お母さんが登録して、LINEでパートナーを招待（ペア結成）。
 2. 二人が**写真＋一言メッセージ**を投稿。
 3. 月ごとに「〇〇さんが写っている写真が○枚増えました」などの**やさしいリマインド**。
-4. 一定期間で**自動アルバム案**を生成（PDFプレビュー）→二人で最終チェック。
-5. 印刷や共有で「1歳アルバム」「記念アルバム」として**完成**。
+4. 印刷や共有で「1歳アルバム」「記念アルバム」として**完成**。
 
 ---
 
@@ -117,40 +116,36 @@ Tsumugi では、日々の投稿として写真と思い出を記録しておく
 
 ### MVP機能
 
--  ユーザー登録（LINEでログイン）
--  ペア招待・承認（LINEログイン/招待リンク）
--  グループ作成・一覧（子供別に作成できる）
--  写真アップロード（ActiveStorage）＋**一言メッセージ**
--  グループに投稿した写真の年月別での表示機能
--  Xへの共有
+- LINEログイン（omniauth-line）
+- 家族グループ作成・招待（グループ単位で投稿を共有）
+- 子ども情報の登録・編集（名前・誕生日）
+- 思い出投稿（写真・ひとこと・撮影日）
+- 年度ごとの投稿一覧・モーダル詳細表示
+- 投稿の編集・削除
 
-### 本リリースで追加する機能
+### 今後の展望（本リリースで追加予定）
 
--  週次リマインド（LINE Messaging API / Whenever）
--  簡易アルバム生成（WickedPDF：期間選択→PDF出力）
+- 週次リマインド（LINE Messaging API / Whenever）
+- 投稿データからアルバムPDFの自動生成
+- お子さまごとの絞り込み表示・検索機能
+- タグ機能での思い出の並び替え
 -  Vision API（Label Detection）で画像解析（未定だけど面白そう）
 -  LINE Messaging APIで投稿された写真に写っている人の数によってメッセージを送信（未定だけど面白そう）
 
 ---
 
 ## 使用する技術スタック
-- **フレームワーク**：Ruby on Rails 7.x（Ruby 3.2系）
+- **フレームワーク**：Ruby on Rails 7, Hotwire (Turbo/Stimulus)
 - **データベース**：PostgreSQL
-- **デプロイ**：Render 予定（または Fly.io）
-- **フロント**：Hotwire（Turbo / Stimulus）, Tailwind CSS
-- **認証**：Devise, OmniAuth（LINE）
+- **デプロイ**：Render
+- **フロント**：Tailwind CSS + daisyUI
+- **認証**：OmniAuth（LINE）
 - **ストレージ**：ActiveStorage + Amazon S3
-- **バッチ/ジョブ**：Whenever + Sidekiq（通知・集計）
 
 ---
 
-**実装イメージ（一般CRUD以外）**
-- **ペア結成**：`Pair`（user_id, partner_id, status）, LINE OAuthで招待/承認
-- **撮影/被写体タグ**：`photos.photographer_id` と `appearances (photo_id, user_id)`
-- **通知**：月1の集計ジョブ→LINE push（枚数/進捗/アルバム案リンク(年1くらいを想定)）
-
 ## ⬜ 画面遷移図
-[画面遷移図（Figma）](https://www.figma.com/design/H0jLEutahF4QQCpRY55NG4/%E5%8D%92%E5%88%B6%E3%82%A2%E3%83%97%E3%83%AA%EF%BC%88Tsumugi%EF%BC%89-%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=l015hS7XYP1kOoO1-1)
+[リンクをクリックすると画面遷移図が確認できます（Figma）](https://www.figma.com/design/H0jLEutahF4QQCpRY55NG4/%E5%8D%92%E5%88%B6%E3%82%A2%E3%83%97%E3%83%AA%EF%BC%88Tsumugi%EF%BC%89-%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=1-4)
 
 ---
 
