@@ -27,7 +27,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to albums_path, notice: t('flash.posts.destroyed')
+    redirect_to albums_path, notice: t('flash.posts.deleted')
   end
 
   private
@@ -95,17 +95,11 @@ class PostsController < ApplicationController
   # ==================================================
   def handle_success
     attach_images
-    redirect_to albums_path, notice: t('.success')
+    redirect_to albums_path, notice: t('flash.posts.created')
   end
 
   def handle_failure
     Rails.logger.debug { "❌ save failed: #{@post.errors.full_messages}" }
-    render :new, status: :unprocessable_entity
-  end
-
-  def render_without_images
-    @post = Post.new(post_params.except(:images))
-    @post.errors.add(:base, '写真を1枚以上アップロードしてください')
     render :new, status: :unprocessable_entity
   end
 
@@ -120,14 +114,6 @@ class PostsController < ApplicationController
   def authorize_user!
     return if @post.user == current_user
 
-    redirect_to albums_path, alert: t('flash.authorization.denied')
-  end
-
-  def delete_selected_photos
-    return unless params[:delete_photos]
-
-    params[:delete_photos].each do |photo_id|
-      @post.photos.find(photo_id).destroy
-    end
+    redirect_to albums_path, alert: t('flash.authorization.failed')
   end
 end
