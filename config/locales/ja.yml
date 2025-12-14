@@ -16,9 +16,9 @@ ja:
         failure: "家族グループの更新に失敗しました"
 
     posts:
-      created: "投稿しました"
-      updated: "投稿を更新しました"
-      deleted: "投稿を削除しました"
+      created: "思い出を投稿しました"
+      updated: "思い出を更新しました"
+      deleted: "思い出を削除しました"
 
     authorization:
       failure: "権限がありません"
