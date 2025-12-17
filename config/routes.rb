@@ -1,46 +1,37 @@
 Rails.application.routes.draw do
-  get "pages/terms"
-  get "pages/privacy"
-  get "children/new"
-  get "children/create"
-  get "family_settings", to: "family_groups#settings"
-  get "family_groups/update"
-  get "posts/new"
-  get "albums/index"
-  get "sessions/callback"
-  get "sessions/destroy"
-  get "posts/new", to: "posts#new", as: :new_post
-  get "invite/:token", to: "invite_tokens#show", as: :invite
-  get "/terms",   to: "pages#terms"
-  get "/privacy", to: "pages#privacy"
   root "home#index"
 
-  resources :albums, only: [:index, :show, :new, :create]
-  resources :family_groups, only: [:new, :create, :edit, :update]
-  resources :children, only: [:new, :create, :edit, :update, :destroy]
-  resources :posts, only: [:new, :create, :show, :edit, :update, :destroy]
-  resources :invite_tokens, only: [:create]
-
-  # 仮リンク用（あとで本実装予定）
-  get 'about', to: 'home#about'
-  get 'login', to: 'home#login'
+  # Static Pages
+  get '/about',       to: 'pages#about'
+  get '/terms',       to: 'pages#terms'
+  get '/privacy',     to: 'pages#privacy'
+  get '/how_to_use',  to: 'pages#how_to_use'
 
   # LINEログイン
   get "login/line", to: redirect("/auth/line"), as: :line_login
   get "/auth/:provider/callback", to: "sessions#create"
-  # ログアウト
   delete "logout", to: "sessions#destroy", as: :logout
 
-  # ヘルスチェックとPWA用
+  # メイン機能
+  resources :albums, only: %i[index show new create]
+  resources :family_groups, only: %i[new create edit update]
+  resources :children, only: %i[new create edit update destroy]
+  resources :posts, only: %i[new create show edit update destroy]
+  resources :invite_tokens, only: %i[create]
+
+  # 設定画面
+  get "family_settings", to: "family_groups#settings"
+  get "invite/:token", to: "invite_tokens#show", as: :invite
+
+  # PWA / health
   get "up" => "rails/health#show", as: :rails_health_check
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "service-worker" => "rails/pwa#service_worker"
+  get "manifest" => "rails/pwa#manifest"
 
   if Rails.env.test?
     post 'test/login', to: 'test_sessions#create'
   end
 
-  # 開発環境用のログイン簡略化ルート
   if Rails.env.development?
     get "/dev_login/:id", to: "sessions#dev_login"
   end
