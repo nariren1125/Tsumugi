@@ -1,13 +1,38 @@
-<div class="relative cursor-pointer rounded-xl overflow-hidden shadow"
-    data-controller="modal"
-    data-action="click->modal#open"
-    data-modal-id="<%= post.id %>">
+<div
+  class="polaroid-card polaroid-card--tilt"
+  data-controller="modal"
+  data-action="click->modal#open"
+  data-modal-id="<%= post.id %>"
+>
 
-  <% if post.photos.any? && post.photos.first.image.attached? %>
-    <%= image_tag post.photos.first.image, class: "w-full h-48 object-cover" %>
-  <% else %>
-    <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-      No image
-    </div>
-  <% end %>
+  <!-- マスキングテープ -->
+  <div
+    class="masking-tape <%= random_masking_tape_class %>"
+    style="transform: rotate(<%= random_tape_rotation %>deg);"
+  ></div>
+
+  <!-- 写真 -->
+  <div class="polaroid-photo">
+    <% if post.photos.any? && post.photos.first.image.attached? %>
+      <%= image_tag post.photos.first.image,
+            class: "w-full h-full object-cover" %>
+    <% else %>
+      <span class="text-xs text-base-content/40">No Image</span>
+    <% end %>
+  </div>
+
+  <!-- 下余白（ポラロイド感） -->
+  <div class="polaroid-caption">
+    <p class="text-sm font-semibold truncate">
+      <%= post.title %>
+    </p>
+
+    <% if post.photo_date && post.child&.birth_date %>
+      <% age = ((post.photo_date - post.child.birth_date).to_i / 365.25).floor %>
+      <span class="badge badge-outline badge-sm">
+        <%= age %>歳
+      </span>
+    <% end %>
+  </div>
+
 </div>

@@ -1,4 +1,11 @@
+
 @import "tailwindcss";
+
+/* カスタムコンポーネントのインポート */
+@import "./components/polaroid.css";
+@import "./components/masking_tape.css";
+
+
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {

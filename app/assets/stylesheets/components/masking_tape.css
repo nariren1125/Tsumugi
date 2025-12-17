@@ -1,0 +1,11 @@
+.masking-tape {
+    @apply absolute -top-2 left-1/2 -translate-x-1/2
+           w-16 h-4 opacity-80 rounded-sm shadow-sm;
+    transform: rotate(-3deg);
+}
+
+  /* 色バリエーション */
+  .masking-tape--amber { background-color: #fde68a; }
+  .masking-tape--pink  { background-color: #fbcfe8; }
+  .masking-tape--mint  { background-color: #bbf7d0; }
+  .masking-tape--blue  { background-color: #bfdbfe; }

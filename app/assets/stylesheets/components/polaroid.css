@@ -1,0 +1,22 @@
+/* app/assets/stylesheets/components/polaroid.css */
+
+.polaroid-card {
+  @apply relative bg-base-100 rounded-sm shadow-md p-3 pt-4
+         cursor-pointer transition-transform;
+}
+
+.polaroid-card--tilt {
+  transform: rotate(-1deg);
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg);
+}
+
+.polaroid-photo {
+  @apply aspect-square bg-base-200 overflow-hidden;
+}
+
+.polaroid-caption {
+  @apply pt-3 space-y-1;
+}
