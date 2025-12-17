@@ -2,22 +2,28 @@
   <% if @posts_by_year.present? %>
 
     <% @posts_by_year.each do |year, posts| %>
-      <%# 年ヘッダー表示 %>
+      <%# 年ヘッダー %>
       <% if year == "撮影日未設定" %>
-        <h2>…未設定の見出し…</h2>
+        <h2 class="text-lg font-semibold mt-8 mb-4">撮影日未設定</h2>
       <% else %>
-        <h2><%= year %>年</h2>
+        <h2 class="text-lg font-semibold mt-8 mb-4"><%= year %>年</h2>
       <% end %>
 
-      <%# 投稿カード一覧 %>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <% posts.each do |post| %>
-          <%= render "postcard/card", post: post %>
-        <% end %>
+      <!-- 洗濯紐エリア -->
+      <div class="relative mb-8">
+        <!-- 洗濯紐 -->
+        <div class="absolute top-4 left-0 w-full h-px bg-base-300"></div>
+
+        <!-- ポラロイドカード -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8">
+          <% posts.each do |post| %>
+            <%= render "postcard/card", post: post %>
+          <% end %>
+        </div>
       </div>
     <% end %>
 
-    <%# 投稿がある場合のモーダルウィンドウをまとめてレンダリング %>
+    <%# モーダル %>
     <% @posts_by_year.each do |_, posts| %>
       <% posts.each do |post| %>
         <%= render "posts/modal", post: post %>
@@ -25,14 +31,12 @@
     <% end %>
 
   <% else %>
-    <%# 投稿なしの表示 %>
+    <%# 投稿なし %>
     <div class="text-center py-20 space-y-6">
-      <!-- 添付画像 -->
       <div class="w-40 mx-auto animate-bounce">
-        <%= image_tag "no_album.png", alt: "アルバムが空の状態", class: "w-full h-auto" %>
+        <%= image_tag "no_album.png", alt: "アルバムが空の状態" %>
       </div>
 
-      <!-- 優しいメッセージ -->
       <h2 class="text-lg font-semibold text-base-content/80">
         まだ思い出が投稿されていません
       </h2>
@@ -40,9 +44,9 @@
         思い出を投稿して、アルバムを作りましょう。
       </p>
 
-      <!-- CTAボタン -->
       <%= link_to "思い出を投稿する", new_post_path,
             class: "btn btn-accent mt-4" %>
     </div>
   <% end %>
 </div>
+
