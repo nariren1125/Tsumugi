@@ -7,7 +7,7 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get index' do
     log_in_as(@user)
-    get albums_index_url
+    get albums_url
     assert_response :success
   end
 end
