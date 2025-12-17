@@ -18,18 +18,46 @@
     </label>
 
     <ul tabindex="0"
-      class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow mt-3">
+    class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow mt-3">
+
       <% if current_user %>
-        <li class="menu-title px-2 py-1">👤 <%= current_user.name %></li>
+        <li class="menu-title">
+          <span>👤 <%= current_user.name %></span>
+        </li>
+
         <li><%= link_to "アルバム一覧", albums_path %></li>
         <li><%= link_to "設定", family_settings_path %></li>
-        <li><%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "text-red-600" %></li>
+
+        <li class="menu-title mt-2">
+          <span>このアプリについて</span>
+        </li>
+        <li><%= link_to "利用規約", terms_path %></li>
+        <li><%= link_to "プライバシーポリシー", privacy_path %></li>
+
+        <li class="menu-title mt-2">
+          <span>アカウント</span>
+        </li>
+        <li>
+          <%= link_to "ログアウト",
+                      logout_path,
+                      data: { turbo_method: :delete },
+                      class: "text-red-600" %>
+        </li>
+
       <% else %>
-        <li><%= link_to "ログイン", "/auth/line", class: "text-primary" %></li>
+        <li>
+          <%= link_to "ログイン", "/auth/line", class: "text-primary" %>
+        </li>
+
+        <li class="menu-title mt-2">
+          <span>このアプリについて</span>
+        </li>
+        <li><%= link_to "利用規約", terms_path %></li>
+        <li><%= link_to "プライバシーポリシー", privacy_path %></li>
       <% end %>
+
     </ul>
   </div>
-  <!-- ▲▲▲ header 内に置く ▲▲▲ -->
 </header>
 
 <% end %>

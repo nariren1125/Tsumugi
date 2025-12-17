@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "pages/terms"
+  get "pages/privacy"
   get "children/new"
   get "children/create"
   get "family_settings", to: "family_groups#settings"
@@ -9,6 +11,8 @@ Rails.application.routes.draw do
   get "sessions/destroy"
   get "posts/new", to: "posts#new", as: :new_post
   get "invite/:token", to: "invite_tokens#show", as: :invite
+  get "/terms",   to: "pages#terms"
+  get "/privacy", to: "pages#privacy"
   root "home#index"
 
   resources :albums, only: [:index, :show, :new, :create]
