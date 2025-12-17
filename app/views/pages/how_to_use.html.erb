@@ -1,0 +1,38 @@
+<div class="max-w-xl mx-auto px-4 py-10 pb-24 space-y-6">
+
+  <%# タイトル %>
+  <div class="card bg-base-100 shadow-sm">
+    <div class="card-body text-center space-y-2">
+      <h1 class="text-2xl font-bold tracking-wide">
+        初めての方へ
+      </h1>
+      <p class="text-base-content/60">
+        Tumugiの使い方
+      </p>
+    </div>
+  </div>
+
+  <%# 共通カード %>
+  <% steps = [
+    ["はじめに", "Tumugiは、家族で思い出を共有するためのアプリです。操作はとてもシンプルなので、はじめての方でも安心して使えます。"],
+    ["LINEでログイン", "LINEアカウントでログインできます。新しくアカウントを作る必要はありません。"],
+    ["家族グループに参加", "家族グループを作成、または招待を受けて参加します。家族だけで、思い出を共有できます。"],
+    ["思い出を投稿", "写真を選び、ひとことを添えて投稿します。いつもの写真投稿と同じ感覚です。"],
+    ["アルバムを見返す", "思い出はアルバムとして一覧で確認できます。あとから、家族で振り返ることができます。"],
+    ["使い続けることで", "家族で思い出を残す習慣が、自然と生まれていきます。"]
+  ] %>
+
+  <% steps.each do |title, body| %>
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body space-y-3">
+        <h2 class="card-title text-base">
+          <%= title %>
+        </h2>
+        <p class="text-sm text-base-content/80">
+          <%= body %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+
+</div>

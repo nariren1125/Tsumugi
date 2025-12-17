@@ -3,7 +3,7 @@ class PagesController < ApplicationController
 
   def privacy; end
 
-  def privacy; end
+  def about; end
 
   def how_to_use; end
 end
