@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "pages/terms"
+  get "pages/privacy"
   get "children/new"
   get "children/create"
   get "family_settings", to: "family_groups#settings"
