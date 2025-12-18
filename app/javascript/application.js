@@ -1,7 +1,6 @@
 // Importmap 用の設定（Rails 7 の標準構成）
 import "@hotwired/turbo-rails"
 import "controllers"
-import "./photo_preview"
 
 // ✅ Turbo 読み込み完了後に実行
 document.addEventListener("turbo:load", () => {
