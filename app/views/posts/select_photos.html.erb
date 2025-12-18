@@ -1,29 +1,88 @@
-<div class="max-w-xl mx-auto px-4 py-10 pb-24">
+<%# デフォルトヘッダーを抑制 %>
+<% content_for :suppress_header, true %>
 
-  <% if flash[:alert] %>
-    <div class="alert alert-error text-sm mb-4">
-      <%= flash[:alert] %>
-    </div>
-  <% end %>
+<div
+  class="fixed inset-0 bg-base-100"
+  data-controller="photo-picker"
+>
+  <!-- ===== ヘッダー ===== -->
+  <header
+    class="fixed top-0 left-0 w-full z-[100]
+           flex items-center justify-between
+           px-4 py-3 border-b bg-base-300"
+  >
+    <!-- キャンセル -->
+    <button
+      type="button"
+      class="text-xl"
+      data-action="photo-picker#cancel"
+    >
+      ×
+    </button>
 
-  <h1 class="text-xl font-semibold mb-4">写真を選択</h1>
+    <!-- タイトル -->
+    <h1 class="text-base font-semibold">
+      新規投稿
+    </h1>
 
-  <%= form_with url: confirm_photos_posts_path,
-                data: { turbo: false },
-                html: { multipart: true } do %>
+    <!-- 次へ -->
+    <button
+      type="button"
+      class="text-sm font-semibold text-accent disabled:opacity-40"
+      data-photo-picker-target="nextButton"
+      data-action="photo-picker#next"
+      disabled
+    >
+      次へ
+    </button>
+  </header>
 
-    <%= file_field_tag "images[]",
-          multiple: true,
-          accept: "image/*",
-          class: "file-input file-input-bordered w-full",
-          id: "photo-input" %>
+  <!-- ===== メイン ===== -->
+  <main class="pt-14 flex flex-col relative z-10">
 
-    <!-- プレビュー -->
-    <div id="photo-preview"
-         class="grid grid-cols-3 gap-2 mt-4"></div>
+    <!-- 選択中プレビュー（上部） -->
+    <section
+      class="aspect-square bg-black"
+      data-action="click->photo-picker#openPicker"
+    >
+      <img
+        data-photo-picker-target="preview"
+        class="w-full h-full object-contain hidden"
+        alt="選択中の写真"
+      >
+    </section>
 
-    <div class="mt-6">
-      <%= submit_tag "次へ", class: "btn btn-accent w-full" %>
-    </div>
-  <% end %>
+    <!-- 写真一覧（グリッド） -->
+    <section class="flex-1 overflow-y-auto p-1">
+      <div
+        class="grid grid-cols-4 gap-1"
+        data-photo-picker-target="grid"
+      >
+        <%# JSでサムネイルを挿入 %>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== hidden input ===== -->
+
+  <form
+    action="<%= confirm_photos_posts_path %>"
+    method="post"
+    enctype="multipart/form-data"
+    data-photo-picker-target="form"
+    class="hidden"
+  >
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+    <input
+      type="file"
+      name="images[]"
+      accept="image/*"
+      multiple
+      data-photo-picker-target="input"
+      data-action="change->photo-picker#handleFiles"
+    >
+  </form>
+
 </div>
