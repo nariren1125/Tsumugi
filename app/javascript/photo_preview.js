@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("turbo:load", () => {
   const input = document.getElementById("photo-input");
   const preview = document.getElementById("photo-preview");
 
-  if (!input) return;
+  if (!input || !preview) return
 
   input.addEventListener("change", () => {
     preview.innerHTML = "";
