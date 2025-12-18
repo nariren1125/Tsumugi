@@ -44,6 +44,13 @@ class PostsController < ApplicationController
   end
 
   def confirm_photos
+
+    if params[:images].blank?
+      redirect_to select_photos_posts_path,
+                  alert: "写真を1枚以上選択してください"
+      return
+    end
+
     post = current_user.posts.build(album: temp_album)
     post.save!(validate: false)
 
