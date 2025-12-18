@@ -70,10 +70,9 @@ class PostsController < ApplicationController
   end
 
   def build_draft_post
-    current_user.posts.create!(
-      album: temp_album,
-      validate: false
-    )
+    post = current_user.posts.build(album: temp_album)
+    post.save(validate: false)
+    post
   end
 
   def attach_photos(post)
