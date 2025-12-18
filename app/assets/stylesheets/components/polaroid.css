@@ -1,22 +1,33 @@
-/* app/assets/stylesheets/components/polaroid.css */
 
+/* ポラロイドカード専用の部品クラス */
+
+/* ポラロイド1枚分の「外枠」コンポーネント */
+/* HTMLでは class = polaroid-card で使用している */
 .polaroid-card {
   @apply relative bg-base-100 rounded-sm shadow-md p-3 pt-4
          cursor-pointer transition-transform;
 }
 
+/* 傾きバリエーション */
+/* HTMLでは class = polaroid-card--tilt で使用している */
 .polaroid-card--tilt {
   transform: rotate(-1deg);
 }
 
+/* ホバー（タップ）時の効果 */
+/* HTMLでは class = polaroid-card:hover で使用している */
 .polaroid-card:hover {
   transform: rotate(0deg);
 }
 
+/* 画像の比率・トリミングをビュー側で調整するための枠 */
+/* HTMLでは class = polaroid-photo で使用している */
 .polaroid-photo {
   @apply aspect-square bg-base-200 overflow-hidden;
 }
 
+/* 写真下の「タイトル・年齢」部分のコンポーネント */
+/* HTMLでは class = polaroid-caption で使用している */
 .polaroid-caption {
   @apply pt-3 space-y-1;
 }
