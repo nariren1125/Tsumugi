@@ -1,0 +1,21 @@
+<div class="max-w-xl mx-auto px-4 py-10 pb-24">
+  <h1 class="text-xl font-semibold mb-4">写真を選択</h1>
+
+  <%= form_with url: confirm_photos_posts_path,
+                data: { turbo: false },
+                html: { multipart: true } do %>
+
+    <%= file_field_tag "images[]",
+          multiple: true,
+          accept: "image/*",
+          class: "file-input file-input-bordered w-full" %>
+
+    <%# プレビュー領域（あとでJSで拡張） %>
+    <div id="preview" class="grid grid-cols-3 gap-2 mt-4"></div>
+
+    <div class="mt-6">
+      <%= submit_tag "次へ",
+            class: "btn btn-accent w-full" %>
+    </div>
+  <% end %>
+</div>

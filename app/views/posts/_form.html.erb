@@ -28,12 +28,6 @@
               placeholder: "例：はじめての公園遊び" %>
       </div>
 
-      <%# 画像アップロード（最大3枚まで） %>
-      <div class="mb-4">
-          <%= label_tag :images, "写真ファイル（最大3枚）", class: "label-text font-semibold" %>
-          <%= file_field_tag "post[images][]", multiple: true, class: "file-input file-input-bordered w-full" %>
-      </div>
-
       <%# メッセージ %>
       <div class="mb-4">
         <%= f.label :message, "メッセージ", class: "label-text font-semibold" %>
