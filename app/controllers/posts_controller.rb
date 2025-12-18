@@ -5,11 +5,11 @@ class PostsController < ApplicationController
 
   def new
     @post =
-    if params[:draft_post_id]
-      current_user.posts.find(params[:draft_post_id])
-    else
-      Post.new
-    end
+      if params[:draft_post_id]
+        current_user.posts.find(params[:draft_post_id])
+      else
+        Post.new
+      end
 
     @has_family_group = current_user.family_group.present?
   end
@@ -40,23 +40,13 @@ class PostsController < ApplicationController
     redirect_to albums_path, notice: t('flash.posts.deleted')
   end
 
-  def select_photos
-  end
+  def select_photos; end
 
   def confirm_photos
+    return redirect_to_no_photos if params[:images].blank?
 
-    if params[:images].blank?
-      redirect_to select_photos_posts_path,
-                  alert: "写真を1枚以上選択してください"
-      return
-    end
-
-    post = current_user.posts.build(album: temp_album)
-    post.save!(validate: false)
-
-    params[:images].each do |img|
-      post.photos.create!(image: img)
-    end
+    post = build_draft_post
+    attach_photos(post)
 
     redirect_to new_post_path(draft_post_id: post.id)
   end
@@ -71,64 +61,30 @@ class PostsController < ApplicationController
   end
 
   # ==================================================
-  # Controller Flow
+  # Confirm Photos Flow
   # ==================================================
 
-  #def build_and_save_post
-    #build_post
-
-    #if @post.save
-      #handle_success
-    #else
-      #handle_failure
-    #end
-  #end
-
-  #def assign_family_group_flag
-    #@has_family_group = current_user.family_group.present?
-  #end
-
-  # ==================================================
-  # Build
-  # ==================================================
-
-  #def build_post
-    # Postオブジェクトをcurrent_userに紐づけて作成
-    # 画像属性を除外してパラメータを渡す
-    #@post = current_user.posts.build(post_params.except(:images))
-    # 家族グループのアルバムを取得または作成して紐づけ
-    #family = current_user.family_group
-    # family に album があればそれを使う、なければ新規作成
-    #album = family.album || family.create_album!
-    # 上記で取得または作成した album を post に紐づけ
-    #@post.album = album
-  #end
-
-  # ==================================================
-  # Side Effects
-  # ==================================================
-  #def attach_images
-    #return if session[:post_images].blank?
-
-    #session[:post_images].each do |img|
-      #@post.photos.create!(image: img)
-    #end
-
-    #session.delete(:post_images)
-  #end
-
-  # ==================================================
-  # Response
-  # ==================================================
-  def handle_success
-    attach_images
-    redirect_to albums_path, notice: t('flash.posts.created')
+  def redirect_to_no_photos
+    redirect_to select_photos_posts_path,
+                alert: t('flash.posts.no_photos_selected')
   end
 
-  def handle_failure
-    Rails.logger.debug { "❌ save failed: #{@post.errors.full_messages}" }
-    render :new, status: :unprocessable_entity
+  def build_draft_post
+    current_user.posts.create!(
+      album: temp_album,
+      validate: false
+    )
   end
+
+  def attach_photos(post)
+    params[:images].each do |img|
+      post.photos.create!(image: img)
+    end
+  end
+
+  # ==================================================
+  # Album
+  # ==================================================
 
   def temp_album
     family = current_user.family_group
