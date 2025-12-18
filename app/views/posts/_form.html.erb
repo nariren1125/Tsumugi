@@ -1,7 +1,40 @@
-<div class="max-w-xl mx-auto px-4 py-10 pb-24">
-  <h1 class="text-2xl font-semibold text-base-content mb-6">
+<!-- 投稿ページヘッダー抑制 -->
+<% content_for :suppress_header, true %>
+
+<!-- 投稿ページカスタムヘッダー -->
+<div class="fixed top-0 left-0 w-full z-50 flex items-center justify-between
+            bg-base-300 text-base-content px-4 py-3
+            border-b border-base-200">
+
+  <!-- 戻る（写真選択へ） -->
+  <div class="w-20 flex-shrink-0">
+    <%= link_to "←", select_photos_posts_path, class: "text-lg" %>
+  </div>
+
+  <!-- タイトル -->
+  <h2 class="text-base font-bold text-center flex-grow truncate">
     思い出を投稿
-  </h1>
+  </h2>
+
+  <!-- 右側ダミー（中央寄せ用） -->
+  <div class="w-20 flex-shrink-0"></div>
+</div>
+
+<!-- 投稿フォーム本体 -->
+<div class="max-w-xl mx-auto px-4 pt-20 pb-24">
+
+  <%# 既存の写真がある場合はカルーセル表示 %>
+  <div class="flex justify-center gap-2 mb-4">
+    <% @post.photos.each do |photo| %>
+      <div class="w-20 aspect-square rounded-md overflow-hidden">
+        <%= image_tag photo.image, class: "w-full h-full object-cover" %>
+      </div>
+    <% end %>
+  </div>
+
+  <p class="text-xs text-base-content/60 text-center mb-2">
+    選択した写真（変更できません）
+  </p>
 
   <div class="space-y-4 bg-base-100 rounded-box shadow p-4">
     <%# ✅ 共通エラーパーツを呼び出し %>
@@ -26,12 +59,6 @@
         <%= f.text_field :title,
               class: "input input-bordered w-full",
               placeholder: "例：はじめての公園遊び" %>
-      </div>
-
-      <%# 画像アップロード（最大3枚まで） %>
-      <div class="mb-4">
-          <%= label_tag :images, "写真ファイル（最大3枚）", class: "label-text font-semibold" %>
-          <%= file_field_tag "post[images][]", multiple: true, class: "file-input file-input-bordered w-full" %>
       </div>
 
       <%# メッセージ %>

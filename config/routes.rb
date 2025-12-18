@@ -16,8 +16,13 @@ Rails.application.routes.draw do
   resources :albums, only: %i[index show new create]
   resources :family_groups, only: %i[new create edit update]
   resources :children, only: %i[new create edit update destroy]
-  resources :posts, only: %i[new create show edit update destroy]
   resources :invite_tokens, only: %i[create]
+  resources :posts, only: %i[new create show edit update destroy] do
+    collection do
+      get :select_photos
+      post :confirm_photos
+    end
+  end
 
   # 設定画面
   get "family_settings", to: "family_groups#settings"
