@@ -19,10 +19,10 @@ export default class extends Controller {
 
   // 写真が選択されたときの処理
   handleFiles() {
-    const files = this.inputTarget.files
-    if (!files || files.length === 0) return
-
-    const file = files[0]
+    const files = Array.from(this.inputTarget.files)
+    if (files.length === 0) return
+  
+    const lastFile = files[files.length - 1]
 
     // プレビュー表示
     this.previewTarget.src = URL.createObjectURL(file)

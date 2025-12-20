@@ -1,0 +1,38 @@
+<% content_for :suppress_header, true %>
+
+<div data-controller="photo-confirm">
+  <!-- ヘッダー -->
+  <header>
+    <%= link_to "×", select_photos_posts_path %>
+    <h1>確認</h1>
+    <button data-action="photo-confirm#next">次へ</button>
+  </header>
+
+  <!-- スライダー -->
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <% @images.each do |image| %>
+        <div class="swiper-slide">
+          <!-- まだアップロードされていない一時ファイルのパス（tempfile.path）を表示 -->
+          <%= image_tag image.tempfile.path,
+                class: "w-full object-contain" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 次へ用 hidden form -->
+  <form
+    action="<%= new_post_path %>"
+    method="post"
+    enctype="multipart/form-data"
+    data-photo-confirm-target="form"
+    class="hidden"
+  >
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+    <% @images.each do |image| %>
+      <input type="file" name="images[]" value="<%= image %>">
+    <% end %>
+  </form>
+</div>

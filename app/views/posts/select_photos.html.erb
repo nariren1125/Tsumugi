@@ -9,7 +9,7 @@
   <header
     class="fixed top-0 left-0 w-full z-[100]
            flex items-center justify-between
-           px-4 py-3 border-b bg-base-300"
+           px-4 py-4 border-b bg-base-300"
   >
     <!-- キャンセル -->
     <button
@@ -75,14 +75,14 @@
   >
     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
+    <!-- ファイル選択用 input -->
     <input
-      type="file"
-      name="images[]"
-      accept="image/*"
-      multiple
-      data-photo-picker-target="input"
-      data-action="change->photo-picker#handleFiles"
-    >
-  </form>
+    type="file"
+    name="images[]"
+    multiple
+    class="hidden"
+    data-photo-picker-target="input"
+    data-action="change->photo-picker#handleFiles"
+  >
 
 </div>
