@@ -45,8 +45,10 @@ class PostsController < ApplicationController
   #  プレビュー表示アクション
   def confirm_photos
     return redirect_to_no_photos if params[:images].blank?
-    
-    @images = params[:images]
+
+    # アップロードされた画像ファイル群をインスタンス変数へセット
+    @post = build_draft_post
+    attach_photos(@post)
   end
 
   # プレビューから投稿作成画面へ遷移するアクション
