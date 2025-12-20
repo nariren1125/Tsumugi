@@ -1,6 +1,9 @@
 <% content_for :suppress_header, true %>
 
-<div data-controller="photo-confirm">
+<div
+  class="swiper"
+  data-controller="photo-confirm"
+>
   <!-- ヘッダー -->
   <header class="flex justify-between items-center p-4">
     <%= link_to "×", select_photos_posts_path %>
@@ -8,14 +11,21 @@
     <%= link_to "次へ", new_post_path(draft_post_id: @post.id) %>
   </header>
 
-  <!-- スライダー -->
-   <div class="swiper">
-    <div class="swiper-wrapper">
-      <% @post.photos.each do |photo| %>
-        <div class="swiper-slide">
-          <%= image_tag photo.image, class: "w-full object-contain" %>
-        </div>
-      <% end %>
-    </div>
+  <!-- カウンター -->
+  <div
+    class="absolute top-16 right-4 z-50
+           bg-black/60 text-white text-sm px-3 py-1 rounded-full"
+    data-photo-confirm-target="counter"
+  >
+    1 / <%= @post.photos.count %>
+  </div>
+
+  <!-- Swiper -->
+  <div class="swiper-wrapper">
+    <% @post.photos.each do |photo| %>
+      <div class="swiper-slide">
+        <%= image_tag photo.image, class: "w-full object-contain" %>
+      </div>
+    <% end %>
   </div>
 </div>
