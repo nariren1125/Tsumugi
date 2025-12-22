@@ -46,7 +46,7 @@
     </h2>
 
     <p class="text-sm text-base-content/70 mb-6 text-center">
-      投稿できる写真は最大3枚までです。
+      投稿できる写真は最大5枚までです。
     </p>
 
     <button
@@ -57,23 +57,24 @@
     </button>
   </div>
 
-<!-- ===== hidden form / input ===== -->
-<form
-  action="<%= confirm_photos_posts_path %>"
-  method="post"
-  enctype="multipart/form-data"
-  data-photo-picker-target="form"
-  class="hidden"
->
-  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
-  <input
-    type="file"
-    name="images[]"
-    multiple
-    accept="image/*"
-    data-photo-picker-target="input"
-    data-action="change->photo-picker#handleFiles"
+  <!-- ===== hidden form / input ===== -->
+  <form
+    action="<%= confirm_photos_posts_path %>"
+    method="post"
+    enctype="multipart/form-data"
+    data-photo-picker-target="form"
+    class="hidden"
   >
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= hidden_field_tag :dropped_files_count, 0 %>
 
-</form>
+    <input
+      type="file"
+      name="post[images][]"
+      multiple
+      accept="image/*"
+      data-photo-picker-target="input"
+      data-action="change->photo-picker#handleFiles"
+    >
+  </form>
+</main>

@@ -44,10 +44,19 @@ class PostsController < ApplicationController
 
   #  写真を仮保存し、確認プレビューを表示する
   def confirm_photos
-    return redirect_to_no_photos if params[:images].blank?
+    images = params.dig(:post, :images)
+    return redirect_to_no_photos if images.blank?
+
+    max = 5
+
+    # サーバー側で必ず制限する（最重要）
+    limited_images = images.first(max)
+
+    # 画面表示用（何枚切り捨てたか）
+    @dropped_files_count = [images.size - max, 0].max
 
     @post = build_draft_post
-    attach_photos(@post)
+    attach_photos(@post, limited_images)
   end
 
   private
@@ -74,8 +83,8 @@ class PostsController < ApplicationController
     post
   end
 
-  def attach_photos(post)
-    params[:images].each_with_index do |img, index|
+  def attach_photos(post, images)
+    images.each_with_index do |img, index|
       post.photos.create!(
         image: img,
         position: index

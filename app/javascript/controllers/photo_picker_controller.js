@@ -14,11 +14,27 @@ export default class extends Controller {
   }
 
   handleFiles() {
-    const files = this.inputTarget.files
-    if (!files || files.length === 0) return
+    const maxFiles = this.maxFilesValue
+    const files = Array.from(this.inputTarget.files)
+    if (files.length === 0) return
 
-    // ✅ 写真が選ばれたら即 confirm へ
+    // 超過分をカット（最初の5枚を固定）
+    let trimmedFiles = files
+    let droppedCount = 0
+
+    if (files.length > maxFiles) {
+      trimmedFiles = files.slice(0, maxFiles)
+      droppedCount = files.length - maxFiles
+    }
+
+    const dt = new DataTransfer()
+    trimmedFiles.forEach(file => dt.items.add(file))
+    this.inputTarget.files = dt.files
+
+    this.formTarget.querySelector(
+      'input[name="dropped_files_count"]'
+    ).value = droppedCount
+
     this.formTarget.submit()
   }
-
 }
