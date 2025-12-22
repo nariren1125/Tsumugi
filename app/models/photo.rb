@@ -1,5 +1,5 @@
 class Photo < ApplicationRecord
-  belongs_to :post
+  belongs_to :post, inverse_of: :photos
   # imagesがActive Storageで管理されるように設定
   has_one_attached :image
 
