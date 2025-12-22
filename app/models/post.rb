@@ -10,4 +10,13 @@ class Post < ApplicationRecord
 
   validates :title, presence: true, length: { maximum: 100 }
   validates :content, presence: true, length: { maximum: 500 }
+  validate :photos_count_within_limit
+
+  private
+
+  def photos_count_within_limit
+    return unless photos.size > 5
+
+    errors.add(:base, '写真は最大5枚まで投稿できます')
+  end
 end

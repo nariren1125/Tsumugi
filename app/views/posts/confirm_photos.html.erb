@@ -17,6 +17,22 @@
     <div class="w-6"></div>
   </header>
 
+  <!-- 写真アップロードが5枚以上だった時の警告 -->
+  <% if @dropped_files_count > 0 %>
+    <div
+      data-controller="auto-dismiss"
+      data-auto-dismiss-timeout-value="3000"
+      class="absolute top-16 left-1/2 -translate-x-1/2 z-30
+             bg-warning/80 text-warning-content
+             px-4 py-2 rounded-lg text-xs
+             shadow-md
+             transition-opacity duration-500
+             pointer-events-none"
+    >
+      <%= "#{@dropped_files_count}枚の写真はアップロードできませんでした（最大5枚まで）" %>
+    </div>
+  <% end %>
+
   <!-- ===== プレビュー ===== -->
   <div class="flex-1 flex items-start justify-center px-4 pt-6 pb-30">
     <div class="w-full max-w-md">
