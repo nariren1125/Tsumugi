@@ -48,7 +48,10 @@
 
       <% else %>
         <li>
-          <%= link_to "ログイン", "/auth/line", class: "text-primary" %>
+          <%= link_to "ログイン",
+                      "/auth/line",
+                      class: "text-primary",
+                      data: { turbo: false } %>
         </li>
 
         <li class="menu-title mt-2">

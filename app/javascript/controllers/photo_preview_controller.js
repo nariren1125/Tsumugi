@@ -1,24 +1,52 @@
-document.addEventListener("turbo:load", () => {
-  const input = document.getElementById("photo-input");
-  const preview = document.getElementById("photo-preview");
+// 写真プレビューコントローラー
+import { Controller } from "@hotwired/stimulus"
 
-  if (!input || !preview) return
+export default class extends Controller {
+  static targets = [
+    "input",
+    "preview",
+    "nextButton",
+    "form",
+    "formInput"
+  ]
 
-  input.addEventListener("change", () => {
-    preview.innerHTML = "";
+  // =========================
+  // 写真選択を開く
+  // =========================
+  openPicker() {
+    this.inputTarget.click()
+  }
 
-  const files = Array.from(input.files).slice(0, 3);
+  // 写真が選択されたときの処理
+  handleFiles() {
+    const files = Array.from(this.inputTarget.files)
+    if (files.length === 0) return
+  
+    const lastFile = files[files.length - 1]
 
-    files.forEach((file) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "aspect-square overflow-hidden rounded bg-base-200";
+    // プレビュー表示
+    this.previewTarget.src = URL.createObjectURL(file)
+    this.previewTarget.classList.remove("hidden")
 
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      img.className = "w-full h-full object-cover";
+    // 次へボタン有効化
+    this.nextButtonTarget.disabled = false
+  }
 
-      wrapper.appendChild(img);
-      preview.appendChild(wrapper);
-    });
-  });
-});
+  // =========================
+  // 次へ
+  // =========================
+  next() {
+    // 選択されたファイルを hidden form にコピー
+    this.formInputTarget.files = this.inputTarget.files
+
+    // confirm_photos に POST
+    this.formTarget.submit()
+  }
+
+  // =========================
+  // キャンセル
+  // =========================
+  cancel() {
+    history.back()
+  }
+}
