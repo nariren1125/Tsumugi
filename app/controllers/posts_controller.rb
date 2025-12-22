@@ -42,23 +42,12 @@ class PostsController < ApplicationController
 
   def select_photos; end
 
-  #  プレビュー表示アクション
+  #  写真を仮保存し、確認プレビューを表示する
   def confirm_photos
     return redirect_to_no_photos if params[:images].blank?
 
-    # アップロードされた画像ファイル群をインスタンス変数へセット
     @post = build_draft_post
     attach_photos(@post)
-  end
-
-  # プレビューから投稿作成画面へ遷移するアクション
-  def prepare_post
-    return redirect_to_no_photos if params[:images].blank?
-  
-    post = build_draft_post
-    attach_photos(post)
-  
-    redirect_to new_post_path(draft_post_id: post.id)
   end
 
   private
@@ -86,8 +75,11 @@ class PostsController < ApplicationController
   end
 
   def attach_photos(post)
-    params[:images].each do |img|
-      post.photos.create!(image: img)
+    params[:images].each_with_index do |img, index|
+      post.photos.create!(
+        image: img,
+        position: index
+      )
     end
   end
 

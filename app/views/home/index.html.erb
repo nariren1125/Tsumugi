@@ -11,8 +11,10 @@
     </p>
 
     <!-- メインボタン -->
-    <%= link_to "LINEでログイン / 新規登録", line_login_path,
-          class: "btn btn-accent w-full mb-4 text-base" %>
+    <%= link_to "LINEでログイン / 新規登録",
+                line_login_path,
+                class: "btn btn-accent w-full mb-4 text-base",
+                data: { turbo: false } %>
 
     <!-- サブリンク -->
     <%= link_to "Tumugiについて", about_path,
