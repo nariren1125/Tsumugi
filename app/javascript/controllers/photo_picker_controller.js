@@ -7,6 +7,11 @@ export default class extends Controller {
 
   connect() {
     console.log("photo-picker connected")
+
+    // 🔑 画面表示後に自動でファイルピッカーを開く
+    requestAnimationFrame(() => {
+      this.openPicker()
+    })
   }
 
   openPicker() {
