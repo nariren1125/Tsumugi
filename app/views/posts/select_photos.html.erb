@@ -1,86 +1,77 @@
-<%# デフォルトヘッダーを抑制 %>
+<%# デフォルトヘッダー、デフォルト背景を制御%>
 <% content_for :suppress_header, true %>
+<% content_for :transparent_background, true %>
 
-<div
-  class="fixed inset-0 bg-base-100"
-  data-controller="photo-picker"
->
+<div class="relative min-h-screen">
+
   <!-- ===== ヘッダー ===== -->
   <header
     class="fixed top-0 left-0 w-full z-[100]
            flex items-center justify-between
-           px-4 py-4 border-b bg-base-300"
+           px-4 py-4 shadow-sm bg-base-300"
   >
-    <!-- キャンセル -->
-    <button
-      type="button"
-      class="text-xl"
-      data-action="photo-picker#cancel"
-    >
-      ×
-    </button>
 
     <!-- タイトル -->
     <h1 class="text-base font-semibold">
       新規投稿
     </h1>
-
-    <!-- 次へ -->
-    <button
-      type="button"
-      class="text-sm font-semibold text-accent disabled:opacity-40"
-      data-photo-picker-target="nextButton"
-      data-action="photo-picker#next"
-      disabled
-    >
-      次へ
-    </button>
   </header>
 
   <!-- ===== メイン ===== -->
-  <main class="pt-14 flex flex-col relative z-10">
 
-    <!-- 選択中プレビュー（上部） -->
-    <section
-      class="aspect-square bg-black"
-      data-action="click->photo-picker#openPicker"
-    >
-      <img
-        data-photo-picker-target="preview"
-        class="w-full h-full object-contain hidden"
-        alt="選択中の写真"
-      >
-    </section>
-
-    <!-- 写真一覧（グリッド） -->
-    <section class="flex-1 overflow-y-auto p-1">
-      <div
-        class="grid grid-cols-4 gap-1"
-        data-photo-picker-target="grid"
-      >
-        <%# JSでサムネイルを挿入 %>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ===== hidden input ===== -->
-
-  <form
-    action="<%= confirm_photos_posts_path %>"
-    method="post"
-    enctype="multipart/form-data"
-    data-photo-picker-target="form"
-    class="hidden"
+  <!-- photo-pickerコントローラーを適用 -->
+  <main
+    data-controller="photo-picker"
+    class="relative flex flex-col items-center px-6
+           pt-28 pb-40
+           min-h-[calc(100svh-120px)]"
   >
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
-    <!-- ファイル選択用 input -->
-    <input
+  <!-- 🌿 背景（メイン専用） -->
+  <div class="absolute inset-0 -z-10 translate-y-14 pointer-events-none">
+  <%= image_tag "post_select_bg.png",
+    class: "w-full h-full object-cover object-[center_85%] opacity-80",
+    alt: "" %>
+</div>
+
+  <div class="flex flex-col items-center translate-y-28">
+    <div class="w-40 mx-auto">
+      <%= image_tag "tumugi_photo.png",
+          alt: "ツムとムギが写真を撮っているイラスト",
+          class: "w-full h-auto opacity-90 drop-shadow-sm" %>
+    </div>
+
+    <h2 class="text-lg font-semibold mb-2">
+      思い出の写真を選ぼう
+    </h2>
+
+    <p class="text-sm text-base-content/70 mb-6 text-center">
+      投稿できる写真は最大3枚までです。
+    </p>
+
+    <button
+      class="btn btn-accent mt-2 shadow-md rounded-full px-6"
+      data-action="photo-picker#openPicker"
+    >
+      写真を選ぶ
+    </button>
+  </div>
+
+<!-- ===== hidden form / input ===== -->
+<form
+  action="<%= confirm_photos_posts_path %>"
+  method="post"
+  enctype="multipart/form-data"
+  data-photo-picker-target="form"
+  class="hidden"
+>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <input
     type="file"
     name="images[]"
     multiple
-    class="hidden"
+    accept="image/*"
     data-photo-picker-target="input"
     data-action="change->photo-picker#handleFiles"
   >
