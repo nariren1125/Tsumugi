@@ -2,35 +2,28 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   open(event) {
-
-    const id = event.currentTarget.dataset.modalId
+    const id = this.element.dataset.modalId || event.currentTarget.dataset.modalId
     const modal = document.getElementById(`modal-${id}`)
 
-    if (modal) {
-      modal.classList.remove("hidden")
+    if (!modal) return
 
-      // Swiperの初期化（初回のみ）
-      if (!modal.dataset.swiperInitialized) {
-        // 👇 window.Swiper を使う
-        new window.Swiper(`#modal-${id} .swiper`, {
-          loop: false,
-          pagination: {
-            el: `#modal-${id} .swiper-pagination`,
-            clickable: true,
-          },
-        })
+    // ① モーダルを表示
+    modal.classList.remove("hidden")
 
-        modal.dataset.swiperInitialized = true
-      }
-    } else {
-      console.warn(`❌ モーダル modal-${id} が見つかりません`)
+    // ② 中の swiper_controller を探す
+    const swiperElement = modal.querySelector('[data-controller="swiper"]')
+
+    if (swiperElement) {
+      const controller = this.application.getControllerForElementAndIdentifier(
+        swiperElement,
+        "swiper"
+      )
+
+      controller?.init()
     }
   }
 
-  close(event) {
-    const modal = event.currentTarget.closest("[id^=modal-]")
-    if (modal) {
-      modal.classList.add("hidden")
-    }
+  close() {
+    this.element.classList.add("hidden")
   }
 }

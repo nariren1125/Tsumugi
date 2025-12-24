@@ -32,7 +32,7 @@
         写真
       </h2>
 
-      <div class="swiper rounded-xl overflow-hidden shadow">
+      <div class="swiper rounded-xl overflow-hidden shadow" data-controller="swiper" data-swiper-autoinit-value="true">
         <div class="swiper-wrapper">
           <% @post.photos.each do |photo| %>
             <% if photo.image.attached? %>
@@ -71,12 +71,3 @@
 
   <% end %>
 </div>
-
-<script>
-  document.addEventListener("turbo:load", () => {
-    new Swiper(".swiper", {
-      loop: true,
-      pagination: { el: ".swiper-pagination" },
-    });
-  });
-</script>

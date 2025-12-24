@@ -32,21 +32,6 @@
 
   <% else %>
     <%# 投稿なし %>
-    <div class="text-center py-20 space-y-6">
-      <div class="w-40 mx-auto animate-bounce">
-        <%= image_tag "no_album.png", alt: "アルバムが空の状態" %>
-      </div>
-
-      <h2 class="text-lg font-semibold text-base-content/80">
-        まだ思い出が投稿されていません
-      </h2>
-      <p class="text-sm text-base-content/60">
-        思い出を投稿して、アルバムを作りましょう。
-      </p>
-
-      <%= link_to "思い出を投稿する", new_post_path,
-            class: "btn btn-accent mt-4" %>
-    </div>
+    <%= render "albums/empty" %>
   <% end %>
 </div>
-
