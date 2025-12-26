@@ -19,5 +19,4 @@ class User < ApplicationRecord
       [I18n.t("activerecord.attributes.user.role.#{key}"), key]
     end
   end
-
 end

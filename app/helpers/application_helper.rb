@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   # 役割に応じたバッジのクラスを返す
   def role_badge_class(role)
     case role
