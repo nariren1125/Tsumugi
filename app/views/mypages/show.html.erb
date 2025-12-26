@@ -2,22 +2,26 @@
   マイページ
 </h1>
 
-<div class="bg-base-200 rounded-2xl p-5 mb-8">
-  <p class="text-lg font-semibold">
-    <%= @user.name %>
-  </p>
+<div class="bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 mb-6">
 
-  <div class="mt-2">
-    <span
-      class="inline-block px-3 py-1 rounded-full text-xs font-medium border
-             <%= @user.role_badge_class %>">
-      <%= t("activerecord.attributes.user.role.#{@user.role}") %>
-    </span>
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <p class="text-lg font-semibold"><%= @user.name %></p>
+
+      <span class="inline-flex px-3 py-0.5 rounded-full text-xs font-medium
+        <%= role_badge_class(@user.role) %>">
+        <%= @user.role_i18n %>
+      </span>
+    </div>
+
+    <%= link_to "編集", edit_mypage_path,
+        class: "btn btn-sm btn-outline rounded-full" %>
   </div>
 
-  <%= link_to "編集",
-        edit_mypage_path,
-        class: "btn btn-sm btn-outline mt-4" %>
+  <div class="mt-4 text-sm text-base-content/70">
+    投稿数：<span class="font-medium text-base-content"><%= @posts.count %></span> 件
+  </div>
+
 </div>
 
 <h2 class="text-sm font-semibold mb-3">

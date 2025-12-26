@@ -21,6 +21,9 @@ ja:
       deleted: "思い出を削除しました"
       no_photos_selected: "写真を1枚以上選択してください"
 
+    mypage:
+      updated: "マイページを更新しました"
+
     authorization:
       failure: "権限がありません"
 
@@ -37,7 +40,8 @@ ja:
         title: "タイトル"
         content: "メッセージ"
       user:
-        role:
+        role: "役割"
+        roles:
           father: "パパ"
           mother: "ママ"
           other: "その他"
