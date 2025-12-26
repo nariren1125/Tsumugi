@@ -1,0 +1,26 @@
+<div class="flex gap-4 items-center bg-base-100 rounded-xl shadow p-4">
+  <!-- サムネイル -->
+  <div class="w-20 h-20 rounded-lg overflow-hidden bg-base-200 flex-shrink-0">
+    <% if post.photos.any? %>
+      <%= image_tag post.photos.first.image,
+            class: "w-full h-full object-cover" %>
+    <% end %>
+  </div>
+
+  <!-- 情報 -->
+  <div class="flex-1">
+    <p class="text-sm text-base-content/60">
+      <%= post.photo_date ? l(post.photo_date) : "撮影日未設定" %>
+    </p>
+
+    <p class="font-semibold">
+      <%= post.title.presence || "タイトル未設定" %>
+    </p>
+  </div>
+
+  <!-- 編集 -->
+  <div>
+    <%= link_to "編集", edit_post_path(post),
+          class: "btn btn-sm btn-outline" %>
+  </div>
+</div>

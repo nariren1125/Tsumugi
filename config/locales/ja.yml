@@ -36,9 +36,8 @@ ja:
       post:
         title: "タイトル"
         content: "メッセージ"
-
       user:
-        role:
+        roles:
           father: "父"
           mother: "母"
           other: "その他"
