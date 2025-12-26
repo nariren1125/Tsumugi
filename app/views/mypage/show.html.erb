@@ -1,0 +1,18 @@
+
+<h1 class="text-lg font-semibold mb-4">マイページ</h1>
+
+<div class="bg-base-100 rounded-box p-4 mb-6">
+  <p class="font-medium"><%= @user.name %></p>
+
+  <p class="text-sm text-base-content/60">
+    役割：<%= @user.role_i18n %>
+  </p>
+
+  <%= link_to "編集", edit_mypage_path, class: "btn btn-sm mt-3" %>
+</div>
+
+<h2 class="text-base font-semibold mb-3">あなたの思い出</h2>
+
+<div class="space-y-4">
+  <%= render @posts %>
+</div>

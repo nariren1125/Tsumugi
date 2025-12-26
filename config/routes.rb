@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy", as: :logout
 
   # メイン機能
+  resource :mypage, only: [:show, :edit, :update]
   resources :albums, only: %i[index show new create]
   resources :family_groups, only: %i[new create edit update]
   resources :children, only: %i[new create edit update destroy]

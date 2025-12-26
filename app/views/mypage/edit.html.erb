@@ -1,0 +1,17 @@
+
+<%= form_with model: @user, url: mypage_path, method: :patch do |f| %>
+
+  <div class="mb-4">
+    <%= f.label :name, "名前" %>
+    <%= f.text_field :name, class: "input input-bordered w-full" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :role, "役割" %>
+    <%= f.select :role, User.roles.keys.map { |k| [k, k] },
+          {}, class: "select select-bordered w-full" %>
+  </div>
+
+  <%= f.submit "保存", class: "btn btn-accent w-full" %>
+
+<% end %>
