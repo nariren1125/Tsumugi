@@ -8,8 +8,10 @@
 
   <div class="mb-4">
     <%= f.label :role, "役割" %>
-    <%= f.select :role, User.roles.keys.map { |k| [k, k] },
-          {}, class: "select select-bordered w-full" %>
+    <%= f.select :role,
+      User.role_options,
+      {},
+      class: "select select-bordered w-full" %>
   </div>
 
   <%= f.submit "保存", class: "btn btn-accent w-full" %>
