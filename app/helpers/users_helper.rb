@@ -1,3 +1,6 @@
+
+module UsersHelper
+
 def role_badge_class(role)
   case role.to_sym
   when :father
@@ -7,4 +10,6 @@ def role_badge_class(role)
   else
     'bg-gray-100 text-gray-700'
   end
+end
+
 end
