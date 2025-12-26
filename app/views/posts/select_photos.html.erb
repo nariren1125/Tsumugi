@@ -5,11 +5,7 @@
 <div class="relative min-h-screen">
 
   <!-- ===== ヘッダー ===== -->
-  <header
-    class="fixed top-0 left-0 w-full z-[100]
-           flex items-center justify-between
-           px-4 py-4 shadow-sm bg-base-300"
-  >
+  <header class="w-full bg-base-300 text-base-content shadow-sm px-4 h-14 flex justify-between items-center">
 
     <!-- タイトル -->
     <h1 class="text-base font-semibold">
@@ -28,7 +24,7 @@
   >
 
   <!-- 🌿 背景（メイン専用） -->
-  <div class="absolute inset-0 -z-10 translate-y-14 pointer-events-none">
+  <div class="absolute inset-0 -z-10  pointer-events-none">
   <%= image_tag "post_select_bg.png",
     class: "w-full h-full object-cover object-[center_85%] opacity-80",
     alt: "" %>
