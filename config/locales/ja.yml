@@ -37,6 +37,12 @@ ja:
         title: "タイトル"
         content: "メッセージ"
 
+      user:
+        role:
+          father: "父"
+          mother: "母"
+          other: "その他"
+
     errors:
       models:
         post:
