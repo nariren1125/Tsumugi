@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/terms',       to: 'pages#terms'
   get '/privacy',     to: 'pages#privacy'
   get '/how_to_use',  to: 'pages#how_to_use'
+  get "mypage", to: "mypages#show"
 
   # LINEログイン
   get "login/line", to: redirect("/auth/line"), as: :line_login
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy", as: :logout
 
   # メイン機能
+  resource :mypage, only: [:show, :edit, :update]
   resources :albums, only: %i[index show new create]
   resources :family_groups, only: %i[new create edit update]
   resources :children, only: %i[new create edit update destroy]

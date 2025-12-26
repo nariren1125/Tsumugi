@@ -18,7 +18,14 @@
   <%= link_to family_settings_path,
       class: "dock-item #{current_page?(family_settings_path) && 'dock-active'} flex flex-col items-center" do %>
     <span class="material-symbols-outlined text-2xl">group</span>
-    <span class="dock-label text-xs mt-0.5">設定</span>
+    <span class="dock-label text-xs mt-0.5">グループ</span>
+  <% end %>
+
+  <!-- マイページ -->
+  <%= link_to mypage_path,
+      class: "dock-item #{current_page?(mypage_path) && 'dock-active'} flex flex-col items-center" do %>
+    <span class="material-symbols-outlined text-2xl">person</span>
+    <span class="dock-label text-xs mt-0.5">個人</span>
   <% end %>
 
 </div>

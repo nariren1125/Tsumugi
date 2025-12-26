@@ -1,0 +1,33 @@
+<h1 class="text-sm text-base-content/60 mb-2">
+  マイページ
+</h1>
+
+<div class="bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 mb-6">
+
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <p class="text-lg font-semibold"><%= @user.name %></p>
+
+      <span class="inline-flex px-3 py-0.5 rounded-full text-xs font-medium
+        <%= role_badge_class(@user.role) %>">
+        <%= @user.role_i18n %>
+      </span>
+    </div>
+
+    <%= link_to "編集", edit_mypage_path,
+        class: "btn btn-sm btn-outline rounded-full" %>
+  </div>
+
+  <div class="mt-4 text-sm text-base-content/70">
+    投稿数：<span class="font-medium text-base-content"><%= @posts.count %></span> 件
+  </div>
+
+</div>
+
+<h2 class="text-sm font-semibold mb-3">
+  あなたの思い出
+</h2>
+
+<div class="space-y-4  pb-24">
+  <%= render @posts %>
+</div>
