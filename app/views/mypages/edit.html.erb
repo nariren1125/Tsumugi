@@ -3,21 +3,10 @@
 <% content_for :suppress_header, true %>
 
 <!-- カスタムヘッダー -->
-<div class="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
-  <!-- 戻るボタン -->
-  <div class="w-20 flex-shrink-0">
-    <%= link_to "←", mypage_path, class: "text-xl", aria: { label: "マイページに戻る" } %>
-  </div>
-
-  <!-- タイトル -->
-  <h2 class="text-base font-bold text-center flex-grow truncate">
-    プロフィールの編集
-  </h2>
-
-  <!-- 右端スペース確保 -->
-    <div class="w-20 flex-shrink-0"></div>
-  </div>
-
+<%= render "shared/back_header",
+      title: "プロフィールの編集",
+      back_path: mypage_path,
+      back_aria: "マイページに戻る" %>
 
 
 <!-- 本体 -->
