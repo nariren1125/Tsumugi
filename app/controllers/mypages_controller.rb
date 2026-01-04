@@ -2,7 +2,7 @@ class MypagesController < ApplicationController
   before_action :require_login
 
   def show
-    # 他のメンバーのマイページも見れるようにする
+   # 他のメンバーのマイページも見れるようにする
     @user =
       if params[:id].present?
         current_user.family_group.users.find(params[:id])
@@ -10,9 +10,10 @@ class MypagesController < ApplicationController
         current_user
       end
 
-    # そのユーザーの投稿一覧を取得
-    @posts = @user.posts.order(created_at: :desc)
-    @post_count = @user.posts.count
+    # そのユーザーの投稿一覧を取得（photo_date優先で新しい順、未設定は最後）
+    @posts = @user.posts.order(Arel.sql("photo_date IS NULL"), photo_date: :desc, created_at: :desc)
+
+    @post_count = @posts.count
   end
 
   def edit
