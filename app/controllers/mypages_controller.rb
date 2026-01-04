@@ -2,8 +2,16 @@ class MypagesController < ApplicationController
   before_action :require_login
 
   def show
-    @user = current_user
-    @posts = current_user.posts.order(created_at: :desc)
+    # 他のメンバーのマイページも見れるようにする
+    @user =
+      if params[:id].present?
+        current_user.family_group.users.find(params[:id])
+      else
+        current_user
+      end
+
+    # そのユーザーの投稿一覧を取得
+    @posts = @user.posts.order(created_at: :desc)
     @post_count = @user.posts.count
   end
 

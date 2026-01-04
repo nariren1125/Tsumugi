@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/privacy',     to: 'pages#privacy'
   get '/how_to_use',  to: 'pages#how_to_use'
   get "mypage", to: "mypages#show"
+  get "users/:id", to: "mypages#show", as: :user
 
   # LINEログイン
   get "login/line", to: redirect("/auth/line"), as: :line_login

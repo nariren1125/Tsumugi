@@ -23,11 +23,15 @@
       <% if members.any? %>
         <div class="flex flex-wrap gap-2">
           <% members.each do |user| %>
-            <div class="bg-base-200 rounded-box px-4 py-2 hover:bg-base-300 transition duration-150 block text-sm shadow">
+            <%= link_to user_path(user),
+              class: "rounded-box px-4 py-2 text-sm shadow
+                      transition duration-150 hover:brightness-105 active:scale-[0.99]
+                      #{role_member_chip_class(user.role)}" do %>
               <%= user.name.presence || "未設定ユーザー" %>
-            </div>
+            <% end %>
           <% end %>
         </div>
+
       <% else %>
         <p class="text-sm opacity-60">まだ家族が登録されていません。</p>
       <% end %>
