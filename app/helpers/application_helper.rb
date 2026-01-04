@@ -35,7 +35,6 @@ module ApplicationHelper
     end
   end
 
-
   # マスキングテープのクラスをランダムに返す
   def random_masking_tape_class
     %w[
