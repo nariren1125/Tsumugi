@@ -11,6 +11,31 @@ module ApplicationHelper
     end
   end
 
+  # 役割に応じたテキストのクラスを返す
+  def role_text_class(role)
+    case role.to_s
+    when 'father'
+      'text-info/80'
+    when 'mother'
+      'text-secondary/80'
+    else
+      'text-base-content/70'
+    end
+  end
+
+  # 役割に応じたチップのクラスを返す
+  def role_chip_class(role)
+    case role.to_s
+    when 'father'
+      'bg-blue-100 text-blue-700'
+    when 'mother'
+      'bg-pink-100 text-pink-700'
+    else
+      'bg-gray-100 text-gray-700'
+    end
+  end
+
+
   # マスキングテープのクラスをランダムに返す
   def random_masking_tape_class
     %w[
