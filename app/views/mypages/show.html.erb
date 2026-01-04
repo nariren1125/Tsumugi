@@ -42,6 +42,12 @@
   <%= @user == current_user ? "あなたの思い出" : "#{@user.name}の思い出" %>
 </h2>
 
-<div class="space-y-4  pb-24">
+<%# ===== 投稿一覧 ===== %>
+<div class="space-y-4 pb-24" data-controller="modal">
   <%= render @posts %>
 </div>
+
+<%# ✅ モーダルは最後にまとめて %>
+<% @posts.each do |post| %>
+  <%= render "posts/modal", post: post %>
+<% end %>
