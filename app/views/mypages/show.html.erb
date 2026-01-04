@@ -19,9 +19,11 @@
       </p>
   </div>
 
+  <% if @user == current_user %>
     <%= link_to "編集", edit_mypage_path,
         class: "btn btn-sm btn-outline rounded-full" %>
-  </div>
+  <% end %>
+</div>
 
   <div class="mt-4 text-sm text-base-content/70">
     投稿数：<span class="font-medium text-base-content"><%= @posts.count %></span> 件

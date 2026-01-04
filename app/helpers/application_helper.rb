@@ -24,14 +24,14 @@ module ApplicationHelper
   end
 
   # 役割に応じたチップのクラスを返す
-  def role_chip_class(role)
+  def role_member_chip_class(role)
     case role.to_s
     when 'father'
       'bg-blue-100 text-blue-700'
     when 'mother'
       'bg-pink-100 text-pink-700'
     else
-      'bg-gray-100 text-gray-700'
+      'bg-base-200 text-base-content'
     end
   end
 
