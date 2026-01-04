@@ -38,9 +38,28 @@
 
 </div>
 
-<h2 class="text-sm font-semibold mb-3">
-  <%= @user == current_user ? "あなたの思い出" : "#{@user.name}の思い出" %>
-</h2>
+<div class="mb-3 px-4">
+  <div class="flex items-center justify-between">
+    <h2 class="text-sm font-semibold">
+      <%= @user == current_user ? "あなたの思い出" : "#{@user.name}の思い出" %>
+    </h2>
+
+    <%= form_with url: request.path, method: :get, local: true do %>
+      <select
+        name="year"
+        class="select select-sm select-bordered"
+        onchange="this.form.submit()"
+      >
+        <option value="">すべて</option>
+        <% @years.each do |y| %>
+          <option value="<%= y %>" <%= "selected" if @selected_year.to_s == y.to_s %>>
+            <%= y %>年
+          </option>
+        <% end %>
+      </select>
+    <% end %>
+  </div>
+</div>
 
 <%# ===== 投稿一覧 ===== %>
 <div class="space-y-4 pb-24" data-controller="modal">
