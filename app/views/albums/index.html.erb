@@ -1,3 +1,12 @@
+
+<%# デフォルトヘッダー、デフォルト背景を制御%>
+<% content_for :suppress_header, true %>
+
+<div class="relative min-h-screen">
+
+<!-- ===== ヘッダー ===== -->
+  <%= render "shared/simple_header", title: "アルバム一覧" %>
+
 <div class="max-w-xl mx-auto px-4 py-10 pb-24">
   <% if @posts_by_year.present? %>
 

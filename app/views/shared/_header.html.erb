@@ -1,69 +1,31 @@
 <%# 共通ヘッダーを抑制するコンテンツが設定されていない場合にのみ表示 %>
 <% unless content_for?(:suppress_header) %>
 
-<!-- 共通ヘッダー部分 -->
-<header class="w-full bg-base-300 text-base-content shadow-sm px-4 h-14 flex justify-between items-center">
-  <h1 class="text-xl font-bold">
-    <%= link_to "Tsumugi", root_path %>
-  </h1>
+<header
+  class="w-full bg-base-300 text-base-content shadow-sm px-4 h-14
+         flex items-center relative"
+>
 
-  <div class="dropdown dropdown-end">
-    <label tabindex="0" class="btn btn-ghost btn-circle">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-        viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </label>
-
-    <ul tabindex="0"
-    class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow mt-3">
-
-      <% if current_user %>
-        <li class="menu-title">
-          <span>👤 <%= current_user.name %></span>
-        </li>
-
-        <li><%= link_to "アルバム一覧", albums_path %></li>
-        <li><%= link_to "設定", family_settings_path %></li>
-
-        <li class="menu-title mt-2">
-          <span>このアプリについて</span>
-        </li>
-        <li><%= link_to "Tumugiについて", about_path %></li>
-        <li><%= link_to "初めての方へ", how_to_use_path %></li>
-        <li><%= link_to "利用規約", terms_path %></li>
-        <li><%= link_to "プライバシーポリシー", privacy_path %></li>
-
-        <li class="menu-title mt-2">
-          <span>アカウント</span>
-        </li>
-        <li>
-          <%= link_to "ログアウト",
-                      logout_path,
-                      data: { turbo_method: :delete },
-                      class: "text-red-600" %>
-        </li>
-
-      <% else %>
-        <li>
-          <%= link_to "ログイン",
-                      "/auth/line",
-                      class: "text-primary",
-                      data: { turbo: false } %>
-        </li>
-
-        <li class="menu-title mt-2">
-          <span>このアプリについて</span>
-        </li>
-        <li><%= link_to "Tumugiについて", about_path %></li>
-        <li><%= link_to "初めての方へ", how_to_use_path %></li>
-        <li><%= link_to "利用規約", terms_path %></li>
-        <li><%= link_to "プライバシーポリシー", privacy_path %></li>
-      <% end %>
-
-    </ul>
+  <!-- 左エリア -->
+  <div class="flex-1">
+    <% unless content_for?(:center_title) %>
+      <h1 class="text-xl font-bold">
+        <%= content_for?(:page_title) ? yield(:page_title) : "Tsumugi" %>
+      </h1>
+    <% end %>
   </div>
-</header>
 
+  <!-- 中央タイトル -->
+  <% if content_for?(:center_title) %>
+    <h1 class="absolute left-1/2 -translate-x-1/2 text-base font-semibold">
+      <%= yield(:center_title) %>
+    </h1>
+  <% end %>
+
+  <!-- 右エリア（ミートボール） -->
+  <div class="flex-1 flex justify-end">
+    <%= render "shared/meatball_menu" %>
+  </div>
+
+</header>
 <% end %>
