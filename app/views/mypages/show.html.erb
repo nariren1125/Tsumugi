@@ -4,7 +4,14 @@
 <div class="relative min-h-screen">
 
   <!-- ===== ヘッダー ===== -->
-  <%= render "shared/simple_header", title: "マイページ" %>
+  <% if @user == current_user %>
+    <%= render "shared/simple_header", title: "マイページ" %>
+  <% else %>
+    <%= render "shared/back_header",
+          title: @user.name,
+          back_path: settings_family_group_path,
+          show_meatball: true %>
+  <% end %>
 
   <!-- ===== メインコンテンツ ===== -->
 <div class="mt-4 space-y-4 bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 mb-8">
@@ -32,7 +39,7 @@
 </div>
 
 <h2 class="text-sm font-semibold mb-3">
-  あなたの思い出
+  <%= @user == current_user ? "あなたの思い出" : "#{@user.name}の思い出" %>
 </h2>
 
 <div class="space-y-4  pb-24">

@@ -1,0 +1,21 @@
+
+<%# locals: title:, back_path:, show_meatball: false %>
+
+<header class="w-full bg-base-300 shadow-sm px-4 h-14 flex items-center">
+  <!-- 戻るボタン -->
+  <div class="w-20 flex-shrink-0">
+    <%= link_to "←", back_path, class: "text-xl", aria: { label: "戻る" } %>
+  </div>
+
+  <!-- タイトル -->
+  <h2 class="text-base font-bold text-center flex-grow truncate">
+    <%= title %>
+  </h2>
+
+  <!-- 右側 -->
+  <div class="w-20 flex-shrink-0 flex justify-end">
+    <% if local_assigns[:show_meatball] %>
+      <%= render "shared/meatball_menu" %>
+    <% end %>
+  </div>
+</header>
