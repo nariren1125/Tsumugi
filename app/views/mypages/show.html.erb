@@ -21,7 +21,7 @@
       <p class="text-lg font-semibold text-base-content">
         <%= @user.name %>
         <span class="text-base-content/60 font-medium">
-          （<%= @user.role_i18n %>）
+          （<%= @user.role_i18n_in(current_family_group) %>）
         </span>
       </p>
   </div>

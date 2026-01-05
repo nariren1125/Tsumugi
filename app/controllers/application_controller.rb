@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :current_family_group
+  helper_method :current_user, :current_family_group, :current_membership, :current_role
   after_action :join_family_group_after_signup, if: -> { current_user.present? && session[:invite_family_group_id].present? }
 
   private
@@ -71,6 +72,17 @@ class ApplicationController < ActionController::Base
   def posts_scope
     return Post.none unless current_family_group
     Post.joins(:album).where(albums: { family_group_id: current_family_group.id })
+  end
+
+  # 現在のユーザーの、選択中グループにおけるメンバーシップを取得
+  def current_membership
+    return nil unless current_user && current_family_group
+    @current_membership ||= current_user.family_group_memberships.find_by(family_group_id: current_family_group.id)
+  end
+
+  # 現在のユーザーの、選択中グループにおける役割を取得
+  def current_role
+    current_membership&.role
   end
 
   allow_browser versions: :modern
