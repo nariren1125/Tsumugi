@@ -21,7 +21,7 @@ class MypagesController < ApplicationController
     @user = current_user
 
     if @user.update(user_params)
-      redirect_to mypage_path, notice: t('.success')
+      redirect_to mypage_path, notice: t('flash.mypage.updated')
     else
       render :edit, status: :unprocessable_entity
     end

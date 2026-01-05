@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
   # 設定画面
   get "family_settings", to: "family_groups#settings"
+  # アルバムの切り替え設定
+  post "family_settings/switch", to: "family_groups#switch", as: :switch_family_group
   get "invite/:token", to: "invite_tokens#show", as: :invite
 
   # PWA / health

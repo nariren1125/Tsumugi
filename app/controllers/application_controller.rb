@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
-  after_action :join_family_group_after_signup, if: -> { respond_to?(:user_signed_in?) && user_signed_in? }
+  helper_method :current_family_group
+  after_action :join_family_group_after_signup, if: -> { current_user.present? && session[:invite_family_group_id].present? }
 
   private
 
@@ -18,15 +19,52 @@ class ApplicationController < ActionController::Base
   def join_family_group_after_signup
     return unless session[:invite_family_group_id]
     # ユーザーが招待リンクを経由していない場合には、何も処理をしない
-    return if current_user.family_group_id.present?
+    family_group = FamilyGroup.find_by(id: session[:invite_family_group_id])
+    return unless family_group
 
-    # current_user がどこかの家族グループに属している場合は、それ以上上書きしないで終了
+    # すでにそのグループに所属しているなら何もしない
+    already_member = current_user.family_group_memberships.exists?(family_group_id: family_group.id)
+    if already_member
+      session.delete(:invite_family_group_id)
+      session[:current_family_group_id] ||= family_group.id
+      return
+    end
 
-    current_user.update(family_group_id: session[:invite_family_group_id])
-    # invite_family_group_id を current_user.family_group_id に設定
-    # 招待された家族グループに正式に参加
+    # 新：membershipで参加させる
+    current_user.family_group_memberships.create!(family_group: family_group)
+
+    # 招待情報を消す
     session.delete(:invite_family_group_id)
-    # 設定が終わったら、セッションから招待情報を削除
+
+    # 初回はこのグループを選択中にしておくと自然
+    session[:current_family_group_id] ||= family_group.id
+  end
+
+  def current_family_group
+    return @current_family_group if defined?(@current_family_group)
+    return nil unless current_user
+
+    # 移行期の保険：旧 family_group_id があるのに membership が無いなら作る
+    if current_user.family_group_id.present?
+      current_user.family_group_memberships.find_or_create_by!(family_group_id: current_user.family_group_id)
+    end
+
+    # sessionに保存されている選択中グループを優先
+    if session[:current_family_group_id].present?
+      @current_family_group = current_user.family_groups.find_by(id: session[:current_family_group_id])
+      return @current_family_group if @current_family_group
+    end
+
+    # sessionが無い/不正な場合は、所属グループの先頭を採用
+    @current_family_group = current_user.family_groups.first
+
+    # 移行期の後方互換（旧 users.family_group_id があればfallback）
+    @current_family_group ||= current_user.family_group
+
+    # 決まったらsessionに保存（次回から安定）
+    session[:current_family_group_id] = @current_family_group&.id
+
+    @current_family_group
   end
 
   allow_browser versions: :modern

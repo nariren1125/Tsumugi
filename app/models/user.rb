@@ -2,6 +2,8 @@ class User < ApplicationRecord
   # family_groupが無いユーザーも存在する仕様
   belongs_to :family_group, optional: true
   has_many :posts, dependent: :destroy
+  has_many :family_group_memberships
+  has_many :family_groups, through: :family_group_memberships
 
   validates :line_uid, presence: true, uniqueness: true
   validates :name, presence: true, length: { maximum: 50 }

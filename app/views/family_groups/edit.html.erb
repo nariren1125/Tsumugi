@@ -1,2 +1,38 @@
-<h1>FamilyGroups#edit</h1>
-<p>Find me in app/views/family_groups/edit.html.erb</p>
+<% content_for :suppress_header, true %>
+
+<%= render "shared/simple_header", title: "家族名の編集" %>
+
+<div class="max-w-xl mx-auto px-4 py-10 pb-24">
+  <div class="bg-base-100 rounded-box shadow p-6">
+    <h2 class="font-semibold text-base mb-4">家族名を変更する</h2>
+
+    <%= form_with model: @family_group, local: true do |f| %>
+      <% if @family_group.errors.any? %>
+        <div class="alert alert-error mb-4">
+          <ul class="list-disc pl-5 text-sm">
+            <% @family_group.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-control">
+        <%= f.label :name, "家族名", class: "label" %>
+        <%= f.text_field :name,
+              class: "input input-bordered w-full",
+              placeholder: "例：成松家",
+              maxlength: 50,
+              required: true %>
+        <p class="mt-2 text-xs text-base-content/60">
+          グループ一覧やアルバム表示名として使われます。
+        </p>
+      </div>
+
+      <div class="mt-6 flex gap-2">
+        <%= f.submit "更新する", class: "btn btn-accent flex-1" %>
+        <%= link_to "戻る", family_settings_path, class: "btn btn-outline flex-1" %>
+      </div>
+    <% end %>
+  </div>
+</div>

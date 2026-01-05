@@ -12,8 +12,10 @@ ja:
         success: "家族グループを作成しました"
         failure: "家族グループの作成に失敗しました"
       update:
-        success: "家族グループを更新しました"
-        failure: "家族グループの更新に失敗しました"
+        success: "家族名を更新しました"
+        failure: "家族名の更新に失敗しました"
+      switch:
+        success: "家族グループを切り替えました"
 
     posts:
       created: "思い出を投稿しました"
