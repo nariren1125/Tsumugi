@@ -67,5 +67,11 @@ class ApplicationController < ActionController::Base
     @current_family_group
   end
 
+  # 投稿の基本スコープを取得
+  def posts_scope
+    return Post.none unless current_family_group
+    Post.joins(:album).where(albums: { family_group_id: current_family_group.id })
+  end
+
   allow_browser versions: :modern
 end

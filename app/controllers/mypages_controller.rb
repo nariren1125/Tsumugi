@@ -34,14 +34,21 @@ class MypagesController < ApplicationController
     @user = params[:id].present? ? family_member : current_user
   end
 
-  # 家族グループ内から対象ユーザーを取得（権限制約）
+  # 選択中のグループ内から対象ユーザーを取得
   def family_member
-    current_user.family_group.users.find(params[:id])
+    current_family_group.users.find(params[:id])
   end
 
-  # 投稿の基本スコープを取得（N+1対策）
+  # 選択中グループの投稿に限定（他グループ漏れを帽子）
   def base_posts_scope
-    @user.posts.includes(photos: { image_attachment: :blob })
+    return Post.none unless current_family_group
+
+  #
+  Post
+    .joins(:album)
+    .where(albums: { family_group_id: current_family_group.id })
+    .where(user_id: @user.id)
+    .includes(photos: { image_attachment: :blob })
   end
 
   # photo_date から年度候補（年）を取得
@@ -79,4 +86,5 @@ class MypagesController < ApplicationController
   def user_params
     params.require(:user).permit(:name, :role)
   end
+
 end

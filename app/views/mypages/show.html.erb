@@ -33,7 +33,7 @@
 </div>
 
   <div class="mt-4 text-sm text-base-content/70">
-    投稿数：<span class="font-medium text-base-content"><%= @posts.count %></span> 件
+    投稿数：<span class="font-medium text-base-content"><%= @post_count %></span> 件
   </div>
 
 </div>
@@ -62,11 +62,34 @@
 </div>
 
 <%# ===== 投稿一覧 ===== %>
-<div class="space-y-4 pb-24" data-controller="modal">
-  <%= render @posts %>
+<div class="pb-24" data-controller="modal">
+  <% if @posts.present? %>
+    <div class="space-y-4">
+      <%= render @posts %>
+    </div>
+
+    <%# ✅ モーダルは最後にまとめて %>
+    <% @posts.each do |post| %>
+      <%= render "posts/modal", post: post %>
+    <% end %>
+
+  <% else %>
+    <div class="flex flex-col items-center justify-center text-center pt-14 px-6">
+      <div class="w-44 mx-auto">
+        <%= image_tag "no_album.png",
+          alt: "投稿がない状態",
+          class: "w-full h-auto opacity-90" %>
+      </div>
+
+      <h2 class="mt-6 text-base font-semibold text-base-content/80">
+        まだ思い出が投稿されていません
+      </h2>
+
+      <p class="mt-2 text-sm text-base-content/60 leading-relaxed">
+        思い出を投稿して、アルバムを紡ぎましょう。
+      </p>
+
+    </div>
+  <% end %>
 </div>
 
-<%# ✅ モーダルは最後にまとめて %>
-<% @posts.each do |post| %>
-  <%= render "posts/modal", post: post %>
-<% end %>
