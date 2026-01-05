@@ -25,7 +25,7 @@ module ApplicationHelper
 
   # 役割に応じたチップのクラスを返す
   def role_member_chip_class(role)
-    case role.to_s
+    case role&.to_s
     when 'father'
       'bg-blue-100 text-blue-700'
     when 'mother'

@@ -11,4 +11,9 @@ class FamilyGroupMembership < ApplicationRecord
   def role_i18n
     I18n.t("activerecord.attributes.user.roles.#{role}")
   end
+
+  # 役割の選択肢を取得
+  def self.role_options
+    roles.keys.map { |r| [I18n.t("activerecord.attributes.user.roles.#{r}"), r] }
+  end
 end

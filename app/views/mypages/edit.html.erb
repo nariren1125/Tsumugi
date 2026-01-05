@@ -22,15 +22,16 @@
   </div>
 
   <div class="mb-6">
-    <%= f.label :role, "役割", class: "label-text font-semibold" %>
-    <%= f.select :role,
-          User.roles.keys.map { |role|
-            [I18n.t("activerecord.attributes.user.roles.#{role}"), role]
-          },
-          {},
-          class: "select select-bordered w-full"
-    %>
+    <%= label_tag :role, "役割", class: "label-text font-semibold" %>
+
+    <%= select_tag "user[role]",
+          options_for_select(
+            FamilyGroupMembership.role_options,
+            current_user.membership_in(current_family_group)&.role
+          ),
+          class: "select select-bordered w-full" %>
   </div>
+
 
   <%= f.submit "保存", class: "btn btn-accent w-full" %>
 

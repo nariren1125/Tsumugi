@@ -58,13 +58,16 @@
       <% if members.any? %>
         <div class="flex flex-wrap gap-2">
           <% members.each do |user| %>
+            <% role = user.membership_in(@family_group)&.role %>
+
             <%= link_to user_path(user),
               class: "rounded-box px-4 py-2 text-sm shadow
                       transition duration-150 hover:brightness-105 active:scale-[0.99]
-                      #{role_member_chip_class(user.role)}" do %>
+                      #{role_member_chip_class(role)}" do %>
               <%= user.name.presence || "未設定ユーザー" %>
             <% end %>
           <% end %>
+
         </div>
       <% else %>
         <p class="text-sm opacity-60">まだ家族が登録されていません。</p>

@@ -49,5 +49,4 @@ class AlbumsController < ApplicationController
     grouped['撮影日未設定'] = without_date if without_date.any?
     grouped
   end
-
 end
