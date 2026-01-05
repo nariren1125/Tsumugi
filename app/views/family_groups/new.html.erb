@@ -1,12 +1,18 @@
+
+<!-- 編集ページヘッダー抑制 -->
+<% content_for :suppress_header, true %>
+
+<!-- カスタムヘッダー -->
+<%= render "shared/back_header",
+      title: "グループの新規作成",
+      back_path: family_settings_path,
+      back_aria: "家族設定に戻る" %>
+
 <div class="max-w-md mx-auto mt-12 bg-base-100 rounded-box shadow p-6">
 
-  <h1 class="text-xl font-bold text-center mb-2">
-    グループをつくりましょう
+  <h1 class="text-base font-semibold text-center mb-10">
+    新しくアルバムを紡ぐグループを作成します。
   </h1>
-
-  <p class="text-center text-sm text-base-content/70 mb-6">
-    アルバムを紡ぐグループを作成します。
-  </p>
 
   <%= form_with model: @family_group, local: true do |f| %>
     <div class="form-control mb-4">

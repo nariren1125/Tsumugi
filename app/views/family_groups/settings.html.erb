@@ -7,31 +7,68 @@
 <!-- ===== メインコンテンツ ===== -->
 <div class="max-w-xl mx-auto px-4 py-10 pb-24">
 
-  <% if current_user.family_group.present? %>
+  <% if @family_group.present? %>
 
-    <!-- 家族名 -->
-    <div class="mb-4 text-base-content font-semibold">
-      家族名：<%= current_user.family_group.name %>
+    <!-- ✅ グループ一覧（onchangeで即切替） + 新規作成 -->
+    <div class="mb-6 bg-base-100 rounded-box shadow p-4">
+      <h2 class="font-semibold text-base mb-3">グループ一覧</h2>
+
+      <div class="flex items-end gap-2">
+        <div class="form-control w-full">
+          <label class="label py-1">
+            <span class="label-text text-sm text-base-content/70">選択中のグループ</span>
+          </label>
+
+          <%= form_with url: switch_family_group_path, method: :post, local: true do %>
+            <%= select_tag :family_group_id,
+              options_from_collection_for_select(@family_groups, :id, :name, @family_group.id),
+              class: "select select-bordered w-full",
+              onchange: "this.form.submit()" %>
+          <% end %>
+        </div>
+
+        <%= link_to "+ 新規作成", new_family_group_path,
+          class: "btn btn-outline btn-accent whitespace-nowrap" %>
+      </div>
+
+      <p class="mt-3 text-xs text-base-content/60">
+        切り替えると、表示されるアルバム・家族メンバー・お子さま・思い出が変わります。
+      </p>
+    </div>
+
+    <!-- ✅ 家族名カード（編集ボタンで遷移） -->
+    <div class="mb-6 bg-base-100 rounded-box shadow p-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold text-base">家族名</h2>
+        <%= link_to "編集", edit_family_group_path(@family_group),
+          class: "btn btn-sm btn-outline" %>
+      </div>
+
+      <div class="mt-3 text-base-content font-semibold">
+        <%= @family_group.name %>
+      </div>
     </div>
 
     <!-- ✅ 家族一覧 -->
     <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
       <h2 class="font-semibold text-base">家族一覧</h2>
 
-      <% members = current_user.family_group.users %>
+      <% members = @family_group.users %>
 
       <% if members.any? %>
         <div class="flex flex-wrap gap-2">
           <% members.each do |user| %>
+            <% role = user.membership_in(@family_group)&.role %>
+
             <%= link_to user_path(user),
               class: "rounded-box px-4 py-2 text-sm shadow
                       transition duration-150 hover:brightness-105 active:scale-[0.99]
-                      #{role_member_chip_class(user.role)}" do %>
+                      #{role_member_chip_class(role)}" do %>
               <%= user.name.presence || "未設定ユーザー" %>
             <% end %>
           <% end %>
-        </div>
 
+        </div>
       <% else %>
         <p class="text-sm opacity-60">まだ家族が登録されていません。</p>
       <% end %>
@@ -41,16 +78,16 @@
     <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
       <div class="flex items-center justify-between">
         <h2 class="font-semibold text-base">お子さま一覧</h2>
-        <%= link_to "+ 追加", new_child_path,
-              class: "btn btn-sm btn-outline btn-accent" %>
+        <%= link_to "+ 追加", new_child_path, class: "btn btn-sm btn-outline btn-accent" %>
       </div>
 
-      <% children = current_user.family_group.children %>
+      <% children = @family_group.children %>
 
       <% if children.any? %>
         <div class="flex flex-wrap gap-2">
           <% children.each do |child| %>
-            <%= link_to edit_child_path(child), class: "bg-base-200 rounded-box px-4 py-2 hover:bg-base-300 transition duration-150 block" do %>
+            <%= link_to edit_child_path(child),
+                class: "bg-base-200 rounded-box px-4 py-2 hover:bg-base-300 transition duration-150 block" do %>
               <span class="font-semibold"><%= child.name %></span>
             <% end %>
           <% end %>
@@ -89,7 +126,7 @@
       <!-- ボタン -->
       <%= link_to "グループを作成する",
             new_family_group_path,
-            class: "btn btn-accent w-full " %>
+            class: "btn btn-accent w-full" %>
     </div>
 
   <% end %>

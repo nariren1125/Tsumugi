@@ -2,7 +2,7 @@ class AlbumsController < ApplicationController
   before_action :require_login
 
   def index
-    family = current_user.family_group
+    family = current_family_group
 
     @posts_by_year =
       if family
@@ -48,10 +48,5 @@ class AlbumsController < ApplicationController
   def append_without_date(grouped, without_date)
     grouped['撮影日未設定'] = without_date if without_date.any?
     grouped
-  end
-
-  # ログイン必須
-  def require_login
-    redirect_to root_path, alert: t('flash.login.required') if session[:user_id].blank?
   end
 end

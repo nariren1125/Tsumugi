@@ -18,7 +18,7 @@ class FamilyGroupsControllerTest < ActionDispatch::IntegrationTest
       family_group: { name: 'New Name' }
     }
 
-    assert_redirected_to edit_family_group_url(@family_group)
+    assert_redirected_to family_settings_url
     @family_group.reload
     assert_equal 'New Name', @family_group.name
   end
