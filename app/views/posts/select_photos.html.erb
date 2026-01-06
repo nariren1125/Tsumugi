@@ -7,64 +7,71 @@
   <!-- ===== ヘッダー ===== -->
   <%= render "shared/simple_header", title: "新規投稿" %>
 
-  <!-- ===== メイン ===== -->
+  <% if current_family_group.present? %>
+    <!-- ===== メイン（グループあり） ===== -->
+    <main
+      data-controller="photo-picker"
+      class="relative flex flex-col items-center px-6
+             pt-28 pb-40
+             min-h-[calc(100svh-120px)]"
+    >
 
-  <!-- photo-pickerコントローラーを適用 -->
-  <main
-    data-controller="photo-picker"
-    class="relative flex flex-col items-center px-6
-           pt-28 pb-40
-           min-h-[calc(100svh-120px)]"
-  >
+      <!-- 🌿 背景（メイン専用） -->
+      <div class="absolute inset-0 -z-10 pointer-events-none">
+        <%= image_tag "post_select_bg.png",
+              class: "w-full h-full object-cover object-[center_85%] opacity-80",
+              alt: "" %>
+      </div>
 
-  <!-- 🌿 背景（メイン専用） -->
-  <div class="absolute inset-0 -z-10  pointer-events-none">
-  <%= image_tag "post_select_bg.png",
-    class: "w-full h-full object-cover object-[center_85%] opacity-80",
-    alt: "" %>
-</div>
+      <div class="flex flex-col items-center translate-y-28">
+        <div class="w-40 mx-auto">
+          <%= image_tag "tumugi_photo.png",
+                alt: "ツムとムギが写真を撮っているイラスト",
+                class: "w-full h-auto opacity-90 drop-shadow-sm" %>
+        </div>
 
-  <div class="flex flex-col items-center translate-y-28">
-    <div class="w-40 mx-auto">
-      <%= image_tag "tumugi_photo.png",
-          alt: "ツムとムギが写真を撮っているイラスト",
-          class: "w-full h-auto opacity-90 drop-shadow-sm" %>
+        <h2 class="text-lg font-semibold mb-2">
+          思い出の写真を選ぼう
+        </h2>
+
+        <p class="text-sm text-base-content/70 mb-6 text-center">
+          投稿できる写真は最大5枚までです。
+        </p>
+
+        <button
+          class="btn btn-accent mt-2 shadow-md rounded-full px-6"
+          data-action="photo-picker#openPicker"
+        >
+          写真を選ぶ
+        </button>
+      </div>
+
+      <!-- ===== hidden form / input ===== -->
+      <form
+        action="<%= confirm_photos_posts_path %>"
+        method="post"
+        enctype="multipart/form-data"
+        data-photo-picker-target="form"
+        class="hidden"
+      >
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= hidden_field_tag :dropped_files_count, 0 %>
+
+        <input
+          type="file"
+          name="post[images][]"
+          multiple
+          accept="image/*"
+          data-photo-picker-target="input"
+          data-action="change->photo-picker#handleFiles"
+        >
+      </form>
+    </main>
+
+  <% else %>
+    <!-- ===== グループなし ===== -->
+    <div class="max-w-xl mx-auto px-4 py-10 pb-24">
+      <%= render "no_family_group" %>
     </div>
-
-    <h2 class="text-lg font-semibold mb-2">
-      思い出の写真を選ぼう
-    </h2>
-
-    <p class="text-sm text-base-content/70 mb-6 text-center">
-      投稿できる写真は最大5枚までです。
-    </p>
-
-    <button
-      class="btn btn-accent mt-2 shadow-md rounded-full px-6"
-      data-action="photo-picker#openPicker"
-    >
-      写真を選ぶ
-    </button>
-  </div>
-
-  <!-- ===== hidden form / input ===== -->
-  <form
-    action="<%= confirm_photos_posts_path %>"
-    method="post"
-    enctype="multipart/form-data"
-    data-photo-picker-target="form"
-    class="hidden"
-  >
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-    <%= hidden_field_tag :dropped_files_count, 0 %>
-
-    <input
-      type="file"
-      name="post[images][]"
-      multiple
-      accept="image/*"
-      data-photo-picker-target="input"
-      data-action="change->photo-picker#handleFiles"
-    >
-  </form>
-</main>
+  <% end %>
+</div>
