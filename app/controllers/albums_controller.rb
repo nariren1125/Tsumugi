@@ -27,7 +27,7 @@ class AlbumsController < ApplicationController
 
   # 投稿を写真付きでロード（N+1回避）
   def load_posts(family)
-    family.posts.includes(:photos)
+    family.posts.includes(:photos).order(photo_date: :desc, created_at: :desc, id: :desc)
   end
 
   # 撮影日あり・なしで分割

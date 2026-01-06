@@ -97,8 +97,10 @@ class PostsController < ApplicationController
   # ==================================================
 
   def temp_album
-    family = current_user.family_group
-    family.album || family.create_album!
+    family = current_family_group
+    raise ActiveRecord::RecordNotFound, 'family_group not selected' unless family
+
+    family.albums.first || family.albums.create!(title: '思い出アルバム')
   end
 
   # ==================================================
