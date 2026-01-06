@@ -16,4 +16,9 @@ class FamilyGroupMembership < ApplicationRecord
   def self.role_options
     roles.keys.map { |r| [I18n.t("activerecord.attributes.user.roles.#{r}"), r] }
   end
+
+  # 管理者かどうかを判定
+  def admin?
+    is_admin
+  end
 end
