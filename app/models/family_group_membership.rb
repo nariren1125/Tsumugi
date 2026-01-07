@@ -21,4 +21,5 @@ class FamilyGroupMembership < ApplicationRecord
   def admin?
     is_admin
   end
+
 end

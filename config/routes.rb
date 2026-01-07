@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "family_group_memberships/edit"
+  get "family_group_memberships/update"
   root "home#index"
 
   # Static Pages
