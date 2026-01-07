@@ -1,0 +1,14 @@
+
+# 管理者として使う membership
+one:
+  user: one          # ← users.yml の one を参照
+  family_group: one  # ← family_groups.yml の one を参照
+  is_admin: true
+  role: other        # enum の値に合わせて変更（:role が "other" の想定）
+
+# 一般メンバー（必要なら）
+two:
+  user: two
+  family_group: two
+  is_admin: false
+  role: other
