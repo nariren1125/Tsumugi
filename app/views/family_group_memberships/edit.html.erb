@@ -1,0 +1,30 @@
+
+
+<!-- 編集ページヘッダー抑制 -->
+<% content_for :suppress_header, true %>
+
+<!-- カスタムヘッダー -->
+<%= render "shared/back_header",
+      title: "メンバー権限の編集",
+      back_path: family_settings_path,
+      back_aria: "家族設定に戻る" %>
+
+<!-- 本体 -->
+<div class="max-w-xl mx-auto px-4 pt-16 pb-24 space-y-6">
+
+<%= form_with(model: @membership, url: family_group_membership_path(@membership), method: :patch, class: "space-y-4") do |f| %>
+  <div>
+    <label class="label">役割</label>
+    <%= f.select :role, FamilyGroupMembership.roles.keys.map { |r| [r.humanize, r] }, {}, class: "select select-bordered w-full" %>
+  </div>
+
+  <div class="form-control">
+    <label class="label cursor-pointer">
+      <%= f.check_box :is_admin, class: "checkbox" %>
+      <span class="label-text ml-2">管理者にする</span>
+    </label>
+  </div>
+
+  <%= f.submit "更新する", class: "btn btn-primary" %>
+<% end %>
+

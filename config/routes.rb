@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "family_group_memberships/edit"
+  get "family_group_memberships/update"
   root "home#index"
 
   # Static Pages
@@ -20,6 +22,7 @@ Rails.application.routes.draw do
   resources :family_groups, only: %i[new create edit update]
   resources :children, only: %i[new create edit update destroy]
   resources :invite_tokens, only: %i[create]
+  resources :family_group_memberships, only: [:edit, :update]
   resources :posts, only: %i[new create show edit update destroy] do
     collection do
       get :select_photos

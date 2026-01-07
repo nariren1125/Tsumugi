@@ -17,6 +17,13 @@ ja:
       switch:
         success: "家族グループを切り替えました"
 
+    membership:
+      admin:
+        requested: "権限がありません"
+      admin_changed:
+        success: "ユーザーの権限を変更しました"
+        failure: "ユーザーの権限の変更に失敗しました"
+
     posts:
       created: "思い出を投稿しました"
       updated: "思い出を更新しました"
