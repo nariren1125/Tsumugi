@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     get "members/edit", to: "members#edit"
     get "admin_members/edit", to: "admin_members#edit"
     get "edit_group", to: "groups#edit"
+    delete "members/leave", to: "members#leave", as: :leave_family_group
   end
 
   # 招待リンク

@@ -36,7 +36,6 @@
   <!-- 招待 + 退出：一列（横並び） -->
   <div class="grid grid-cols-2 gap-3">
 
-    <%# ←不具合修正にも効く %>
     <%= button_to "家族を招待する",
       invite_tokens_path,
       method: :post,
@@ -44,7 +43,13 @@
       data: { turbo: false },
       class: "btn btn-accent w-full" %>
 
-    <%= link_to "家族から退出する", "#", class: "btn btn-outline w-full" %>
+    <%= button_to "家族から退出する",
+          family_settings_leave_family_group_path,
+          method: :delete,
+          data: {
+            turbo_confirm: "本当にこの家族グループから退出しますか？"
+          },
+          class: "btn btn-outline w-full" %>
   </div>
 
   <p class="text-xs text-base-content/50 leading-snug">
