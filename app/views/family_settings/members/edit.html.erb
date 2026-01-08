@@ -1,0 +1,55 @@
+
+<% content_for :suppress_header, true %>
+
+<%= render "shared/back_header",
+  title: "家族一覧の編集",
+  back_path: family_settings_path,
+  back_aria: "家族設定に戻る" %>
+
+<div class="max-w-xl mx-auto px-4 pt-16 pb-24 space-y-6">
+
+  <!-- ✅ 家族一覧 -->
+    <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
+      <h2 class="font-semibold text-base">家族一覧</h2>
+
+      <% members = @family_group.users %>
+
+      <% if members.any? %>
+        <div class="flex flex-wrap gap-2">
+          <% members.each do |user| %>
+            <% role = user.membership_in(@family_group)&.role %>
+
+            <%= link_to user_path(user),
+              class: "rounded-box px-4 py-2 text-sm shadow
+                      transition duration-150 hover:brightness-105 active:scale-[0.99]
+                      #{role_member_chip_class(role)}" do %>
+              <%= user.name.presence || "未設定ユーザー" %>
+            <% end %>
+          <% end %>
+
+        </div>
+      <% else %>
+        <p class="text-sm opacity-60">まだ家族が登録されていません。</p>
+      <% end %>
+    </div>
+
+  <!-- 招待 + 退出：一列（横並び） -->
+  <div class="grid grid-cols-2 gap-3">
+
+    <%# ←不具合修正にも効く %>
+    <%= button_to "家族を招待する",
+      invite_tokens_path,
+      method: :post,
+      params: { family_group_id: @family_group&.id },
+      data: { turbo: false },
+      class: "btn btn-accent w-full" %>
+
+    <%= link_to "家族から退出する", "#", class: "btn btn-outline w-full" %>
+  </div>
+
+  <p class="text-xs text-base-content/50 leading-snug">
+    招待リンクからTsumugiに新規登録またはログインすると、
+    あなたの家族グループに招待されたユーザーが追加されます。<br>
+    退出すると、選択中の家族グループから脱退します。
+</p>
+</div>

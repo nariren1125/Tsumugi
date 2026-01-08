@@ -19,7 +19,7 @@
             <span class="label-text text-sm text-base-content/70">選択中のグループ</span>
           </label>
 
-          <%= form_with url: switch_family_group_path, method: :post, local: true do %>
+          <%= form_with url: family_settings_switch_family_group_path, method: :post, local: true do %>
             <%= select_tag :family_group_id,
               options_from_collection_for_select(@family_groups, :id, :name, @family_group.id),
               class: "select select-bordered w-full",
@@ -36,13 +36,9 @@
       </p>
     </div>
 
-    <!-- ✅ 家族名カード（編集ボタンで遷移） -->
+    <!-- 家族名カード -->
     <div class="mb-6 bg-base-100 rounded-box shadow p-4">
-      <div class="flex items-center justify-between">
-        <h2 class="font-semibold text-base">家族名</h2>
-        <%= link_to "編集", edit_family_group_path(@family_group),
-          class: "btn btn-sm btn-outline" %>
-      </div>
+      <h2 class="font-semibold text-base">家族名</h2>
 
       <div class="mt-3 text-base-content font-semibold">
         <%= @family_group.name %>
@@ -51,7 +47,11 @@
 
     <!-- ✅ 家族一覧 -->
     <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
-      <h2 class="font-semibold text-base">家族一覧</h2>
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold text-base">家族一覧</h2>
+        <%= link_to "編集", family_settings_members_edit_path,
+              class: "btn btn-sm btn-outline" %>
+      </div>
 
       <% members = @family_group.users %>
 
@@ -105,6 +105,24 @@
             data: { turbo: false },
             class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
     </div>
+
+    <!-- ✅ 管理者ユーザーのみ表示する -->
+    <% if current_membership&.admin? %>
+
+      <!-- 管理者専用カード -->
+      <div class="card bg-base-100 shadow-md p-4 mt-6">
+        <h2 class="font-semibold text-base mb-4">グループの管理（管理者のみの権限）</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <%= link_to "メンバーの編集", "#", class: "btn btn-outline w-full" %>
+          <%= link_to "グループの編集", "#", class: "btn btn-outline w-full" %>
+        </div>
+        <p class="mt-4 text-sm text-gray-600 leading-relaxed">
+        メンバーの編集では、家族メンバーの権限の変更や削除が行えます。<br>
+        グループの編集では、家族グループの名前の変更や削除が行えます。
+        </p>
+      </div>
+
+    <% end %>
 
   <% else %>
 
