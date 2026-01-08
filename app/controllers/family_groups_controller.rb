@@ -17,7 +17,7 @@ class FamilyGroupsController < ApplicationController
     @family_group  = current_family_group
     @family_member = family_members
 
-    render "family_settings/settings"
+    render 'family_settings/settings'
   end
 
   # ===== 新規作成 =====
