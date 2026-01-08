@@ -32,8 +32,17 @@ Rails.application.routes.draw do
 
   # 設定画面
   get "family_settings", to: "family_groups#settings"
-  # アルバムの切り替え設定
-  post "family_settings/switch", to: "family_groups#switch", as: :switch_family_group
+
+  # グループの設定（admin/member edit用）
+  namespace :family_settings do
+    post "switch", to: "family_groups#switch", as: :switch_family_group
+    get "members/edit", to: "members#edit"
+    get "admin_members/edit", to: "admin_members#edit"
+    get "edit_group", to: "groups#edit"
+    delete "members/leave", to: "members#leave", as: :leave_family_group
+  end
+
+  # 招待リンク
   get "invite/:token", to: "invite_tokens#show", as: :invite
 
   # PWA / health

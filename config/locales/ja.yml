@@ -16,6 +16,22 @@ ja:
         failure: "家族名の更新に失敗しました"
       switch:
         success: "家族グループを切り替えました"
+      leave:
+        success: "家族グループを退会しました"
+        failure: "家族グループの退会に失敗しました"
+        no_member: "管理者が一人のため、家族グループを退会できません"
+      last_admin_cannot_leave: "管理者が1人しのため退出できません。"
+
+    member:
+      invite:
+        success: "招待リンクを送信しました"
+        failure: "招待リンクの送信に失敗しました"
+      remove:
+        success: "メンバーを削除しました"
+        failure: "メンバーの削除に失敗しました"
+      accept_invite:
+        success: "家族グループに参加しました"
+        failure: "家族グループへの参加に失敗しました"
 
     membership:
       admin:

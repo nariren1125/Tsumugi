@@ -16,4 +16,17 @@ class FamilyGroup < ApplicationRecord
 
   # バリデーション:グループ名は必須
   validates :name, presence: true, length: { maximum: 50 }
+
+  # 管理者が1人だけかどうかを確認するメソッド
+  def only_one_admin?
+    family_group_memberships.where(is_admin: true).one?
+  end
+
+  # 指定したユーザーが最後の管理者かどうかを確認するメソッド
+  def last_admin?(user)
+    membership = family_group_memberships.find_by(user: user)
+    return false unless membership&.is_admin?
+
+    only_one_admin?
+  end
 end
