@@ -97,15 +97,6 @@
       <% end %>
     </div>
 
-    <!-- ✅ 招待ボタン -->
-    <div class="mt-6">
-      <%= button_to "LINEで家族を招待する",
-            invite_tokens_path,
-            method: :post,
-            data: { turbo: false },
-            class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
-    </div>
-
     <!-- ✅ 管理者ユーザーのみ表示する -->
     <% if current_membership&.admin? %>
 

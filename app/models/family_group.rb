@@ -19,7 +19,7 @@ class FamilyGroup < ApplicationRecord
 
   # 管理者が1人だけかどうかを確認するメソッド
   def only_one_admin?
-    family_group_memberships.where(is_admin: true).count == 1
+    family_group_memberships.where(is_admin: true).one?
   end
 
   # 指定したユーザーが最後の管理者かどうかを確認するメソッド

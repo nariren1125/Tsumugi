@@ -91,8 +91,13 @@ class FamilyGroupsController < ApplicationController
   # 新規作成した家族グループに参加し、
   # そのグループを「選択中グループ」に設定する
   def create_membership_and_select!(family_group)
-    current_user.family_group_memberships.find_or_create_by!(family_group: family_group)
-    session[:current_family_group_id] ||= family_group.id
+    membership = current_user.family_group_memberships.find_or_create_by!(family_group: family_group)
+
+    # 作成者を管理者にする
+    membership.update!(is_admin: true) unless membership.is_admin?
+
+    # 新規作成したグループを必ず選択状態にする（UX改善）
+    session[:current_family_group_id] = family_group.id
   end
 
   # ===== Strong Parameters =====
