@@ -43,14 +43,28 @@
       data: { turbo: false },
       class: "btn btn-accent w-full" %>
 
-    <%= button_to "家族から退出する",
-          family_settings_leave_family_group_path,
-          method: :delete,
-          data: {
-            turbo_confirm: "本当にこの家族グループから退出しますか？"
-          },
-          class: "btn btn-outline w-full" %>
+      <% last_admin = current_membership&.admin? && @family_group.family_group_memberships.where(is_admin: true).count == 1 %>
+
+    <% if last_admin %>
+      <button class="btn btn-outline w-full" disabled>
+        家族から退出する
+      </button>
+    <% else %>
+      <%= button_to "家族から退出する",
+            family_settings_leave_family_group_path,
+            method: :delete,
+            data: { turbo_confirm: "本当にこの家族グループから退出しますか？" },
+            class: "btn btn-outline w-full" %>
+    <% end %>
+
   </div>
+
+  <% if last_admin %>
+    <p class="text-xs text-error leading-snug">
+      管理者が1人の場合、グループからの退出ができません。<br>
+      他のメンバーを管理者にするか、グループの削除をご検討ください。
+    </p>
+  <% end %>
 
   <p class="text-xs text-base-content/50 leading-snug">
     招待リンクからTsumugiに新規登録またはログインすると、
