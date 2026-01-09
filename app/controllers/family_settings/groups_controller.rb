@@ -1,16 +1,18 @@
+module FamilySettings
+  class GroupsController < ApplicationController
+    before_action :require_login
+    before_action :require_admin!
 
-class FamilySettings::GroupsController < ApplicationController
-  before_action :require_login
-  before_action :require_admin!
+    def edit
+      # まずは遷移確認だけ。あとで @family_group = current_family_group
+    end
 
-  def edit
-    # まずは遷移確認だけ。あとで @family_group = current_family_group
-  end
+    private
 
-  private
+    def require_admin!
+      return if current_membership&.admin?
 
-  def require_admin!
-    return if current_membership&.admin?
-    redirect_to family_settings_path, alert: t("flash.membership_admin_required")
+      redirect_to family_settings_path, alert: t('flash.membership_admin_required')
+    end
   end
 end

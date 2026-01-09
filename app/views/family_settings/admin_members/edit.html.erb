@@ -1,0 +1,82 @@
+
+<% content_for :suppress_header, true %>
+
+<%= render "shared/back_header",
+  title: "ユーザー情報の編集",
+  back_path: family_settings_admin_members_path,
+  back_aria: "家族管理（管理者）に戻る" %>
+
+  <% family_group = @membership.family_group %>
+  <% last_admin = family_group.last_admin_membership?(@membership) %>
+  <% self_membership = @membership.user_id == current_user.id %>
+
+<div class="max-w-xl mx-auto px-4 pt-16 pb-24 space-y-6">
+  <div class="bg-base-100 rounded-box shadow p-4 space-y-6">
+
+    <h2 class="font-semibold text-lg">
+      <%= @membership.user.name.presence || "未設定ユーザー" %>
+    </h2>
+
+    <%= form_with model: @membership,
+                  url: family_settings_admin_member_path(@membership),
+                  method: :patch,
+                  local: true do |f| %>
+
+      <div class="form-control">
+        <%= f.label :role, "役割", class: "label" %>
+        <%= f.select :role,
+              FamilyGroupMembership.role_options,
+              {},
+              class: "select select-bordered" %>
+      </div>
+
+      <div class="form-control mt-4">
+        <label class="label cursor-pointer justify-start gap-3">
+          <%= f.check_box :is_admin, class: "checkbox" %>
+          <span class="label-text">管理者にする</span>
+        </label>
+      </div>
+
+      <div class="mt-6">
+        <%= f.submit "更新する", class: "btn btn-accent w-full" %>
+      </div>
+    <% end %>
+
+    <hr>
+
+    <!-- 危険操作 -->
+    <div class="space-y-2">
+
+      <% if last_admin %>
+        <button class="btn btn-outline btn-error w-full" disabled>
+          このメンバーを削除
+        </button>
+        <p class="text-xs text-error">
+          管理者が1人しかいないため削除できません。<br>
+          別のメンバーを管理者に設定してください。
+        </p>
+
+      <% elsif self_membership %>
+        <button class="btn btn-outline btn-error w-full" disabled>
+          このメンバーを削除
+        </button>
+        <p class="text-xs text-error">
+          自分自身は削除できません。<br>
+          グループから退出する場合は「家族一覧の編集」から行ってください。
+        </p>
+
+      <% else %>
+        <%= button_to "このメンバーを削除",
+              family_settings_admin_member_path(@membership),
+              method: :delete,
+              data: {
+                turbo: false,
+                confirm: "このメンバーを家族グループから削除します。\n\n本当に削除しますか？"
+              },
+              class: "btn btn-outline btn-error w-full" %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>

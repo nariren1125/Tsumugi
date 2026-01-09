@@ -35,14 +35,14 @@ Rails.application.routes.draw do
 
   # グループの設定（admin/member edit用）
   namespace :family_settings do
+    # グループ切り替え
     post "switch", to: "family_groups#switch", as: :switch_family_group
+    # 一般ユーザー：家族一覧編集
     get  "members/edit", to: "members#edit"
     delete "members/leave", to: "members#leave", as: :leave_family_group
-
-    # 管理者用：メンバー管理（まずは画面だけ）
-    get "admin_members", to: "admin_members#index", as: :admin_members
-
-    # 管理者用：グループ管理（まずは画面だけ）
+    # 管理者用：メンバー管理
+    resources "admin_members", only: %i[index edit update destroy], path: "members/admin"
+    # 管理者用：グループ管理
     get "group/edit", to: "groups#edit", as: :edit_group
   end
 
