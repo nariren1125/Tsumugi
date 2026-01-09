@@ -104,8 +104,8 @@
       <div class="card bg-base-100 shadow-md p-4 mt-6">
         <h2 class="font-semibold text-base mb-4">グループの管理（管理者のみの権限）</h2>
         <div class="grid grid-cols-2 gap-4">
-          <%= link_to "メンバーの編集", "#", class: "btn btn-outline w-full" %>
-          <%= link_to "グループの編集", "#", class: "btn btn-outline w-full" %>
+          <%= link_to "メンバーの編集", family_settings_admin_members_path, class: "btn btn-outline w-full" %>
+          <%= link_to "グループの編集", family_settings_edit_group_path, class: "btn btn-outline w-full" %>
         </div>
         <p class="mt-4 text-sm text-gray-600 leading-relaxed">
         メンバーの編集では、家族メンバーの権限の変更や削除が行えます。<br>

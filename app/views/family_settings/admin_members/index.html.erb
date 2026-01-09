@@ -1,0 +1,50 @@
+<% content_for :suppress_header, true %>
+
+<%= render "shared/back_header",
+  title: "家族管理（管理者）",
+  back_path: family_settings_path,
+  back_aria: "家族設定に戻る" %>
+
+<div class="max-w-xl mx-auto px-4 pt-16 pb-24 space-y-6">
+
+  <!-- ✅ 家族一覧（チップ型） -->
+  <div class="space-y-4 bg-base-100 rounded-box shadow p-4 mb-6">
+    <h2 class="font-semibold text-base">家族一覧</h2>
+
+    <% if @memberships.any? %>
+      <div class="flex flex-wrap gap-2">
+        <% @memberships.each do |membership| %>
+          <% role = membership.role %>
+
+          <%= link_to edit_family_settings_admin_member_path(membership),
+              class: "rounded-box px-4 py-2 text-sm shadow
+                      transition duration-150 hover:brightness-105 active:scale-[0.99]
+                      #{role_member_chip_class(role)}" do %>
+            <%= membership.user.name.presence || "未設定ユーザー" %>
+            <% if membership.admin? %>
+              <span class="ml-1 text-xs opacity-70">(管理者)</span>
+            <% end %>
+          <% end %>
+
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm opacity-60">まだ家族が登録されていません。</p>
+    <% end %>
+  </div>
+
+  <!-- ✅ 操作の補足（管理者用） -->
+  <p class="text-xs text-base-content/50 leading-snug">
+    メンバーをクリックすると、役割や権限の変更、メンバーの削除が行えます。<br>
+    ※ 削除は「ユーザーの削除」ではなく「この家族グループから外す」操作です。
+  </p>
+
+  <!-- ✅ 注意（おすすめ：最後の管理者 / 自分自身の扱い） -->
+  <div class="text-xs text-base-content/50 leading-snug">
+    <p>
+      ・最後の管理者の権限解除や削除はできないように制限されています。<br>
+      ・自分自身の管理者解除や削除も制限されます（必要なら別管理者に引き継いでください）。
+    </p>
+  </div>
+
+</div>

@@ -17,16 +17,22 @@ class FamilyGroup < ApplicationRecord
   # バリデーション:グループ名は必須
   validates :name, presence: true, length: { maximum: 50 }
 
+  # 管理者の人数をカウントするメソッド
+  def admin_count
+    family_group_memberships.where(is_admin: true).count
+  end
+
   # 管理者が1人だけかどうかを確認するメソッド
   def only_one_admin?
     family_group_memberships.where(is_admin: true).one?
   end
 
-  # 指定したユーザーが最後の管理者かどうかを確認するメソッド
-  def last_admin?(user)
-    membership = family_group_memberships.find_by(user: user)
-    return false unless membership&.is_admin?
+  # 指定したメンバーシップが最後の管理者かどうかを確認するメソッド
+  def last_admin_membership?(membership)
+    return false unless membership
+    return false unless membership.family_group_id == id
+    return false unless membership.is_admin?
 
-    only_one_admin?
+    admin_count == 1
   end
 end
