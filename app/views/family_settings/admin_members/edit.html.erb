@@ -67,13 +67,10 @@
 
       <% else %>
         <%= button_to "このメンバーを削除",
-              family_settings_admin_member_path(@membership),
-              method: :delete,
-              data: {
-                turbo: false,
-                confirm: "このメンバーを家族グループから削除します。\n\n本当に削除しますか？"
-              },
-              class: "btn btn-outline btn-error w-full" %>
+          family_settings_admin_member_path(@membership),
+          method: :delete,
+          form: { data: { turbo_confirm: "このメンバーを家族グループから削除します。\n\n本当に削除しますか？" } },
+          class: "btn btn-outline btn-error w-full" %>
       <% end %>
 
     </div>

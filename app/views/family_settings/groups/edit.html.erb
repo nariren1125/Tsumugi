@@ -1,12 +1,57 @@
-
 <% content_for :suppress_header, true %>
-<%= render "shared/simple_header", title: "グループ管理（管理者）" %>
 
-<div class="max-w-xl mx-auto px-4 py-10 pb-24">
-  <div class="bg-base-100 rounded-box shadow p-4">
-    <p class="text-sm opacity-70">ここに「家族名変更・グループ削除」を実装します。</p>
-    <div class="mt-4">
-      <%= link_to "家族設定へ戻る", family_settings_path, class: "btn btn-outline btn-sm" %>
-    </div>
+<%= render "shared/back_header",
+  title: "グループの編集",
+  back_path: family_settings_path %>
+
+<div class="max-w-xl mx-auto px-4 pt-16 pb-24 space-y-6">
+
+  <!-- グループ名変更 -->
+  <div class="bg-base-100 rounded-box shadow p-4 space-y-4">
+    <h2 class="font-semibold">グループ名の変更</h2>
+
+    <%= form_with model: @family_group,
+                  url: family_settings_group_path,
+                  method: :patch,
+                  local: true do |f| %>
+
+      <%= f.text_field :name, class: "input input-bordered w-full" %>
+
+      <%= f.submit "更新する", class: "btn btn-accent w-full mt-3" %>
+    <% end %>
+  </div>
+
+  <!-- グループ削除 -->
+  <div class="bg-base-100 rounded-box shadow p-4 space-y-3">
+    <h2 class="font-semibold text-error">グループの削除</h2>
+
+    <% if @family_group.other_members_exist?(current_user) %>
+      <button class="btn btn-outline w-full" disabled>
+        グループを削除
+      </button>
+
+      <p class="text-xs text-error">
+        他のメンバーが存在するため削除できません。<br>
+        すべてのメンバーを削除または退出させてください。
+      </p>
+    <% else %>
+      <%= form_with url: family_settings_group_path,
+                    method: :delete,
+                    local: true do %>
+
+        <p class="text-xs">
+          削除するには、グループ名
+          <strong><%= @family_group.name %></strong>
+          を入力してください。
+        </p>
+
+        <%= text_field_tag :confirm_name, "",
+              class: "input input-bordered w-full mt-2" %>
+
+        <%= submit_tag "グループを削除",
+              class: "btn btn-error w-full mt-3",
+              data: { turbo_confirm: "本当にグループを削除しますか？（元に戻せません）" } %>
+      <% end %>
+    <% end %>
   </div>
 </div>

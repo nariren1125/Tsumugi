@@ -7,8 +7,11 @@ class FamilyGroupMembership < ApplicationRecord
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :family_group_id }
 
+  # 権限変更ガード
   before_update :prevent_admin_removal_if_last_admin
-  before_destroy :prevent_destroy_if_last_admin
+
+  # 削除ガード（※グループ削除時は除外）
+  before_destroy :prevent_destroy_if_last_admin, unless: :destroyed_by_family_group?
 
   # enumの値を日本語で返す
   def role_i18n
@@ -20,14 +23,14 @@ class FamilyGroupMembership < ApplicationRecord
     roles.keys.map { |r| [I18n.t("activerecord.attributes.user.roles.#{r}"), r] }
   end
 
-  # 管理者かどうかを判定
+  # 管理者かどうか
   def admin?
     is_admin
   end
 
   private
 
-  # 管理者一人の場合、削除を塞ぐ
+  # ===== 削除ガード =====
   def prevent_destroy_if_last_admin
     return unless family_group.last_admin_membership?(self)
 
@@ -35,7 +38,7 @@ class FamilyGroupMembership < ApplicationRecord
     throw(:abort)
   end
 
-  # 管理者一人の場合、権限を一般ユーザーにできない仕様とする。
+  # ===== 権限変更ガード =====
   def prevent_admin_removal_if_last_admin
     return unless is_admin_changed?
     return unless is_admin_was == true && is_admin == false
@@ -43,5 +46,10 @@ class FamilyGroupMembership < ApplicationRecord
 
     errors.add(:base, '管理者が1人しかいないため権限を外せません')
     throw(:abort)
+  end
+
+  # ===== グループ削除に伴う dependent: :destroy 判定 =====
+  def destroyed_by_family_group?
+    destroyed_by_association&.name == :family_group_memberships
   end
 end

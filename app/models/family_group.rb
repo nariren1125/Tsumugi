@@ -27,6 +27,11 @@ class FamilyGroup < ApplicationRecord
     family_group_memberships.where(is_admin: true).one?
   end
 
+  # 他メンバー（自分以外）が存在するか
+  def other_members_exist?(user)
+    family_group_memberships.where.not(user_id: user.id).exists?
+  end
+
   # 指定したメンバーシップが最後の管理者かどうかを確認するメソッド
   def last_admin_membership?(membership)
     return false unless membership

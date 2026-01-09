@@ -1,6 +1,6 @@
 <% flash.each do |type, message| %>
   <%# 🚫 バリデーションエラー用の alert は非表示にする %>
-  <% next if type.to_sym == :alert %>
+  <%# next if type.to_sym == :alert %>
 
   <% color =
     case type.to_sym

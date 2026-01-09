@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     # 管理者用：メンバー管理
     resources "admin_members", only: %i[index edit update destroy], path: "members/admin"
     # 管理者用：グループ管理
-    get "group/edit", to: "groups#edit", as: :edit_group
+    resource :group, only: %i[edit update destroy], path: "group"
   end
 
   # 招待リンク

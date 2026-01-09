@@ -14,6 +14,15 @@ ja:
       update:
         success: "家族名を更新しました"
         failure: "家族名の更新に失敗しました"
+      delete:
+        success: "家族グループを削除しました"
+        failure: "家族グループの削除に失敗しました"
+        has_members: "他のメンバーがいるため削除できません。全員が退出してから削除してください。"
+        name_mismatch: "グループ名が違います。"
+      destroy:
+        success: "家族グループを削除しました"
+        has_members: "他のメンバーがいるため削除できません。全員が退出してから削除してください。"
+        name_mismatch: "グループ名が一致しません"
       switch:
         success: "家族グループを切り替えました"
       leave:
