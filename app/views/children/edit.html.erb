@@ -27,14 +27,16 @@
     <!-- 更新ボタン（左側） -->
     <div class="flex gap-4 items-center">
       <%= f.submit "更新する", class: "btn btn-accent" %>
-
-      <!-- 削除ボタンは form_with の外側だが、見た目上は同じ行に配置 -->
-      <%= button_to "削除する",
-            child_path(@child),
-            method: :delete,
-            data: { turbo: false, confirm: "削除してもよろしいですか？" },
-            class: "btn btn-outline btn-error inline-block" %>
     </div>
   <% end %>
+
+      <!-- 削除ボタンは form_with の外側だが、見た目上は同じ行に配置 -->
+      <div class="mt-4">
+        <%= button_to "削除する",
+              child_path(@child),
+              method: :delete,
+              form: { data: { turbo_confirm: "削除してもよろしいですか？" } },
+              class: "btn btn-outline btn-error w-full" %>
+      </div>
 
 </div>
