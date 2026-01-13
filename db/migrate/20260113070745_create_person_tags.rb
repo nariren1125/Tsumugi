@@ -6,8 +6,8 @@ class CreatePersonTags < ActiveRecord::Migration[7.2]
       t.string :normalized_name, null: false
 
       t.timestamps
-
-      add_index :person_tags, [:family_group_id, :normalized_name], unique: true
     end
+
+    add_index :person_tags, [:family_group_id, :normalized_name], unique: true
   end
 end
