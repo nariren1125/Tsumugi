@@ -10,6 +10,7 @@ class PersonTag < ApplicationRecord
   validates :normalized_name, presence: true, uniqueness: { scope: :family_group_id }
 
   private
+
   def set_normalized_name
     self.normalized_name = name.to_s.strip.downcase
   end

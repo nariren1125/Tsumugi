@@ -9,14 +9,13 @@ class FamilyGroupMembership < ApplicationRecord
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :family_group_id }
 
+  # 思い出のタグ項目へのメンバー追加後処理
+  after_create :ensure_person_tag_for_user
   # 権限変更ガード
   before_update :prevent_admin_removal_if_last_admin
 
   # 削除ガード（※グループ削除時は除外）
   before_destroy :prevent_destroy_if_last_admin, unless: :destroyed_by_family_group?
-
-  # 思い出のタグ項目へのメンバー追加後処理
-  after_create :ensure_person_tag_for_user
 
   # enumの値を日本語で返す
   def role_i18n

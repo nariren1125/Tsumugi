@@ -14,8 +14,7 @@ class PostsController < ApplicationController
       end
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     Rails.logger.debug { "POST PARAMS: #{post_params}" }
