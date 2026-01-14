@@ -2,11 +2,15 @@ class FamilyGroupMembership < ApplicationRecord
   belongs_to :user
   belongs_to :family_group
 
+  has_many :person_tags, dependent: :destroy
+
   enum :role, { father: 0, mother: 1, other: 2 }
 
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :family_group_id }
 
+  # 思い出のタグ項目へのメンバー追加後処理
+  after_create :ensure_person_tag_for_user
   # 権限変更ガード
   before_update :prevent_admin_removal_if_last_admin
 
@@ -46,6 +50,11 @@ class FamilyGroupMembership < ApplicationRecord
 
     errors.add(:base, '管理者が1人しかいないため権限を外せません')
     throw(:abort)
+  end
+
+  # ===== タグ項目にメンバー追加後処理 =====
+  def ensure_person_tag_for_user
+    family_group.person_tags.find_or_create_by!(name: user.name)
   end
 
   # ===== グループ削除に伴う dependent: :destroy 判定 =====

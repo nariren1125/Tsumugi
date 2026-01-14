@@ -1,0 +1,91 @@
+<% if @has_family_group %>
+  <div class="mb-4">
+    <!-- ラベル＋ボタン行 -->
+    <div class="flex items-center justify-between mb-1 gap-2">
+      <%= f.label :person_tag_ids, "誰が写っている？",
+            class: "label font-medium text-base-content" %>
+
+      <% if @person_tags.any? %>
+        <label
+          for="person-tags-modal"
+          class="btn btn-sm btn-outline normal-case"
+        >
+          選択する
+        </label>
+      <% end %>
+    </div>
+
+    <!-- 選択結果の表示エリア -->
+    <div
+      class="input input-bordered input-auto-height
+             w-full flex flex-wrap gap-2
+             text-xs px-3 py-1"
+      data-person-tags-target="selectedList"
+    >
+      <% if @person_tags.any? %>
+        <span class="text-base-content/50">
+          まだ選択されていません
+        </span>
+      <% else %>
+        <span class="text-base-content/50">
+          タグを作成すると、ここに選択した名前が表示されます
+        </span>
+      <% end %>
+    </div>
+
+    <% if @person_tags.any? %>
+      <div class="hidden">
+        <%= f.collection_check_boxes :person_tag_ids, @person_tags, :id, :name do |b| %>
+          <%= b.check_box(
+                data: {
+                  person_tags_target: "checkbox",
+                  name: b.text
+                }
+              ) %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<!-- モーダルのトグル用チェックボックス -->
+<input type="checkbox" id="person-tags-modal" class="modal-toggle" />
+
+<div class="modal">
+  <div class="modal-box max-w-md">
+    <h3 class="font-semibold text-base mb-2">
+      写っている人を選択
+    </h3>
+    <p class="text-xs text-base-content/60 mb-3">
+      家族グループに登録されているユーザー・子どもの名前から選べます。
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      <% @person_tags.each do |tag| %>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline normal-case"
+          data-action="person-tags#toggle"
+          data-person-tags-id-value="<%= tag.id %>"
+          data-person-tags-name-value="<%= tag.name %>"
+          data-person-tags-target="chip"
+        >
+          <%= tag.name %>
+        </button>
+      <% end %>
+    </div>
+
+    <div class="modal-action">
+      <label for="person-tags-modal" class="btn btn-ghost btn-sm">
+        キャンセル
+      </label>
+      <label
+        for="person-tags-modal"
+        class="btn btn-accent btn-sm"
+        data-action="person-tags#apply"
+      >
+        完了する
+      </label>
+    </div>
+  </div>
+</div>

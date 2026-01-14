@@ -40,30 +40,36 @@
     <%# ✅ 共通エラーパーツを呼び出し %>
     <%= render "shared/form_errors", object: @post %>
 
-    <%# turbo: false を指定してTurboフォーム送信を無効化  Postが複数回送信される問題を回避 %>
-    <%# multipart: true を指定してファイルアップロードを有効にする %>
-    <%= form_with model: @post, data: { turbo: false }, html: { multipart: true, novalidate: true } do |f| %>
+    <%# turbo: false を指定してTurboフォーム送信を無効化 %>
+    <%= form_with model: @post,
+                  data: { turbo: false, controller: "person-tags" },
+                  html: { multipart: true, novalidate: true } do |f| %>
 
-    <%# 撮影日 %>
-    <div class="mb-4">
-      <%= f.label :photo_date, "撮影日", class: "label" %>
-      <%= f.date_field :photo_date,
-            class: "input input-bordered w-full",
-            required: true %>
-    </div>
-
-
-    <%# タイトル %>
+      <%# 撮影日 %>
       <div class="mb-4">
-        <%= f.label :title, "タイトル", class: "label-text font-semibold" %>
+        <%= f.label :photo_date, "撮影日",
+              class: "label font-medium text-base-content" %>
+        <%= f.date_field :photo_date,
+              class: "input input-bordered w-full",
+              required: true %>
+      </div>
+
+      <%# タイトル %>
+      <div class="mb-4">
+        <%= f.label :title, "タイトル",
+              class: "label font-medium text-base-content" %>
         <%= f.text_field :title,
               class: "input input-bordered w-full",
               placeholder: "例：はじめての公園遊び" %>
       </div>
 
+      <%# 誰が写っているか？（部分テンプレート） %>
+      <%= render "person_tags_field", f: f %>
+
       <%# メッセージ %>
       <div class="mb-4">
-        <%= f.label :message, "メッセージ", class: "label-text font-semibold" %>
+        <%= f.label :content, "メッセージ",
+              class: "label font-medium text-base-content" %>
         <%= f.text_area :content,
               rows: 3,
               placeholder: "今日の思い出をひとことで",
@@ -72,13 +78,10 @@
 
       <%# 送信ボタン %>
       <div class="mt-6">
-        <%= f.submit "投稿する", class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
+        <%= f.submit "投稿する",
+              class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
       </div>
-    <% end %>
-  </div>
 
-  <div class="mt-6 text-sm text-base-content/60">
-    ※ 今後、子供の当時の年齢や誰が写っているか？などの項目も追加予定です。<br>
-    ※ まずは写真＋ひとことメッセージから投稿できるようにしています。
+    <% end %>
   </div>
 </div>

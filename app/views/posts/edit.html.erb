@@ -21,35 +21,28 @@
 </div>
 
 <!-- 本体 -->
-<div class="max-w-xl mx-auto px-4 py-14 pb-24">
+<div class="max-w-xl mx-auto px-4 pt-20 pb-24">
 
   <%= render "shared/form_errors", object: @post %>
 
   <%# --- 現在登録されている写真（削除不可・閲覧のみ） --- %>
-  <% if @post.photos.any? %>
-    <div class="mb-8">
-      <h2 class="text-lg font-semibold text-base-content mb-3">
-        写真
-      </h2>
-
-      <div class="swiper rounded-xl overflow-hidden shadow" data-controller="swiper" data-swiper-autoinit-value="true">
-        <div class="swiper-wrapper">
-          <% @post.photos.each do |photo| %>
-            <% if photo.image.attached? %>
-              <div class="swiper-slide">
-                <%= image_tag photo.image, class: "w-full h-64 object-cover" %>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-
-        <div class="swiper-pagination"></div>
+  <div class="flex justify-center gap-2 mb-4">
+    <% @post.photos.each do |photo| %>
+      <div class="w-20 aspect-square rounded-md overflow-hidden">
+        <%= image_tag photo.image, class: "w-full h-full object-cover" %>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+
+  <p class="text-xs text-base-content/60 text-center mb-2">
+    思い出写真（変更できません）
+  </p>
 
   <%# --- 投稿編集フォーム --- %>
-  <%= form_with model: @post, local: true, html: { multipart: true, id: "edit-post-form" } do |f| %>
+  <%= form_with model: @post,
+              local: true,
+              html: { multipart: true, id: "edit-post-form" },
+              data: { controller: "person-tags" } do |f| %>
 
     <%# --- 撮影日 --- %>
     <div class="mb-6">
@@ -63,9 +56,12 @@
       <%= f.text_field :title, class: "input input-bordered w-full" %>
     </div>
 
+    <%# 誰が写っているか？ %>
+    <%= render "person_tags_field", f: f %>
+
     <%# --- ひとことメッセージ --- %>
     <div class="mb-6">
-      <%= f.label :content, "ひとことメッセージ", class: "label font-medium text-base-content" %>
+      <%= f.label :content, "メッセージ", class: "label font-medium text-base-content" %>
       <%= f.text_area :content, rows: 4, class: "textarea textarea-bordered w-full" %>
     </div>
 

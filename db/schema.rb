@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_06_162316) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_14_035804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -102,6 +102,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_06_162316) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "person_tags", force: :cascade do |t|
+    t.bigint "family_group_id", null: false
+    t.string "name", null: false
+    t.string "normalized_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_group_id", "normalized_name"], name: "index_person_tags_on_family_group_id_and_normalized_name", unique: true
+    t.index ["family_group_id"], name: "index_person_tags_on_family_group_id"
+  end
+
   create_table "photos", force: :cascade do |t|
     t.bigint "post_id", null: false
     t.string "image_url"
@@ -109,6 +119,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_06_162316) do
     t.datetime "updated_at", null: false
     t.integer "position"
     t.index ["post_id"], name: "index_photos_on_post_id"
+  end
+
+  create_table "post_person_tags", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "person_tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_tag_id"], name: "index_post_person_tags_on_person_tag_id"
+    t.index ["post_id", "person_tag_id"], name: "index_post_person_tags_on_post_id_and_person_tag_id", unique: true
+    t.index ["post_id"], name: "index_post_person_tags_on_post_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -146,7 +166,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_06_162316) do
   add_foreign_key "family_group_memberships", "users"
   add_foreign_key "invite_tokens", "family_groups"
   add_foreign_key "notifications", "users"
+  add_foreign_key "person_tags", "family_groups"
   add_foreign_key "photos", "posts"
+  add_foreign_key "post_person_tags", "person_tags"
+  add_foreign_key "post_person_tags", "posts"
   add_foreign_key "posts", "albums"
   add_foreign_key "posts", "children"
   add_foreign_key "posts", "users"

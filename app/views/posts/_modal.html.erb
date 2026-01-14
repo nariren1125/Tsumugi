@@ -68,6 +68,24 @@
         <div class="swiper-pagination mt-2"></div>
       </div>
 
+    <!-- ✅ 写っているメンバー -->
+      <% if post.person_tags.any? %>
+        <div class="px-4 mt-4">
+          <p class="text-sm text-accent font-semibold mb-1">
+            写っているメンバー
+          </p>
+
+          <div class="flex flex-wrap gap-2 text-xs text-base-content">
+            <% family_group = post.album.family_group if post.album.respond_to?(:family_group) %>
+            <% post.person_tags.each do |tag| %>
+              <span class="px-2 py-1 rounded-full bg-base-200">
+                <%= person_tag_label(tag, post.photo_date, family_group) %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
     <!-- メッセージラベル -->
     <div class="px-4 mt-4">
       <p class="text-sm text-accent font-semibold mb-1">思い出のメッセージ</p>
