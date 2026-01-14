@@ -77,3 +77,10 @@
 .swiper-slide {
   @apply h-auto;
 }
+
+/* 複数行対応の入力フィールド */
+.input-auto-height {
+  height: auto;            /* ← 固定高さをやめる */
+  min-height: 2.75rem;     /* ← 1行分は確保 */
+  align-items: flex-start; /* ← 上寄せで複数行に対応 */
+}

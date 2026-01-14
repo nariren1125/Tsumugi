@@ -9,6 +9,8 @@ class FamilyGroup < ApplicationRecord
   has_many :albums, dependent: :destroy
   has_many :posts, through: :albums
 
+  has_many :person_tags, dependent: :destroy
+
   # 旧（users.family_group_id）
   has_many :legacy_users,
            class_name: 'User',

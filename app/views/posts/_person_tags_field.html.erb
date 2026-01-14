@@ -1,11 +1,9 @@
 <% if @has_family_group %>
-  <div class="bg-base-100 rounded-box shadow p-4 space-y-2 mt-4">
-    <div class="flex items-center justify-between gap-2">
-      <div>
-        <h2 class="font-semibold text-sm">
-          誰が写っている？
-        </h2>
-      </div>
+  <div class="mb-4">
+    <!-- ラベル＋ボタン行 -->
+    <div class="flex items-center justify-between mb-1 gap-2">
+      <%= f.label :person_tag_ids, "誰が写っている？",
+            class: "label font-medium text-base-content" %>
 
       <% if @person_tags.any? %>
         <label
@@ -17,8 +15,11 @@
       <% end %>
     </div>
 
+    <!-- 選択結果の表示エリア -->
     <div
-      class="flex flex-wrap gap-2 text-xs mt-2 min-h-[1.5rem]"
+      class="input input-bordered input-auto-height
+             w-full flex flex-wrap gap-2
+             text-xs px-3 py-1"
       data-person-tags-target="selectedList"
     >
       <% if @person_tags.any? %>
