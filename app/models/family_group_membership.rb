@@ -2,9 +2,7 @@ class FamilyGroupMembership < ApplicationRecord
   belongs_to :user
   belongs_to :family_group
 
-  has_many :person_tags, dependent: :destroy
-
-  enum :role, { father: 0, mother: 1, other: 2 }
+  enum :role, { father: 0, mother: 1, relative: 2, friend: 3, other: 4 }
 
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :family_group_id }

@@ -2,7 +2,6 @@
 <% content_for :suppress_header, true %>
 
 <div class="relative min-h-screen">
-
   <!-- ===== ヘッダー ===== -->
   <% if @user == current_user %>
     <%= render "shared/simple_header", title: "マイページ" %>
@@ -13,83 +12,119 @@
           show_meatball: true %>
   <% end %>
 
-  <!-- ===== メインコンテンツ ===== -->
-<div class="mt-4 space-y-4 bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 mb-8">
+  <!-- ===== メインコンテンツ（共通ラッパー） ===== -->
+  <div class="max-w-xl mx-auto px-4 py-10 pb-24">
 
-  <div class="flex items-center justify-between mb-3">
-    <div class="flex items-center gap-2">
-      <p class="text-lg font-semibold text-base-content">
-        <%= @user.name %>
-        <span class="text-base-content/60 font-medium">
-          （<%= @user.role_i18n_in(current_family_group) %>）
-        </span>
-      </p>
-  </div>
+    <% if current_family_group.present? %>
+      <%# ===== グループありパターン ===== %>
 
-  <% if @user == current_user %>
-    <%= link_to "編集", edit_mypage_path,
-        class: "btn btn-sm btn-outline rounded-full" %>
-  <% end %>
-</div>
+      <!-- プロフィールカード -->
+      <div class="space-y-4 bg-base-100 rounded-box shadow p-5 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <p class="text-lg font-semibold text-base-content">
+              <%= @user.name %>
+              <span class="text-base-content/60 font-medium">
+                （<%= @user.role_i18n_in(current_family_group) %>）
+              </span>
+            </p>
+          </div>
 
-  <div class="mt-4 text-sm text-base-content/70">
-    投稿数：<span class="font-medium text-base-content"><%= @post_count %></span> 件
-  </div>
+          <% if @user == current_user %>
+            <%= link_to "編集", edit_mypage_path,
+                class: "btn btn-sm btn-outline rounded-full" %>
+          <% end %>
+        </div>
 
-</div>
-
-<div class="mb-3 px-4">
-  <div class="flex items-center justify-between">
-    <h2 class="text-sm font-semibold">
-      <%= @user == current_user ? "あなたの思い出" : "#{@user.name}の思い出" %>
-    </h2>
-
-    <%= form_with url: request.path, method: :get, local: true do %>
-      <select
-        name="year"
-        class="select select-sm select-bordered"
-        onchange="this.form.submit()"
-      >
-        <option value="">すべて</option>
-        <% @years.each do |y| %>
-          <option value="<%= y %>" <%= "selected" if @selected_year.to_s == y.to_s %>>
-            <%= y %>年
-          </option>
-        <% end %>
-      </select>
-    <% end %>
-  </div>
-</div>
-
-<%# ===== 投稿一覧 ===== %>
-<div class="pb-24" data-controller="modal">
-  <% if @posts.present? %>
-    <div class="space-y-4">
-      <%= render @posts %>
-    </div>
-
-    <%# ✅ モーダルは最後にまとめて %>
-    <% @posts.each do |post| %>
-      <%= render "posts/modal", post: post %>
-    <% end %>
-
-  <% else %>
-    <div class="flex flex-col items-center justify-center text-center pt-14 px-6">
-      <div class="w-44 mx-auto">
-        <%= image_tag "no_album.png",
-          alt: "投稿がない状態",
-          class: "w-full h-auto opacity-90" %>
+        <div class="text-sm text-base-content/70">
+          投稿数：
+          <span class="font-medium text-base-content">
+            <%= @post_count %>
+          </span>
+          件
+        </div>
       </div>
 
-      <h2 class="mt-6 text-base font-semibold text-base-content/80">
-        まだ思い出が投稿されていません
-      </h2>
+      <!-- 年フィルタ行 -->
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-sm font-semibold">
+          <%= @user == current_user ? "あなたの思い出" : "#{@user.name}の思い出" %>
+        </h2>
 
-      <p class="mt-2 text-sm text-base-content/60 leading-relaxed">
-        思い出を投稿して、アルバムを紡ぎましょう。
-      </p>
+        <%= form_with url: request.path, method: :get, local: true do %>
+          <select
+            name="year"
+            class="select select-sm select-bordered"
+            onchange="this.form.submit()"
+          >
+            <option value="">すべて</option>
+            <% @years.each do |y| %>
+              <option value="<%= y %>" <%= "selected" if @selected_year.to_s == y.to_s %>>
+                <%= y %>年
+              </option>
+            <% end %>
+          </select>
+        <% end %>
+      </div>
 
-    </div>
-  <% end %>
+      <%# ===== 投稿一覧 ===== %>
+      <div data-controller="modal">
+        <% if @posts.present? %>
+          <div class="space-y-4">
+            <%= render @posts %>
+          </div>
+
+          <%# ✅ モーダルは最後にまとめて %>
+          <% @posts.each do |post| %>
+            <%= render "posts/modal", post: post %>
+          <% end %>
+
+        <% else %>
+          <div class="flex flex-col items-center justify-center text-center pt-10 px-4">
+            <div class="w-44 mx-auto">
+              <%= image_tag "no_album.png",
+                alt: "投稿がない状態",
+                class: "w-full h-auto opacity-90" %>
+            </div>
+
+            <h2 class="mt-6 text-base font-semibold text-base-content/80">
+              まだ思い出が投稿されていません
+            </h2>
+
+            <p class="mt-2 text-sm text-base-content/60 leading-relaxed">
+              思い出を投稿して、アルバムを紡ぎましょう。
+            </p>
+          </div>
+        <% end %>
+      </div>
+
+    <% else %>
+      <%# ===== グループなしパターン ===== %>
+
+      <div class="space-y-6 bg-base-100 rounded-box shadow p-6 text-center">
+        <!-- イラスト -->
+        <div class="w-36 mx-auto">
+          <%= image_tag "group_empty.png",
+                alt: "家族未作成の状態",
+                class: "w-full h-auto" %>
+        </div>
+
+        <!-- メッセージ -->
+        <h2 class="text-base-content font-semibold">
+          家族グループを作成しよう
+        </h2>
+
+        <p class="text-sm text-base-content/60 leading-relaxed">
+          家族グループを作成すると、<br>
+          マイページの確認や思い出の共有ができるようになります。
+        </p>
+
+        <!-- ボタン -->
+        <%= link_to "グループを作成する",
+              new_family_group_path,
+              class: "btn btn-accent w-full" %>
+      </div>
+
+    <% end %>
+  </div>
 </div>
-
