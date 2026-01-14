@@ -5,16 +5,20 @@ class PostsController < ApplicationController
 
   def new
     @post =
-      if params[:draft_post_id]
+      if params[:draft_post_id].present?
         current_user.posts.find(params[:draft_post_id])
       else
         Post.new
       end
 
-    @has_family_group = current_user.family_group.present?
+    @has_family_group = current_family_group.present?
+    @person_tags = current_user.family_group&.person_tags&.order(:name) || []
   end
 
-  def edit; end
+  def edit
+    @has_family_group = current_family_group.present?
+    @person_tags = current_family_group&.person_tags&.order(:name) || []
+  end
 
   def create
     Rails.logger.debug { "POST PARAMS: #{post_params}" }
@@ -65,7 +69,13 @@ class PostsController < ApplicationController
   # Strong Parameters
   # ==================================================
   def post_params
-    params.require(:post).permit(:title, :content, :child_id, :photo_date)
+    params.require(:post).permit(
+      :title,
+      :content,
+      :child_id,
+      :photo_date,
+      person_tag_ids: []
+    )
   end
 
   # ==================================================
