@@ -10,10 +10,15 @@
   <div class="flex-1">
     <% unless content_for?(:center_title) %>
       <h1 class="text-xl font-bold">
-        <%= content_for?(:page_title) ? yield(:page_title) : "Tsumugi" %>
+        <% if content_for?(:page_title) %>
+          <%= yield(:page_title) %>
+        <% else %>
+          <%= link_to "Tsumugi", root_path, class: "hover:opacity-70" %>
+        <% end %>
       </h1>
     <% end %>
   </div>
+
 
   <!-- 中央タイトル -->
   <% if content_for?(:center_title) %>

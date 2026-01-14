@@ -78,6 +78,8 @@ ja:
         roles:
           father: "パパ"
           mother: "ママ"
+          relative: "親戚"
+          friend: "友人"
           other: "その他"
 
     errors:
