@@ -15,6 +15,11 @@ class Post < ApplicationRecord
   validates :content, presence: true, length: { maximum: 500 }
   validate :photos_count_within_limit
 
+  # 家族グループに属する投稿を取得するスコープ
+  scope :for_family_group, lambda { |family_group|
+    joins(:album).where(albums: { family_group_id: family_group.id })
+  }
+
   private
 
   def photos_count_within_limit
