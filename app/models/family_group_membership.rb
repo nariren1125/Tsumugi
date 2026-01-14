@@ -2,6 +2,8 @@ class FamilyGroupMembership < ApplicationRecord
   belongs_to :user
   belongs_to :family_group
 
+  has_many :person_tags, dependent: :destroy
+
   enum :role, { father: 0, mother: 1, other: 2 }
 
   validates :role, presence: true
@@ -12,6 +14,9 @@ class FamilyGroupMembership < ApplicationRecord
 
   # 削除ガード（※グループ削除時は除外）
   before_destroy :prevent_destroy_if_last_admin, unless: :destroyed_by_family_group?
+
+  # 思い出のタグ項目へのメンバー追加後処理
+  after_create :ensure_person_tag_for_user
 
   # enumの値を日本語で返す
   def role_i18n
@@ -46,6 +51,11 @@ class FamilyGroupMembership < ApplicationRecord
 
     errors.add(:base, '管理者が1人しかいないため権限を外せません')
     throw(:abort)
+  end
+
+  # ===== タグ項目にメンバー追加後処理 =====
+  def ensure_person_tag_for_user
+    family_group.person_tags.find_or_create_by!(name: user.name)
   end
 
   # ===== グループ削除に伴う dependent: :destroy 判定 =====

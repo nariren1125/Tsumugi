@@ -3,6 +3,8 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[edit update destroy]
   before_action :authorize_user!, only: %i[edit update destroy]
 
+  before_action :set_person_context, only: %i[new edit]
+
   def new
     @post =
       if params[:draft_post_id].present?
@@ -10,14 +12,9 @@ class PostsController < ApplicationController
       else
         Post.new
       end
-
-    @has_family_group = current_family_group.present?
-    @person_tags = current_user.family_group&.person_tags&.order(:name) || []
   end
 
   def edit
-    @has_family_group = current_family_group.present?
-    @person_tags = current_family_group&.person_tags&.order(:name) || []
   end
 
   def create
@@ -26,7 +23,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to albums_path, notice: t('flash.posts.created')
     else
-      @has_family_group = current_user.family_group.present?
+      set_person_context
       render :new, status: :unprocessable_entity
     end
   end
@@ -35,6 +32,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to albums_path, notice: t('flash.posts.updated')
     else
+      set_person_context
       render :edit, status: :unprocessable_entity
     end
   end
@@ -125,5 +123,17 @@ class PostsController < ApplicationController
     return if @post.user == current_user
 
     redirect_to albums_path, alert: t('flash.authorization.failed')
+  end
+
+  # 人物タグの共通セット処理
+  def set_person_context
+    family_group = current_family_group
+    @has_family_group = family_group.present?
+    @person_tags =
+      if family_group
+        PersonTag.where(family_group_id: family_group.id).order(:name)
+      else
+        []
+      end
   end
 end

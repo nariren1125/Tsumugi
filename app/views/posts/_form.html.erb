@@ -42,7 +42,7 @@
 
     <%# turbo: false を指定してTurboフォーム送信を無効化  Postが複数回送信される問題を回避 %>
     <%# multipart: true を指定してファイルアップロードを有効にする %>
-    <%= form_with model: @post, data: { turbo: false }, html: { multipart: true, novalidate: true } do |f| %>
+    <%= form_with model: @post, data: { turbo: false, controller: "person-tags" }, html: { multipart: true, novalidate: true } do |f| %>
 
     <%# 撮影日 %>
     <div class="mb-4">
@@ -62,71 +62,7 @@
       </div>
 
     <%# 誰が写っているか？ %>
-<% if @has_family_group %>
-  <div
-    class="bg-base-100 rounded-box shadow p-4 space-y-2 mt-4"
-    data-controller="person-tags"
-  >
-    <div class="flex items-center justify-between gap-2">
-      <div>
-        <h2 class="font-semibold text-sm">
-          誰が写っている？
-        </h2>
-
-        <% if @person_tags.any? %>
-          <p class="text-[11px] text-base-content/60">
-            家族や子供の名前を選ぶと、あとから「◯◯の写真」だけ振り返れます。
-          </p>
-        <% else %>
-          <p class="text-[11px] text-base-content/60">
-            まだ人物タグが登録されていません。まずは家族設定から、家族の名前タグを作成してください。
-          </p>
-        <% end %>
-      </div>
-
-      <% if @person_tags.any? %>
-        <!-- モーダルを開くボタン（タグがあるときだけ有効） -->
-        <label
-          for="person-tags-modal"
-          class="btn btn-sm btn-outline normal-case"
-        >
-          選択する
-        </label>
-      <% end %>
-    </div>
-
-    <!-- 選択された人の表示エリア -->
-    <div
-      class="flex flex-wrap gap-2 text-xs mt-2 min-h-[1.5rem]"
-      data-person-tags-target="selectedList"
-    >
-      <% if @person_tags.any? %>
-        <span class="text-base-content/50">
-          まだ選択されていません
-        </span>
-      <% else %>
-        <span class="text-base-content/50">
-          タグを作成すると、ここに選択した名前が表示されます
-        </span>
-      <% end %>
-    </div>
-
-    <!-- 本体のチェックボックスは隠しておく（Railsの値保持用） -->
-    <% if @person_tags.any? %>
-      <div class="hidden">
-        <%= f.collection_check_boxes :person_tag_ids, @person_tags, :id, :name do |b| %>
-          <%= b.check_box(
-                data: {
-                  person_tags_target: "checkbox",
-                  name: b.text
-                }
-              ) %>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
-
+    <%= render "person_tags_field", f: f %>
 
       <%# メッセージ %>
       <div class="mb-4">
@@ -142,53 +78,6 @@
         <%= f.submit "投稿する", class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
       </div>
 
-      <!-- モーダルのトグル用チェックボックス -->
-<input type="checkbox" id="person-tags-modal" class="modal-toggle" />
-
-<div class="modal">
-  <div class="modal-box max-w-md">
-    <h3 class="font-semibold text-base mb-2">
-      写っている人を選択
-    </h3>
-    <p class="text-xs text-base-content/60 mb-3">
-      家族グループに登録されているユーザー・子どもの名前から選べます。
-    </p>
-
-    <!-- 一覧（ここでは @person_tags を使う） -->
-    <div class="flex flex-wrap gap-2 mb-4">
-      <% @person_tags.each do |tag| %>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline normal-case"
-          data-action="person-tags#toggle"
-          data-person-tags-id-value="<%= tag.id %>"
-          data-person-tags-name-value="<%= tag.name %>"
-          data-person-tags-target="chip"
-        >
-          <%= tag.name %>
-        </button>
-      <% end %>
-    </div>
-
-    <div class="modal-action">
-      <label for="person-tags-modal" class="btn btn-ghost btn-sm">
-        キャンセル
-      </label>
-      <label
-        for="person-tags-modal"
-        class="btn btn-accent btn-sm"
-        data-action="person-tags#apply"
-      >
-        完了する
-      </label>
-    </div>
-  </div>
-</div>
     <% end %>
-  </div>
-
-  <div class="mt-6 text-sm text-base-content/60">
-    ※ 今後、子供の当時の年齢や誰が写っているか？などの項目も追加予定です。<br>
-    ※ まずは写真＋ひとことメッセージから投稿できるようにしています。
   </div>
 </div>
