@@ -4,6 +4,9 @@ class AlbumsController < ApplicationController
   def index
     family = current_family_group
 
+    @person_tags = family ? family.person_tags.order(:name) : []
+    @children    = family ? family.children.order(:created_at) : []
+
     @posts_by_year =
       if family
         build_grouped_posts(family)
