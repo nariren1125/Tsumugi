@@ -1,5 +1,6 @@
+
 <% if @has_family_group %>
-  <div class="mb-4">
+  <div data-controller="person-tags" class="mb-4">
     <!-- ラベル＋ボタン行 -->
     <div class="flex items-center justify-between mb-1 gap-2">
       <%= f.label :person_tag_ids, "誰が写っている？",
@@ -7,8 +8,9 @@
 
       <% if @person_tags.any? %>
         <label
-          for="person-tags-modal"
+          for="person-tags-modal-post"
           class="btn btn-sm btn-outline normal-case"
+          data-action="click->person-tags#open"
         >
           選択する
         </label>
@@ -17,15 +19,11 @@
 
     <!-- 選択結果の表示エリア -->
     <div
-      class="input input-bordered input-auto-height
-             w-full flex flex-wrap gap-2
-             text-xs px-3 py-1"
+      class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-1"
       data-person-tags-target="selectedList"
     >
       <% if @person_tags.any? %>
-        <span class="text-base-content/50">
-          まだ選択されていません
-        </span>
+        <span class="text-base-content/50">まだ選択されていません</span>
       <% else %>
         <span class="text-base-content/50">
           タグを作成すると、ここに選択した名前が表示されます
@@ -33,6 +31,7 @@
       <% end %>
     </div>
 
+    <!-- hidden checkboxes（フォーム送信用） -->
     <% if @person_tags.any? %>
       <div class="hidden">
         <%= f.collection_check_boxes :person_tag_ids, @person_tags, :id, :name do |b| %>
@@ -45,47 +44,55 @@
         <% end %>
       </div>
     <% end %>
+
+    <!-- モーダルのトグル用チェックボックス（同一ページ内でID重複しないようpost専用に） -->
+    <input
+      type="checkbox"
+      id="person-tags-modal-post"
+      class="modal-toggle"
+      data-person-tags-target="modal"
+    />
+
+    <div class="modal">
+      <div class="modal-box max-w-md">
+        <h3 class="font-semibold text-base mb-2">写っている人を選択</h3>
+        <p class="text-xs text-base-content/60 mb-3">
+          家族グループに登録されているユーザー・子どもの名前から選べます。
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+          <% @person_tags.each do |tag| %>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline normal-case"
+              data-action="click->person-tags#toggle"
+              data-person-tags-id-value="<%= tag.id %>"
+              data-person-tags-name-value="<%= tag.name %>"
+              data-person-tags-target="chip"
+            >
+              <%= tag.name %>
+            </button>
+          <% end %>
+        </div>
+
+        <div class="modal-action">
+          <label
+            for="person-tags-modal-post"
+            class="btn btn-ghost btn-sm"
+            data-action="click->person-tags#cancel"
+          >
+            キャンセル
+          </label>
+
+          <label
+            for="person-tags-modal-post"
+            class="btn btn-accent btn-sm"
+            data-action="click->person-tags#apply"
+          >
+            完了する
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>
-
-<!-- モーダルのトグル用チェックボックス -->
-<input type="checkbox" id="person-tags-modal" class="modal-toggle" />
-
-<div class="modal">
-  <div class="modal-box max-w-md">
-    <h3 class="font-semibold text-base mb-2">
-      写っている人を選択
-    </h3>
-    <p class="text-xs text-base-content/60 mb-3">
-      家族グループに登録されているユーザー・子どもの名前から選べます。
-    </p>
-
-    <div class="flex flex-wrap gap-2 mb-4">
-      <% @person_tags.each do |tag| %>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline normal-case"
-          data-action="person-tags#toggle"
-          data-person-tags-id-value="<%= tag.id %>"
-          data-person-tags-name-value="<%= tag.name %>"
-          data-person-tags-target="chip"
-        >
-          <%= tag.name %>
-        </button>
-      <% end %>
-    </div>
-
-    <div class="modal-action">
-      <label for="person-tags-modal" class="btn btn-ghost btn-sm">
-        キャンセル
-      </label>
-      <label
-        for="person-tags-modal"
-        class="btn btn-accent btn-sm"
-        data-action="person-tags#apply"
-      >
-        完了する
-      </label>
-    </div>
-  </div>
-</div>
