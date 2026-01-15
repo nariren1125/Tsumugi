@@ -114,29 +114,37 @@
                 <%= render "albums/person_tags_modal", person_tags: @person_tags %>
               </div>
 
-              <!-- 子ども年齢 -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-semibold mb-1">子ども</label>
-                  <select name="child_id" class="select select-bordered w-full">
-                    <option value="">選択してください</option>
-                    <% @children.each do |c| %>
-                      <option value="<%= c.id %>" <%= "selected" if params[:child_id].to_s == c.id.to_s %>><%= c.name %></option>
-                    <% end %>
-                  </select>
-                </div>
+              <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
+<div data-controller="child-age">
+  <div class="flex items-center justify-between mb-1 gap-2">
+    <span class="label font-medium text-base-content">子ども年齢</span>
 
-                <div>
-                  <label class="block text-sm font-semibold mb-1">年齢</label>
-                  <select name="age_years" class="select select-bordered w-full">
-                    <option value="">指定しない</option>
-                    <% (0..6).each do |n| %>
-                      <option value="<%= n %>" <%= "selected" if params[:age_years].to_s == n.to_s %>><%= n %>歳</option>
-                    <% end %>
-                  </select>
-                  <p class="text-xs opacity-70 mt-1">0歳＝0ヶ月以上〜1歳未満</p>
-                </div>
-              </div>
+    <% if @children.any? %>
+      <label
+        for="child-age-modal"
+        class="btn btn-sm btn-outline normal-case"
+        data-action="click->child-age#open"
+      >
+        選択する
+      </label>
+    <% end %>
+  </div>
+
+  <%# 表示エリア（チップ） %>
+  <div
+    class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
+    data-child-age-target="selectedLabel"
+  >
+    <span class="text-base-content/50">まだ選択されていません</span>
+  </div>
+
+  <%# hidden（フォーム送信用） %>
+  <input type="hidden" name="child_id" data-child-age-target="childHidden" value="<%= params[:child_id].to_s %>">
+  <input type="hidden" name="age_years" data-child-age-target="ageHidden" value="<%= params[:age_years].to_s %>">
+
+  <%= render "albums/child_age_modal", children: @children %>
+</div>
+
 
               <div class="flex gap-2">
                 <button type="submit" class="btn btn-primary flex-1">絞り込む</button>

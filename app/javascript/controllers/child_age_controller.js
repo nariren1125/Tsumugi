@@ -1,53 +1,58 @@
-
 import { Controller } from "@hotwired/stimulus"
 
+// data-controller="child-age"
 export default class extends Controller {
-  static targets = ["modalChild", "modalAge", "hiddenChild", "hiddenAge", "preview"]
-  static values = { children: Object }
+  static targets = ["childSelect", "ageSelect", "childHidden", "ageHidden", "selectedLabel"]
 
   connect() {
-    this.syncPreviewFromHidden()
-  
-    this._onReset = () => this.clear()
-    document.addEventListener("search:reset", this._onReset)
+    this.childSelectTarget.value = this.childHiddenTarget.value || ""
+    this.ageSelectTarget.value = this.ageHiddenTarget.value || ""
+    this.updateLabel()
   }
-  
-  disconnect() {
-    document.removeEventListener("search:reset", this._onReset)
+
+  open() {
+    this.childSelectTarget.value = this.childHiddenTarget.value || ""
+    this.ageSelectTarget.value = this.ageHiddenTarget.value || ""
   }
 
   apply() {
-    console.log("✅ child-age apply fired")
-
-    // モーダルの選択値を hidden（送信用）へ反映
-    this.hiddenChildTarget.value = this.modalChildTarget.value
-    this.hiddenAgeTarget.value = this.modalAgeTarget.value
-
-    // プレビュー更新
-    this.syncPreviewFromHidden()
-
-    // モーダルを閉じる
-    const toggle = document.getElementById("child-age-modal")
-    if (toggle) toggle.checked = false
+    this.childHiddenTarget.value = this.childSelectTarget.value || ""
+    this.ageHiddenTarget.value = this.ageSelectTarget.value || ""
+    this.updateLabel()
   }
 
-  clear() {
-    this.hiddenChildTarget.value = ""
-    this.hiddenAgeTarget.value = ""
-    this.syncPreviewFromHidden()
-  }  
+  cancel() {
+    this.childSelectTarget.value = this.childHiddenTarget.value || ""
+    this.ageSelectTarget.value = this.ageHiddenTarget.value || ""
+  }
 
-  syncPreviewFromHidden() {
-    const childId = this.hiddenChildTarget.value
-    const age = this.hiddenAgeTarget.value
+  updateLabel() {
+    const childId = this.childHiddenTarget.value
+    const age = this.ageHiddenTarget.value
 
-    if (childId && age !== "") {
-      const name = this.childrenValue?.[childId] || "子ども"
-      this.previewTarget.textContent = `${name} / ${age}歳`
-      this.previewTarget.classList.remove("text-base-content/50")
-    } else {
-      this.previewTarget.textContent = "未選択"
-      this.previewTarget.classList.add("text-base-content/50")
+    this.selectedLabelTarget.innerHTML = ""
+
+    // 未選択表示
+    if (!childId || !age) {
+      const span = document.createElement("span")
+      span.className = "text-base-content/50"
+      span.textContent = "まだ選択されていません"
+      this.selectedLabelTarget.appendChild(span)
+      return
     }
+
+    // 子ども名＋色（optionのdata属性から取得）
+    const opt = Array.from(this.childSelectTarget.options).find((o) => o.value === childId)
+    const childName = opt ? opt.textContent : ""
+    const color = opt?.dataset?.color || "" // 例: "#C07A5B" など
+
+    const span = document.createElement("span")
+    span.className = "text-sm font-medium"
+    if (color) span.style.color = color
+
+    // Tsumugiっぽい文言に
+    span.textContent = `${childName}（${age}歳のころ）`
+
+    this.selectedLabelTarget.appendChild(span)
   }
 }

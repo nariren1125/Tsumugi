@@ -1,4 +1,3 @@
-
 # app/queries/posts/search.rb
 module Posts
   class Search
@@ -24,8 +23,7 @@ module Posts
 
       # 2) 通常モード（year + person_tags AND）
       posts = apply_year_filter(posts)
-      posts = apply_person_tags_and(posts)
-      posts
+      apply_person_tags_and(posts)
     end
 
     private
