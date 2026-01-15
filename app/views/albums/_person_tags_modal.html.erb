@@ -1,0 +1,55 @@
+
+<!-- モーダルのトグル用チェックボックス -->
+<input
+  type="checkbox"
+  id="person-tags-modal"
+  class="modal-toggle"
+  data-person-tags-target="modal"
+  data-action="change->person-tags#cancel"
+/>
+
+<div class="modal">
+  <div class="modal-box max-w-md">
+    <h3 class="font-semibold text-base mb-2">写っている人を選択</h3>
+    <p class="text-xs text-base-content/60 mb-3">
+      登録されているメンバーから選べます。
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      <% person_tags.each do |tag| %>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline normal-case"
+          data-action="click->person-tags#toggle"
+          data-person-tags-id-value="<%= tag.id %>"
+          data-person-tags-name-value="<%= tag.name %>"
+          data-person-tags-target="chip"
+        >
+          <%= tag.name %>
+        </button>
+      <% end %>
+    </div>
+
+    <p class="text-xs text-base-content/60 mb-3">
+      ※複数のタグを選択すると、選択した人全員が写っている思い出のみが表示されます。
+    </p>
+
+    <div class="modal-action">
+      <label
+        for="person-tags-modal"
+        class="btn btn-ghost btn-sm"
+        data-action="click->person-tags#cancel"
+      >
+        キャンセル
+      </label>
+
+      <label
+        for="person-tags-modal"
+        class="btn btn-accent btn-sm"
+        data-action="click->person-tags#apply"
+      >
+        完了する
+      </label>
+    </div>
+  </div>
+</div>

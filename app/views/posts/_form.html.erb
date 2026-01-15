@@ -42,7 +42,7 @@
 
     <%# turbo: false を指定してTurboフォーム送信を無効化 %>
     <%= form_with model: @post,
-                  data: { turbo: false, controller: "person-tags" },
+                  data: { turbo: false },
                   html: { multipart: true, novalidate: true } do |f| %>
 
       <%# 撮影日 %>

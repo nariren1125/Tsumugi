@@ -29,3 +29,7 @@ Style/FrozenStringLiteralComment:
 # クラスやモジュールのドキュメントコメントを不要にします
 Style/Documentation:
   Enabled: false
+
+# .rubocop.yml
+Metrics/ClassLength:
+  Max: 150
