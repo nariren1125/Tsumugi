@@ -70,26 +70,52 @@ module Posts
     # 家族アルバム前提：投稿が特定の子1人に紐づくとは限らないため、
     # Post.child_id ではなく「その子の人物タグ(person_tag)」が付いている投稿を対象にする。
     def apply_age_filter(posts)
-      child = family_group.children.find_by(id: params[:child_id])
-      return posts.none if child.nil? || child.birth_date.blank?
+      child = child_for_age_filter
+      return posts.none if child.nil?
 
-      age  = params[:age_years].to_i
-      from = child.birth_date.advance(years: age)
-      to   = child.birth_date.advance(years: age + 1)
-
-      # Child 作成時に ensure_person_tag している前提で、同名の人物タグを取得
-      tag = family_group.person_tags.find_by(name: child.name)
+      tag = child_tag(child)
       return posts.none if tag.nil?
 
-      # 1) 撮影日レンジ（photo_date 必須）
-      # 2) その子の人物タグが付いている投稿
-      #
-      # joins(:post_person_tags) を使うことで SQL が単純になりやすく、
-      # person_tags AND の joins(:person_tags) と衝突しづらい
+      age_range = build_age_range(child)
+
+      filter_posts_by_age_and_tag(posts, age_range, tag.id)
+    end
+
+    # ---- apply_age_filter 用の小さなヘルパー ----
+
+    # 年齢絞り込み対象の子どもを取得
+    # Child が存在しない or 誕生日が空なら nil を返す
+    def child_for_age_filter
+      child = family_group.children.find_by(id: params[:child_id])
+      return if child.nil? || child.birth_date.blank?
+
+      child
+    end
+
+    # 指定年齢のレンジ（from...to）を生成
+    def build_age_range(child)
+      age = params[:age_years].to_i
+      from = child.birth_date.advance(years: age)
+      to   = child.birth_date.advance(years: age + 1)
+      from...to
+    end
+
+    # Child 作成時に ensure_person_tag している前提で、同名の人物タグを取得
+    def child_tag(child)
+      family_group.person_tags.find_by(name: child.name)
+    end
+
+    # 実際に絞り込みを行う部分
+    # 1) 撮影日レンジ（photo_date 必須）
+    # 2) その子の人物タグが付いている投稿
+    #
+    # joins(:post_person_tags) を使うことで SQL が単純になりやすく、
+    # person_tags AND の joins(:person_tags) と衝突しづらい
+    def filter_posts_by_age_and_tag(posts, age_range, tag_id)
       posts
-        .where(photo_date: from...to)
+        .where(photo_date: age_range)
         .joins(:post_person_tags)
-        .where(post_person_tags: { person_tag_id: tag.id })
+        .where(post_person_tags: { person_tag_id: tag_id })
     end
   end
 end

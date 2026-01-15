@@ -9,6 +9,7 @@
     <!-- ===== 検索（省スペース） ===== -->
     <div class="mb-6">
       <div class="collapse collapse-arrow bg-base-200 rounded-xl">
+        <%# いずれかの条件が入っていれば、検索エリアを開いた状態にする %>
         <input
           type="checkbox"
           <%= (params[:year].present? || params[:child_id].present? || params[:age_years].present? || Array(params[:person_tag_ids]).present?) ? "checked" : "" %>
@@ -37,15 +38,18 @@
         <div class="collapse-content">
           <%= form_with url: albums_path, method: :get, local: true do %>
             <div class="space-y-4">
+              <%# child_id + age_years が揃ったら「年」select をロック %>
               <% age_mode = params[:child_id].present? && params[:age_years].present? %>
 
-              <!-- 年 -->
+              <!-- ===== 年 ===== -->
               <div>
                 <label class="block text-sm font-semibold mb-1">年度（年）</label>
                 <select name="year" class="select select-bordered w-full" <%= "disabled" if age_mode %>>
                   <option value="">指定しない</option>
                   <% Date.current.year.downto(Date.current.year - 10).each do |y| %>
-                    <option value="<%= y %>" <%= "selected" if params[:year].to_s == y.to_s %>><%= y %>年</option>
+                    <option value="<%= y %>" <%= "selected" if params[:year].to_s == y.to_s %>>
+                      <%= y %>年
+                    </option>
                   <% end %>
                 </select>
 
@@ -72,14 +76,14 @@
                   <% end %>
                 </div>
 
+                <%# GETパラメータから選択済みのタグIDを復元 %>
                 <% selected_ids = Array(params[:person_tag_ids]).reject(&:blank?).map(&:to_s) %>
 
-                <!-- 選択結果の表示 -->
+                <!-- 選択結果の表示（ここは person-tags controller が更新するが、初期表示も入れる） -->
                 <div
                   class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
                   data-person-tags-target="selectedList"
                 >
-                  <%# JSで上書きされるが、初期表示も入れておく %>
                   <% if @person_tags.any? %>
                     <% selected = @person_tags.select { |t| selected_ids.include?(t.id.to_s) } %>
 
@@ -115,44 +119,64 @@
               </div>
 
               <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
-<div data-controller="child-age">
-  <div class="flex items-center justify-between mb-1 gap-2">
-    <span class="label font-medium text-base-content">子ども年齢</span>
+              <div data-controller="child-age">
+                <div class="flex items-center justify-between mb-1 gap-2">
+                  <span class="label font-medium text-base-content">子ども年齢</span>
 
-    <% if @children.any? %>
-      <label
-        for="child-age-modal"
-        class="btn btn-sm btn-outline normal-case"
-        data-action="click->child-age#open"
-      >
-        選択する
-      </label>
-    <% end %>
-  </div>
+                  <% if @children.any? %>
+                    <label
+                      for="child-age-modal"
+                      class="btn btn-sm btn-outline normal-case"
+                      data-action="click->child-age#open"
+                    >
+                      選択する
+                    </label>
+                  <% end %>
+                </div>
 
-  <%# 表示エリア（チップ） %>
-  <div
-    class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
-    data-child-age-target="selectedLabel"
-  >
-    <span class="text-base-content/50">まだ選択されていません</span>
-  </div>
+                <%# 表示エリア（child-age controller が文字表示に更新） %>
+                <div
+                  class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
+                  data-child-age-target="selectedLabel"
+                >
+                  <span class="text-base-content/50">まだ選択されていません</span>
+                </div>
 
-  <%# hidden（フォーム送信用） %>
-  <input type="hidden" name="child_id" data-child-age-target="childHidden" value="<%= params[:child_id].to_s %>">
-  <input type="hidden" name="age_years" data-child-age-target="ageHidden" value="<%= params[:age_years].to_s %>">
+                <%# hidden（フォーム送信用：GETパラメータとして送る） %>
+                <input
+                  type="hidden"
+                  name="child_id"
+                  data-child-age-target="childHidden"
+                  value="<%= params[:child_id].to_s %>"
+                >
+                <input
+                  type="hidden"
+                  name="age_years"
+                  data-child-age-target="ageHidden"
+                  value="<%= params[:age_years].to_s %>"
+                >
 
-  <%= render "albums/child_age_modal", children: @children %>
-</div>
-
-
-              <div class="flex gap-2">
-                <button type="submit" class="btn btn-primary flex-1">絞り込む</button>
-                <%= link_to "リセット", albums_path, class: "btn btn-ghost" %>
+                <%= render "albums/child_age_modal", children: @children %>
               </div>
 
+              <%# ===== 送信ボタン：Tsumugi仕様（左右50:50） ===== %>
+              <div class="flex gap-3">
+                <%# 絞り込み：アクセント色（主ボタン） %>
+                <button type="submit" class="btn btn-accent flex-1 rounded-xl normal-case">
+                  絞り込む
+                </button>
+
+                <%# リセット：アウトライン（副ボタン） %>
+                <%= link_to albums_path, class: "btn btn-outline flex-1 rounded-xl normal-case" do %>
+                  リセット
+                <% end %>
+              </div>
+
+              <%# 注意文（年/年齢で絞ると撮影日未設定は除外される） %>
               <% if params[:year].present? || (params[:child_id].present? && params[:age_years].present?) %>
-                <p class="text-xs opacity-70">※年／年齢で絞り込む場合、撮影日未設定の思い出は表示されません</p>
+                <p class="text-xs opacity-70">
+                  ※年／年齢で絞り込む場合、撮影日未設定の思い出は表示されません
+                </p>
               <% end %>
             </div>
           <% end %>
