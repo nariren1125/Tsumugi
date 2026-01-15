@@ -11,6 +11,9 @@ class Post < ApplicationRecord
   # PostモデルがPhotoモデルの属性を受け入れるように設定
   accepts_nested_attributes_for :photos, allow_destroy: true
 
+  # 投稿作成時にchild_idが未設定なら、関連するアルバムのchild_idで埋める
+  before_validation :fill_child_id_from_album, on: :create
+
   validates :title, presence: true, length: { maximum: 100 }
   validates :content, presence: true, length: { maximum: 500 }
   validate :photos_count_within_limit
@@ -26,5 +29,10 @@ class Post < ApplicationRecord
     return unless photos.size > 5
 
     errors.add(:base, '写真は最大5枚まで投稿できます')
+  end
+
+  # 投稿のchild_idが未設定の場合、関連するアルバムのchild_idで埋める
+  def fill_child_id_from_album
+    self.child_id ||= album&.child_id
   end
 end
