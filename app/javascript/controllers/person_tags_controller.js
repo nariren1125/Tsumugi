@@ -6,35 +6,80 @@ export default class extends Controller {
 
   connect() {
     console.log("✅ person-tags controller connected")
-    this.syncChipsFromCheckboxes()
-    this.updateSelectedList()
+
+    // 「確定済み」= hidden checkbox の状態
+    this.committedIds = new Set(this.checkedIdsFromCheckboxes())
+    // 「下書き」= モーダル内で一時的に選ぶ状態
+    this.draftIds = new Set(this.committedIds)
+
+    // 初期UI
+    this.syncChipsFromIdSet(this.committedIds)
+    this.updateSelectedListFromIdSet(this.committedIds)
   }
 
-  // モーダル内の名前ボタンが押されたとき
+  // ===== モーダルを開くときに呼ぶ（推奨） =====
+  // data-action="click->person-tags#open" を「選択する」ボタン等に付ける
+  open() {
+    this.committedIds = new Set(this.checkedIdsFromCheckboxes())
+    this.draftIds = new Set(this.committedIds)
+    this.syncChipsFromIdSet(this.draftIds)
+  }
+
+  // モーダル内の名前ボタンが押されたとき（下書きだけ更新）
+  // data-action="click->person-tags#toggle"
   toggle(event) {
+    event.preventDefault()
+
     const chip = event.currentTarget
-    const id = chip.dataset.personTagsIdValue   // ★ HTMLと合わせる
+    const id = String(chip.dataset.personTagsIdValue || "")
+    if (!id) return
 
-    const checkbox = this.checkboxTargets.find((cb) => cb.value === id)
-    if (!checkbox) return
+    if (this.draftIds.has(id)) {
+      this.draftIds.delete(id)
+      this.updateChipStyle(chip, false)
+    } else {
+      this.draftIds.add(id)
+      this.updateChipStyle(chip, true)
+    }
 
-    checkbox.checked = !checkbox.checked
-    this.updateChipStyle(chip, checkbox.checked)
-    this.updateSelectedList()
+    // ★ここが重要：フォーム（checkbox/selectedList）は更新しない
   }
 
-  // 「完了する」押下時
+  // 「完了する」押下時（ここで初めてフォームに反映）
+  // data-action="click->person-tags#apply"
   apply() {
-    this.updateSelectedList()
+    this.committedIds = new Set(this.draftIds)
+    this.applyIdSetToCheckboxes(this.committedIds)
+    this.updateSelectedListFromIdSet(this.committedIds)
+    // closeModal() は不要（labelが閉じる）
   }
 
-  // 既にチェック済みのものがあればUIを同期
-  syncChipsFromCheckboxes() {
+  // 「キャンセル」押下時（確定済みに戻す）
+  // data-action="click->person-tags#cancel"
+  cancel() {
+    this.draftIds = new Set(this.committedIds)
+    this.syncChipsFromIdSet(this.committedIds)
+    // closeModal() は不要（labelが閉じる）
+  }
+
+  // ===== 内部処理 =====
+  checkedIdsFromCheckboxes() {
+    return this.checkboxTargets
+      .filter((cb) => cb.checked)
+      .map((cb) => String(cb.value))
+  }
+
+  applyIdSetToCheckboxes(idSet) {
+    this.checkboxTargets.forEach((cb) => {
+      cb.checked = idSet.has(String(cb.value))
+    })
+  }
+
+  // 既にチェック済みのものがあればUIを同期（※Set版）
+  syncChipsFromIdSet(idSet) {
     this.chipTargets.forEach((chip) => {
-      const id = chip.dataset.personTagsIdValue
-      const checkbox = this.checkboxTargets.find((cb) => cb.value === id)
-      const checked = checkbox && checkbox.checked
-      this.updateChipStyle(chip, checked)
+      const id = String(chip.dataset.personTagsIdValue || "")
+      this.updateChipStyle(chip, idSet.has(id))
     })
   }
 
@@ -48,9 +93,10 @@ export default class extends Controller {
     }
   }
 
-  updateSelectedList() {
+  // フォーム側の表示（selectedList）は committed だけを表示する
+  updateSelectedListFromIdSet(idSet) {
     const selectedNames = this.checkboxTargets
-      .filter((cb) => cb.checked)
+      .filter((cb) => idSet.has(String(cb.value)))
       .map((cb) => cb.dataset.name)
 
     this.selectedListTarget.innerHTML = ""
@@ -65,10 +111,18 @@ export default class extends Controller {
 
     selectedNames.forEach((name) => {
       const tag = document.createElement("span")
-      tag.className =
-        "px-2 py-1 rounded-full bg-base-200 text-xs text-base-content"
+      tag.className = "px-2 py-1 rounded-full bg-base-200 text-xs text-base-content"
       tag.textContent = name
       this.selectedListTarget.appendChild(tag)
     })
+  }
+
+  // 既存互換（connectから呼んでいる場合のため残すなら）
+  syncChipsFromCheckboxes() {
+    this.syncChipsFromIdSet(new Set(this.checkedIdsFromCheckboxes()))
+  }
+
+  updateSelectedList() {
+    this.updateSelectedListFromIdSet(new Set(this.checkedIdsFromCheckboxes()))
   }
 }

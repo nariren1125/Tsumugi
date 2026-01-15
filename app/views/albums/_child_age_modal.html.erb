@@ -1,0 +1,51 @@
+
+<input type="checkbox" id="child-age-modal" class="modal-toggle" />
+
+<div class="modal" role="dialog">
+  <div class="modal-box max-w-md">
+    <h3 class="font-semibold text-base mb-2">子どもの年齢で絞り込む</h3>
+    <p class="text-xs text-base-content/60 mb-3">
+      子どもを1人選択し、年齢を指定してください。
+    </p>
+
+    <div class="space-y-3">
+      <div>
+        <label class="label text-sm font-medium">子ども</label>
+        <select class="select select-bordered w-full"
+                data-child-age-target="modalChild">
+          <option value="">選択してください</option>
+          <% children.each do |c| %>
+            <option value="<%= c.id %>" <%= "selected" if selected_child_id.to_s == c.id.to_s %>><%= c.name %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <div>
+        <label class="label text-sm font-medium">年齢</label>
+        <select class="select select-bordered w-full"
+                data-child-age-target="modalAge">
+          <option value="">選択してください</option>
+          <% (0..6).each do |n| %>
+            <option value="<%= n %>" <%= "selected" if selected_age_years.to_s == n.to_s %>><%= n %>歳</option>
+          <% end %>
+        </select>
+        <p class="text-xs opacity-70 mt-1">例：0歳は0ヶ月以上〜1歳未満<br>
+        ※子供の年齢を指定すると、年度の選択肢は制限されます。
+        </p>
+      </div>
+    </div>
+
+    <div class="modal-action">
+      <label for="child-age-modal" class="btn btn-outline btn-ghost btn-sm">キャンセル</label>
+
+      <button type="button"
+              class="btn btn-accent btn-sm"
+              data-action="click->child-age#apply">
+        完了する
+      </button>
+    </div>
+  </div>
+
+  <!-- これがあると、外側タップで閉じる＆クリックが安定しやすい -->
+  <label class="modal-backdrop" for="child-age-modal">close</label>
+</div>
