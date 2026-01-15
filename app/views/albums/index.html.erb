@@ -1,4 +1,3 @@
-
 <%# デフォルトヘッダー、デフォルト背景を制御 %>
 <% content_for :suppress_header, true %>
 
@@ -63,9 +62,11 @@
                   <span class="label font-medium text-base-content">誰が写っている？</span>
 
                   <% if @person_tags.any? %>
-                    <label for="person-tags-modal"
-                            class="btn btn-sm btn-outline normal-case"
-                            data-action="click->person-tags#open">
+                    <label
+                      for="person-tags-modal"
+                      class="btn btn-sm btn-outline normal-case"
+                      data-action="click->person-tags#open"
+                    >
                       選択する
                     </label>
                   <% end %>
@@ -113,7 +114,7 @@
                 <%= render "albums/person_tags_modal", person_tags: @person_tags %>
               </div>
 
-              <!-- 子ども年齢（ステップ1はとりあえず既存selectでOK：後でモーダル化） -->
+              <!-- 子ども年齢 -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label class="block text-sm font-semibold mb-1">子ども</label>
@@ -151,21 +152,18 @@
       </div>
     </div>
 
+    <%# ===== 結果一覧 ===== %>
     <% if @posts_by_year.present? %>
       <% @posts_by_year.each do |year, posts| %>
-        <%# 年ヘッダー %>
         <% if year == "撮影日未設定" %>
           <h2 class="text-lg font-semibold mt-8 mb-4">撮影日未設定</h2>
         <% else %>
           <h2 class="text-lg font-semibold mt-8 mb-4"><%= year %>年</h2>
         <% end %>
 
-        <!-- 洗濯紐エリア -->
         <div class="relative mb-8">
-          <!-- 洗濯紐 -->
           <div class="absolute top-4 left-0 w-full h-px bg-base-300"></div>
 
-          <!-- ポラロイドカード -->
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8">
             <% posts.each do |post| %>
               <%= render "postcard/card", post: post %>
@@ -181,7 +179,6 @@
         <% end %>
       <% end %>
     <% else %>
-      <%# 投稿なし %>
       <%= render "albums/empty" %>
     <% end %>
   </div>
