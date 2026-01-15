@@ -1,42 +1,50 @@
-<%# 子ども年齢モーダル %>
-
+<!-- モーダルトグル -->
 <input type="checkbox" id="child-age-modal" class="modal-toggle" />
 
 <div class="modal">
   <div class="modal-box max-w-md">
     <h3 class="font-semibold text-base mb-2">子どもと年齢を選択</h3>
-    <p class="text-xs text-base-content/60 mb-3">
+
+    <p class="text-xs text-base-content/60 mb-4">
       子どもと年齢を指定すると、その期間に撮影された思い出を表示します。
     </p>
 
-    <div class="space-y-3">
-      <div>
-        <label class="block text-sm font-semibold mb-1">子ども</label>
-        <select class="select select-bordered w-full bg-base-100" data-child-age-target="childSelect">
-          <option value="">選択してください</option>
-          <% children.each do |c| %>
-            <option value="<%= c.id %>" data-color="<%= c.try(:color) %>"><%= c.name %></option>
-          <% end %>
-        </select>
+    <!-- 子ども -->
+    <div class="mb-3">
+      <label class="block text-sm font-semibold mb-1">子ども</label>
+      <select
+        class="select select-bordered w-full"
+        data-child-age-target="childSelect"
+        data-action="change->child-age#childChanged"
+      >
+        <option value="">選択してください</option>
+        <% children.each do |c| %>
+          <option value="<%= c.id %>"><%= c.name %></option>
+        <% end %>
+      </select>
+    </div>
 
-      </div>
-
-      <div>
-        <label class="block text-sm font-semibold mb-1">年齢</label>
-        <select class="select select-bordered w-full" data-child-age-target="ageSelect">
-          <option value="">指定しない</option>
-          <% (0..6).each do |n| %>
-            <option value="<%= n %>"><%= n %>歳</option>
-          <% end %>
-        </select>
-        <p class="text-xs opacity-70 mt-1">0歳＝0ヶ月以上〜1歳未満</p>
-      </div>
+    <!-- 年齢（子どもに応じてJSが動的に中身を書き換える） -->
+    <div class="mb-1">
+      <label class="block text-sm font-semibold mb-1">年齢</label>
+      <select
+        class="select select-bordered w-full"
+        data-child-age-target="ageSelect"
+      >
+        <!-- connect/open で JS が「指定しない + 実データの年齢」を差し込む -->
+      </select>
+      <p class="text-xs opacity-70 mt-1">0歳＝0ヶ月以上〜1歳未満</p>
     </div>
 
     <div class="modal-action">
-      <label for="child-age-modal" class="btn btn-ghost btn-sm" data-action="click->child-age#cancel">
+      <label
+        for="child-age-modal"
+        class="btn btn-ghost btn-sm"
+        data-action="click->child-age#cancel"
+      >
         キャンセル
       </label>
+
       <label
         for="child-age-modal"
         class="btn btn-accent btn-sm"

@@ -46,7 +46,9 @@
                 <label class="block text-sm font-semibold mb-1">年度（年）</label>
                 <select name="year" class="select select-bordered w-full" <%= "disabled" if age_mode %>>
                   <option value="">指定しない</option>
-                  <% Date.current.year.downto(Date.current.year - 10).each do |y| %>
+
+                  <%# 実データに存在する年だけ表示 %>
+                  <% @available_years.each do |y| %>
                     <option value="<%= y %>" <%= "selected" if params[:year].to_s == y.to_s %>>
                       <%= y %>年
                     </option>
@@ -119,45 +121,37 @@
               </div>
 
               <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
-              <div data-controller="child-age">
-                <div class="flex items-center justify-between mb-1 gap-2">
-                  <span class="label font-medium text-base-content">子ども年齢</span>
+<div
+  data-controller="child-age"
+  data-child-age-ages-by-child-value="<%= @ages_by_child_id.to_json %>"
+>
+  <div class="flex items-center justify-between mb-1 gap-2">
+    <span class="label font-medium text-base-content">子ども年齢</span>
 
-                  <% if @children.any? %>
-                    <label
-                      for="child-age-modal"
-                      class="btn btn-sm btn-outline normal-case"
-                      data-action="click->child-age#open"
-                    >
-                      選択する
-                    </label>
-                  <% end %>
-                </div>
+    <% if @children.any? %>
+      <label
+        for="child-age-modal"
+        class="btn btn-sm btn-outline normal-case"
+        data-action="click->child-age#open"
+      >
+        選択する
+      </label>
+    <% end %>
+  </div>
 
-                <%# 表示エリア（child-age controller が文字表示に更新） %>
-                <div
-                  class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
-                  data-child-age-target="selectedLabel"
-                >
-                  <span class="text-base-content/50">まだ選択されていません</span>
-                </div>
+  <div
+    class="input input-bordered input-auto-height w-full px-3 py-2"
+    data-child-age-target="selectedLabel"
+  >
+    <span class="text-base-content/50">まだ選択されていません</span>
+  </div>
 
-                <%# hidden（フォーム送信用：GETパラメータとして送る） %>
-                <input
-                  type="hidden"
-                  name="child_id"
-                  data-child-age-target="childHidden"
-                  value="<%= params[:child_id].to_s %>"
-                >
-                <input
-                  type="hidden"
-                  name="age_years"
-                  data-child-age-target="ageHidden"
-                  value="<%= params[:age_years].to_s %>"
-                >
+  <%# hidden（フォーム送信用） %>
+  <input type="hidden" name="child_id" value="<%= params[:child_id].to_s %>" data-child-age-target="childHidden" />
+  <input type="hidden" name="age_years" value="<%= params[:age_years].to_s %>" data-child-age-target="ageHidden" />
 
-                <%= render "albums/child_age_modal", children: @children %>
-              </div>
+  <%= render "albums/child_age_modal", children: @children %>
+</div>
 
               <%# ===== 送信ボタン：Tsumugi仕様（左右50:50） ===== %>
               <div class="flex gap-3">
