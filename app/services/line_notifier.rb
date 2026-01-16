@@ -95,7 +95,7 @@ class LineNotifier
   def user_text(post)
     {
       type: 'text',
-      text: "#{post.user.name}さんが投稿しました",
+      text: "#{post.user.name}さんが思い出を投稿しました",
       size: 'sm',
       color: '#888888',
       wrap: true
@@ -112,13 +112,13 @@ class LineNotifier
     }
   end
 
-  def view_post_button(post)
+  def view_post_button(_post)
     {
       type: 'button',
       action: {
         type: 'uri',
-        label: '投稿を見る',
-        uri: post_url(post)
+        label: 'アルバムを開く',
+        uri: 'https://tumugi.app/albums'
       },
       style: 'link',
       height: 'sm'
