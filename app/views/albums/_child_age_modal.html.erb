@@ -1,8 +1,10 @@
+
 <!-- モーダルトグル -->
 <input type="checkbox" id="child-age-modal" class="modal-toggle" />
 
-<div class="modal">
-  <div class="modal-box max-w-md">
+<!-- ★ここも同じく z-[80] を追加 -->
+<div class="modal z-[9999]">
+  <div class="modal-box max-w-md relative z-[10000]">
     <h3 class="font-semibold text-base mb-2">子どもと年齢を選択</h3>
 
     <p class="text-xs text-base-content/60 mb-4">
@@ -24,14 +26,14 @@
       </select>
     </div>
 
-    <!-- 年齢（子どもに応じてJSが動的に中身を書き換える） -->
+    <!-- 年齢 -->
     <div class="mb-1">
       <label class="block text-sm font-semibold mb-1">年齢</label>
       <select
         class="select select-bordered w-full"
         data-child-age-target="ageSelect"
       >
-        <!-- connect/open で JS が「指定しない + 実データの年齢」を差し込む -->
+        <!-- JSで差し込む -->
       </select>
       <p class="text-xs opacity-70 mt-1">0歳＝0ヶ月以上〜1歳未満</p>
     </div>
