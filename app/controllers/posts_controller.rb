@@ -34,9 +34,8 @@ class PostsController < ApplicationController
 
   # 投稿投稿処理
   def update
-    notify_family_group_members(@post)
-
     if @post.update(post_params)
+      notify_family_group_members(@post)
       redirect_to albums_path, notice: t('flash.posts.updated')
     else
       set_person_context

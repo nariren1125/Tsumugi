@@ -7,50 +7,23 @@ class LineNotifier
   require 'json'
 
   # ----------------------------------------
-  # テキストメッセージ送信
-  # ----------------------------------------
-  def push_message(to, message)
-    Rails.logger.info '=== LINE API 実行 (Text) ==='
-    Rails.logger.info "送信先: #{to}"
-    Rails.logger.info "メッセージ: #{message}"
-
-    payload = build_text_payload(to, message)
-    send_line_request(payload)
-  end
-
-  # ----------------------------------------
-  # Flexメッセージ送信（画像 + タイトル + リンク）
+  # LINEユーザーにFlexメッセージを送信
   # ----------------------------------------
   def push_flex_message(to, post)
     Rails.logger.info '=== LINE API 実行 (Flex) ==='
     Rails.logger.info "送信先: #{to}"
     Rails.logger.info "投稿ID: #{post.id}"
 
-    payload = build_flex_payload(to, post)
+    payload = build_payload(to, post)
     send_line_request(payload)
   end
 
   private
 
   # ----------------------------------------
-  # テキストメッセージ用ペイロード構築
+  # ペイロード全体を構築
   # ----------------------------------------
-  def build_text_payload(to, message)
-    {
-      to: to,
-      messages: [
-        {
-          type: 'text',
-          text: message
-        }
-      ]
-    }
-  end
-
-  # ----------------------------------------
-  # Flexメッセージ用ペイロード構築
-  # ----------------------------------------
-  def build_flex_payload(to, post)
+  def build_payload(to, post)
     {
       to: to,
       messages: [flex_message(post)]
@@ -58,96 +31,97 @@ class LineNotifier
   end
 
   # ----------------------------------------
-  # Flexメッセージ本体の内容
+  # Flexメッセージ本体を構築
   # ----------------------------------------
   def flex_message(post)
     {
       type: 'flex',
       altText: "#{post.user.name}さんが新しい思い出を投稿しました📸",
-      contents: {
-        type: 'bubble',
-        hero: hero_image_section(post),
-        body: body_text_section(post),
-        footer: footer_button_section(post)
-      }
+      contents: flex_contents(post)
     }
   end
 
-  # ----------------------------------------
-  # HERO画像（上部）セクション
-  # ----------------------------------------
+  def flex_contents(post)
+    {
+      type: 'bubble',
+      hero: hero_image_section(post),
+      body: body_text_section(post),
+      footer: footer_button_section(post)
+    }
+  end
+
   def hero_image_section(post)
     {
       type: 'image',
-      url: post.photos.first&.image&.service_url || placeholder_image,
+      url: post.photos.first&.image&.service_url || placeholder_image_url,
       size: 'full',
       aspectRatio: '16:9',
       aspectMode: 'cover'
     }
   end
 
-  # ----------------------------------------
-  # 本文（タイトル + 投稿者）セクション
-  # ----------------------------------------
-  def body_text_section(post)
-    [
-      {
-        type: 'text',
-        text: post.title.presence || 'タイトルなし',
-        weight: 'bold',
-        size: 'md',
-        wrap: true
-      },
-      {
-        type: 'text',
-        text: "#{post.user.name}さんが投稿しました",
-        size: 'sm',
-        color: '#888888',
-        wrap: true
-      }
-    ].yield_self do |contents|
-      {
-        type: 'box',
-        layout: 'vertical',
-        contents: contents
-      }
-    end
+  def placeholder_image_url
+    'https://placehold.co/600x400?text=No+Image'
   end
 
-  # ----------------------------------------
-  # フッター（リンクボタン）セクション
-  # ----------------------------------------
+  def body_text_section(post)
+    {
+      type: 'box',
+      layout: 'vertical',
+      contents: [
+        title_text(post),
+        user_text(post)
+      ]
+    }
+  end
+
+  def title_text(post)
+    {
+      type: 'text',
+      text: post.title.presence || 'タイトルなし',
+      weight: 'bold',
+      size: 'md',
+      wrap: true
+    }
+  end
+
+  def user_text(post)
+    {
+      type: 'text',
+      text: "#{post.user.name}さんが投稿しました",
+      size: 'sm',
+      color: '#888888',
+      wrap: true
+    }
+  end
+
   def footer_button_section(post)
     {
       type: 'box',
       layout: 'vertical',
       spacing: 'sm',
-      contents: [
-        {
-          type: 'button',
-          style: 'link',
-          height: 'sm',
-          action: {
-            type: 'uri',
-            label: '投稿を見る',
-            uri: "https://tumugi.app/posts/#{post.id}"
-          }
-        }
-      ],
+      contents: [view_post_button(post)],
       flex: 0
     }
   end
 
-  # ----------------------------------------
-  # プレースホルダー画像URL
-  # ----------------------------------------
-  def placeholder_image
-    'https://placehold.co/600x400?text=No+Image'
+  def view_post_button(post)
+    {
+      type: 'button',
+      action: {
+        type: 'uri',
+        label: '投稿を見る',
+        uri: post_url(post)
+      },
+      style: 'link',
+      height: 'sm'
+    }
   end
 
-  # ----------------------------------------
-  # LINE API リクエスト送信処理
-  # ----------------------------------------
+  def post_url(_post)
+    'https://tumugi.app/albums' # 必要に応じて詳細ページに変更
+  end
+
   def send_line_request(payload)
     uri = URI.parse('https://api.line.me/v2/bot/message/push')
     http = Net::HTTP.new(uri.host, uri.port)
@@ -161,9 +135,6 @@ class LineNotifier
     response
   end
 
-  # ----------------------------------------
-  # LINE API 共通ヘッダー
-  # ----------------------------------------
   def headers
     {
       'Content-Type' => 'application/json',
