@@ -55,7 +55,7 @@ class LineNotifier
   def hero_image_section(post)
     {
       type: 'image',
-      url: post.photos.first&.image&.service_url || placeholder_image_url,
+      url: post.photos.first&.image&.blob&.service_url || placeholder_image_url,
       size: 'full',
       aspectRatio: '16:9',
       aspectMode: 'cover'
