@@ -128,7 +128,7 @@ class LineNotifier
   # 通知内の投稿URLを生成
   def post_url(post)
     # production環境のホスト名を使用
-    album_url(post.album)
+    Rails.application.routes.url_helpers.post_url(post, host: 'https://tumugi.app')
   end
 
   def send_line_request(payload)

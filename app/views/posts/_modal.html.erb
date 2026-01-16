@@ -10,7 +10,11 @@
      <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
       <!-- 戻るボタン -->
       <div class="w-20 flex-shrink-0">
-        <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
+        <% if defined?(modal_view) && modal_view == false %>
+          <button class="text-xl" onclick="window.location.href='<%= albums_path %>'">←</button>
+        <% else %>
+          <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
+        <% end %>
       </div>
 
       <!-- タイトル -->
