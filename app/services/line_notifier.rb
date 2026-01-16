@@ -2,6 +2,8 @@
 # LINE通知用のサービスクラス
 # ========================================
 class LineNotifier
+  include Rails.application.routes.url_helpers
+
   require 'net/http'
   require 'uri'
   require 'json'
@@ -118,8 +120,10 @@ class LineNotifier
     }
   end
 
-  def post_url(_post)
-    'https://tumugi.app/albums' # 必要に応じて詳細ページに変更
+  # 通知内の投稿URLを生成
+  def post_url(post)
+    # production環境のホスト名を使用
+    album_url(post.album)
   end
 
   def send_line_request(payload)
