@@ -34,9 +34,8 @@ class PostsController < ApplicationController
 
   # 投稿投稿処理
   def update
-    notify_family_group_members(@post)
-
     if @post.update(post_params)
+      notify_family_group_members(@post)
       redirect_to albums_path, notice: t('flash.posts.updated')
     else
       set_person_context
@@ -121,8 +120,9 @@ class PostsController < ApplicationController
 
   # LINE通知を家族グループのメンバーに送信
   def notify_family_group_members(post)
+    notifier = line_notifier
     recipient_uids_for(post).each do |uid|
-      line_notifier.push_message(uid, build_post_message(post))
+      notifier.push_flex_message(uid, post)
     end
   end
 
