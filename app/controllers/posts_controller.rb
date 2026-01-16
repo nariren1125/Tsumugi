@@ -20,12 +20,11 @@ class PostsController < ApplicationController
   # 編集画面
   def edit; end
 
-  # 投稿作成処理
+  # 投稿画像下書き保存処理
   def create
     Rails.logger.debug { "POST PARAMS: #{post_params}" }
 
     if @post.update(post_params)
-      notify_family_group_members(@post)
       redirect_to albums_path, notice: t('flash.posts.created')
     else
       set_person_context
@@ -33,8 +32,10 @@ class PostsController < ApplicationController
     end
   end
 
-  # 投稿更新処理
+  # 投稿投稿処理
   def update
+    notify_family_group_members(@post)
+
     if @post.update(post_params)
       redirect_to albums_path, notice: t('flash.posts.updated')
     else
