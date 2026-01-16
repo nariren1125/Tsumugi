@@ -25,10 +25,14 @@
     </div>
 
     <!-- 更新ボタン（左側） -->
-    <div class="flex gap-4 items-center">
-      <%= f.submit "更新する", class: "btn btn-accent" %>
+    <div class="mt-4">
+      <%= f.submit "更新する", class: "btn btn-accent w-full" %>
     </div>
   <% end %>
+
+  <hr>
+  <!-- 危険操作 -->
+    <div class="space-y-2">
 
       <!-- 削除ボタンは form_with の外側だが、見た目上は同じ行に配置 -->
       <div class="mt-4">
