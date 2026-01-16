@@ -3,6 +3,7 @@ ja:
     login:
       success: "ログインしました"
       failure: "ログインに失敗しました"
+      required: "ログインが必要です"
 
     logout:
       success: "ログアウトしました"
