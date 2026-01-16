@@ -8,52 +8,60 @@
     <%# Google FontsのMaterial Symbols Outlinedを読み込み %>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
-    <%# SwiperのCSSを読み込み 画像スライダー（Swiper）の見た目を定義するCSS %>
+    <%# SwiperのCSS/JS %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <%# SwiperのJavaScriptを読み込み 画像スライダー（Swiper）の動作を定義するJS %>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <title><%= content_for(:title) || "Tsumugi" %></title>
 
-    <%# ビューポートの設定とモバイル対応 %>
+    <%# ビューポート設定 %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
     <%# iOSでWebアプリをホーム画面に追加した際のフルスクリーン表示を有効化 %>
     <meta name="mobile-web-app-capable" content="yes">
 
-    <%# フォーム送信時の「CSRF対策トークン」を <meta> に埋め込むヘルパー %>
-    <%# form_with などがここからトークンを読んで、安全にPOSTできるようになる %>
+    <%# CSRF/CSP %>
     <%= csrf_meta_tags %>
-
-    <%# コンテンツセキュリティポリシー（CSP）を設定するヘルパー %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# PWA（スマホのホーム画面に追加するウェブアプリ）の設定ファイルを指定 %>
+    <%# PWA 設定 %>
     <link rel="manifest" href="/manifest.json">
 
-    <%# application.css と JavaScript のインクルード %>
+    <%# CSS / JS 読み込み %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <%# bodyタグにdaisyUIのユーティリティクラスを適用 %>
+  <%#
+  body タグの役割：
+  - 画面全体のレイアウトと配色を司るルート要素
+  - Stimulus（person-tags / child-age）コントローラの親要素
+    → フィルターとモーダルをまたいだ状態管理を行う
+  - ページごとに背景色（transparent / base-100）を切り替える
+  - flex レイアウトでフッターナビを画面下に固定する
+%>
   <body
+    data-controller="person-tags child-age"
+    data-child-age-ages-by-child-value="<%= @ages_by_child_id.to_json if defined?(@ages_by_child_id) && @ages_by_child_id.present? %>"
     class="
       <%= content_for?(:transparent_background) ? 'bg-transparent' : 'bg-base-100' %>
       text-base-content min-h-screen flex flex-col
     "
   >
+
     <%# 共通ヘッダーを抑制するコンテンツが設定されていない場合にのみ表示 %>
     <%= render "shared/header" unless content_for(:suppress_header) == true %>
     <%= render "shared/flash" %>
 
-    <main>
+    <main class="flex-1">
       <%= yield %>
     </main>
 
     <%= render "shared/bottom_nav" if current_user %>
 
+    <%# 各ページが content_for :modals で渡したモーダルを body 直下に描画 %>
+    <%= yield :modals if content_for?(:modals) %>
   </body>
 </html>

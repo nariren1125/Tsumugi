@@ -84,3 +84,12 @@
   min-height: 2.75rem;     /* ← 1行分は確保 */
   align-items: flex-start; /* ← 上寄せで複数行に対応 */
 }
+
+/* ====== すべての DaisyUI モーダルを最前面に出す ====== */
+.modal {
+  z-index: 9999 !important;
+}
+
+.modal-box {
+  z-index: 10000 !important;
+}
