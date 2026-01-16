@@ -8,10 +8,6 @@ class PostsController < ApplicationController
   before_action :authorize_user!, only: %i[edit update destroy]
   before_action :set_person_context, only: %i[new edit]
 
-  def show
-    @post = Post.find(params[:id])
-  end
-
   # 新規投稿画面
   def new
     @post = if params[:draft_post_id].present?

@@ -6,28 +6,23 @@
   
   <div class="relative bg-base-100 w-full max-w-md h-full overflow-y-auto text-base-content pt-14 pb-24 rounded-lg">
 
-    <!-- ヘッダー -->
-     <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
-      <!-- 戻るボタン -->
-      <div class="w-20 flex-shrink-0">
-        <% if local_assigns[:from_line] %>
-          <!-- アルバムに戻るボタン -->
-          <%= link_to "アルバムに戻る", albums_path, class: "btn btn-outline btn-sm" %>
-        <% else %>
-          <!-- 通常のモーダル戻るボタン -->
-          <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
-        <% end %>
-
-      <!-- タイトル -->
-      <h2 class="text-base font-bold text-center flex-grow truncate">
-        <%= post.title %>
-      </h2>
-
-      <!-- 撮影日表示（ヘッダー右端） -->
-      <div class="text-xs text-gray-400 w-20 text-right flex-shrink-0">
-        <%= post.photo_date ? l(post.photo_date) : "撮影日未設定" %>
-      </div>
+   <!-- ヘッダー -->
+  <div class="absolute top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
+    <!-- 戻るボタン -->
+    <div class="w-20 flex-shrink-0">
+      <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
     </div>
+
+    <!-- タイトル -->
+    <h2 class="text-base font-bold text-center flex-grow truncate">
+      <%= post.title %>
+    </h2>
+
+    <!-- 撮影日 -->
+    <div class="text-xs text-base-content w-20 text-right flex-shrink-0">
+      <%= post.photo_date ? l(post.photo_date) : "撮影日未設定" %>
+    </div>
+  </div>
 
     <!-- 投稿者情報（画像の少し上に表示） -->
       <div class="flex items-center justify-between text-sm text-base-content px-4 mt-2">
