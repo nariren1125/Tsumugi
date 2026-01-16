@@ -20,6 +20,8 @@ class PostsController < ApplicationController
     Rails.logger.debug { "POST PARAMS: #{post_params}" }
 
     if @post.update(post_params)
+      notify_family_group_members(@post)
+
       redirect_to albums_path, notice: t('flash.posts.created')
     else
       set_person_context
@@ -134,5 +136,22 @@ class PostsController < ApplicationController
       else
         []
       end
+  end
+
+  # LINE通知を家族グループのメンバーに送信
+  def notify_family_group_members(post)
+    family_group = post.album.family_group
+    return unless family_group
+  
+    notifier = LineNotifier.new
+    family_group.users.each do |member|
+      next if member.id == current_user.id
+      next if member.line_uid.blank?
+  
+      notifier.push_message(
+        member.line_uid,
+        "#{current_user.name}さんが新しい思い出を投稿しました📸\n\n#{post.title.presence || 'タイトルなし'}"
+      )
+    end
   end
 end
