@@ -54,7 +54,9 @@ class LineNotifier
 
   def hero_image_section(post)
     photo = post.photos.first
-    image_url = (photo.image.blob&.service_url if photo&.image&.attached?)
+
+    image_url =
+      (Rails.application.routes.url_helpers.url_for(photo.image) if photo&.image&.attached?)
 
     {
       type: 'image',
