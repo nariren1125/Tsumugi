@@ -120,6 +120,8 @@ class PostsController < ApplicationController
 
   # LINE通知を家族グループのメンバーに送信
   def notify_family_group_members(post)
+    Rails.logger.info "=== LINE通知処理 START ==="
+
     family_group = post.album.family_group
     return unless family_group
 
@@ -127,9 +129,14 @@ class PostsController < ApplicationController
     recipient_uids = line_uids_to_notify(family_group.users)
     message = build_post_message(post)
 
+    Rails.logger.info "送信対象UID: #{recipient_uids.inspect}"
+
     recipient_uids.each do |uid|
+      Rails.logger.info "LINE送信: #{uid}"
       notifier.push_message(uid, message)
     end
+
+    Rails.logger.info "=== LINE通知処理 END ==="
   end
 
   # 通知対象のLINE UIDリストを抽出（自分以外でUIDが存在するユーザー）
