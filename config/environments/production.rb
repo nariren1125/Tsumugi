@@ -36,4 +36,7 @@ Rails.application.configure do
 
   config.active_record.attributes_for_inspect = [ :id ]
 
+  # ActiveStorageのURL生成のために必要
+  Rails.application.routes.default_url_options[:host] = 'https://tumugi.app'
+
 end
