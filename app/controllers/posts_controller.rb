@@ -121,8 +121,9 @@ class PostsController < ApplicationController
 
   # LINE通知を家族グループのメンバーに送信
   def notify_family_group_members(post)
+    notifier = line_notifier
     recipient_uids_for(post).each do |uid|
-      line_notifier.push_message(uid, build_post_message(post))
+      notifier.push_flex_message(uid, post)
     end
   end
 
