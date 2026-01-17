@@ -27,7 +27,9 @@
   <div class="flex justify-center gap-2 mb-4">
     <% @post.photos.each do |photo| %>
       <div class="w-20 aspect-square rounded-md overflow-hidden">
-        <%= image_tag photo.image, class: "w-full h-full object-cover" %>
+        <% if photo.image.attached? %>
+          <%= image_tag cdn_image_path(photo.image), class: "w-full h-full object-cover" %>
+        <% end %>
       </div>
     <% end %>
   </div>
