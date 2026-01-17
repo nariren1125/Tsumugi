@@ -49,14 +49,4 @@ module ApplicationHelper
   def random_tape_rotation
     rand(-15..15)
   end
-
-  # CDN経由の画像パスを返す
-  def cdn_image_path(blob)
-    path = rails_blob_path(blob, only_path: true)
-    if Rails.env.production?
-      "https://d47gzlc2fllgd.cloudfront.net#{path}"
-    else
-      path
-    end
-  end
 end

@@ -14,8 +14,7 @@
   <!-- 写真 -->
   <div class="polaroid-photo">
     <% if post.photos.any? && post.photos.first.image.attached? %>
-      <%= image_tag post.photos.first.image,
-            class: "w-full h-full object-cover" %>
+      <%= image_tag cdn_image_path(post.photos.first.image), class: "w-full h-full object-cover", loading: "lazy" %>
     <% else %>
       <span class="text-xs text-base-content/40">No Image</span>
     <% end %>

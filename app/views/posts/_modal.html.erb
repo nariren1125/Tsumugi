@@ -58,7 +58,7 @@
             <% if photo.image.attached? %>
               <div class="swiper-slide flex justify-center items-center">
                 <div class="aspect-square w-full max-w-md bg-base-200 rounded-xl overflow-hidden">
-                  <%= image_tag cdn_image_path(photo.image), class: "w-full h-full object-cover" %>
+                  <%= image_tag cdn_image_path(photo.image), class: "w-full h-full object-cover", loading: "lazy" %>
                 </div>
               </div>
             <% end %>
