@@ -2,6 +2,13 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
+import * as ActiveStorage from "@rails/activestorage"
+
+// ✅ Turboでページが描画された後に開始する
+document.addEventListener("turbo:load", () => {
+  ActiveStorage.start()
+})
+
 // ✅ Turbo 読み込み完了後に実行
 document.addEventListener("turbo:load", () => {
   // ---------------------------

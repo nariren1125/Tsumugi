@@ -2,6 +2,8 @@
 # コントローラー: 投稿関連
 # ================================
 class PostsController < ApplicationController
+  MAX_PHOTOS = 5
+
   # 認証と前処理
   before_action :require_login
   before_action :set_post, only: %i[edit update destroy]
@@ -54,15 +56,16 @@ class PostsController < ApplicationController
 
   # 写真確認（仮保存）
   def confirm_photos
-    images = params.dig(:post, :images)
-    return redirect_to_no_photos if images.blank?
+    signed_ids = selected_image_signed_ids
+    return redirect_to_no_photos if signed_ids.empty?
 
-    max = 5
-    limited_images = images.first(max)
-    @dropped_files_count = [images.size - max, 0].max
+    limited_ids = signed_ids.first(MAX_PHOTOS)
+    @dropped_files_count = dropped_files_count(total: signed_ids.size, max: MAX_PHOTOS)
 
     @post = build_draft_post
-    attach_photos(@post, limited_images)
+    attach_photos(@post, limited_ids)
+  rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
+    redirect_to_no_photos
   end
 
   private
@@ -70,6 +73,18 @@ class PostsController < ApplicationController
   # ストロングパラメータ
   def post_params
     params.require(:post).permit(:title, :content, :child_id, :photo_date, person_tag_ids: [])
+  end
+
+  # 選択された画像 signed_id を配列で返す
+  def selected_image_signed_ids
+    Array(params.dig(:post, :images)).compact_blank
+  end
+
+  # 上限超過数（JS送信値とサーバ計算値の大きい方）
+  def dropped_files_count(total:, max:)
+    js_dropped = params[:dropped_files_count].to_i
+    server_dropped = [total - max, 0].max
+    [js_dropped, server_dropped].max
   end
 
   # 写真未選択リダイレクト
@@ -85,9 +100,10 @@ class PostsController < ApplicationController
   end
 
   # 写真を添付
-  def attach_photos(post, images)
-    images.each_with_index do |img, index|
-      post.photos.create!(image: img, position: index)
+  def attach_photos(post, signed_ids)
+    signed_ids.each_with_index do |signed_id, index|
+      blob = ActiveStorage::Blob.find_signed!(signed_id)
+      post.photos.create!(image: blob, position: index)
     end
   end
 

@@ -9,6 +9,7 @@
   <!-- ===== メイン（グループあり） ===== -->
   <main
     data-controller="photo-picker"
+    data-photo-picker-max-files-value="5"
     class="relative max-w-xl mx-auto px-4
            pt-24 pb-40
            min-h-[calc(100svh-120px)]
@@ -46,25 +47,23 @@
     </div>
 
     <!-- ===== hidden form / input ===== -->
-    <form
-      action="<%= confirm_photos_posts_path %>"
-      method="post"
-      enctype="multipart/form-data"
-      data-photo-picker-target="form"
-      class="hidden"
-    >
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= form_with url: confirm_photos_posts_path,
+                  method: :post,
+                  multipart: true,
+                  data: { turbo: false, "photo-picker-target": "form" },
+                  class: "hidden" do %>
+
       <%= hidden_field_tag :dropped_files_count, 0 %>
 
-      <input
-        type="file"
-        name="post[images][]"
-        multiple
-        accept="image/*"
-        data-photo-picker-target="input"
-        data-action="change->photo-picker#handleFiles"
-      >
-    </form>
+      <%= file_field_tag "post[images][]",
+            multiple: true,
+            accept: "image/*",
+            direct_upload: true,
+            data: {
+              "photo-picker-target": "input",
+              action: "change->photo-picker#handleFiles"
+            } %>
+    <% end %>
   </main>
 
 <% else %>

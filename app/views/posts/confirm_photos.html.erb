@@ -9,6 +9,10 @@
            flex items-center justify-between
            px-4 py-4 border-b bg-base-300"
   >
+
+  <!-- フラッシュメッセージ -->
+  <%= render "shared/flash" %>
+
     <%= link_to "×", select_photos_posts_path,
           class: "text-xl font-semibold" %>
 
@@ -18,7 +22,7 @@
   </header>
 
   <!-- 写真アップロードが5枚以上だった時の警告 -->
-  <% if @dropped_files_count > 0 %>
+  <% if @dropped_files_count.to_i > 0 %>
     <div
       data-controller="auto-dismiss"
       data-auto-dismiss-timeout-value="3000"
