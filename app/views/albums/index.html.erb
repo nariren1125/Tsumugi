@@ -1,5 +1,7 @@
 <%# デフォルトヘッダー、デフォルト背景を制御 %>
 <% content_for :suppress_header, true %>
+<!-- ===== body controller 指定 ===== -->
+<% content_for :body_controllers, "person-tags" %>
 
 <div class="relative min-h-screen">
   <!-- ===== ヘッダー ===== -->
