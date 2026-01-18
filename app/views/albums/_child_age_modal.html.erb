@@ -2,8 +2,13 @@
 <!-- モーダルトグル -->
 <input type="checkbox" id="child-age-modal" class="modal-toggle" />
 
-<!-- ★ここも同じく z-[80] を追加 -->
-<div class="modal z-[9999]">
+<!-- コントローラ -->
+<div
+  class="modal z-[9999]"
+  data-controller="child-age"
+  data-child-age-ages-by-child-value="<%= @ages_by_child_id.to_json %>"
+>
+  <!-- モーダンボックス -->
   <div class="modal-box max-w-md relative z-[10000]">
     <h3 class="font-semibold text-base mb-2">子どもと年齢を選択</h3>
 

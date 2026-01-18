@@ -128,21 +128,8 @@
               </div>
 
               <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
-              <div
-                data-controller="child-age"
-                data-child-age-ages-by-child-value="<%= @ages_by_child_id.to_json %>"
-              >
-                <select
-                  class="hidden"
-                  data-child-age-target="childSelect"
-                ></select>
-
-                <select
-                  class="hidden"
-                  data-child-age-target="ageSelect"
-                ></select>
-
-                <div class="flex items-center justify-between mb-1 gap-2">
+              <div>
+                  <div class="flex items-center justify-between mb-1 gap-2">
                   <span class="label font-medium text-base-content">子ども年齢</span>
 
                   <% if @children.any? %>
@@ -158,7 +145,7 @@
 
                 <div
                   class="input input-bordered input-auto-height w-full px-3 py-2"
-                  data-child-age-target="selectedLabel"
+                  id="child-age-selected-label"
                 >
                   <span class="text-base-content/50">まだ選択されていません</span>
                 </div>
@@ -168,14 +155,16 @@
                   type="hidden"
                   name="child_id"
                   value="<%= params[:child_id].to_s %>"
-                  data-child-age-target="childHidden"
+                  id="child-age-child-hidden"
                 />
+
                 <input
                   type="hidden"
                   name="age_years"
                   value="<%= params[:age_years].to_s %>"
-                  data-child-age-target="ageHidden"
+                  id="child-age-age-hidden"
                 />
+
               </div>
 
               <%# ===== 送信ボタン：Tsumugi仕様（左右50:50） ===== %>
@@ -234,7 +223,7 @@
 <%# ==== アルバム一覧ページ専用モーダル（body 直下で描画） ==== %>
 <% content_for :modals do %>
   <%= render "albums/person_tags_modal", person_tags: @person_tags if @person_tags.present? %>
-  <%= render "albums/child_age_modal",   children:    @children    if @children.present? %>
+  <%= render "albums/child_age_modal", children: @children if @children.present? %>
 
   <% if @posts_by_year.present? %>
     <% @posts_by_year.each do |_, posts| %>
