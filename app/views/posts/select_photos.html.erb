@@ -53,14 +53,20 @@
     </div>
 
     <!-- ===== プレビュー（ローカル） ===== -->
-    <div
-      data-photo-picker-target="preview"
-      class="hidden w-full max-w-md mt-6"
-    >
-      <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 py-6">
+    <div data-photo-picker-target="preview" class="hidden w-full max-w-md mt-6">
+      <div data-photo-picker-target="previewList" class="flex overflow-x-auto snap-x snap-mandatory gap-4 py-6"></div>
         <!-- JSで img を差し込む -->
-      </div>
+      </div >
     </div>
+
+    <!-- ===== 次へボタン ===== -->
+    <button
+      data-photo-picker-target="nextButton"
+      data-action="photo-picker#next"
+      class="btn btn-accent mt-6 hidden"
+    >
+      次へ
+    </button>
 
     <!-- ===== hidden form / input ===== -->
     <%= form_with url: confirm_photos_posts_path,
@@ -79,6 +85,7 @@
               "photo-picker-target": "input",
               action: "change->photo-picker#handleFiles"
             } %>
+
     <% end %>
   </main>
 
