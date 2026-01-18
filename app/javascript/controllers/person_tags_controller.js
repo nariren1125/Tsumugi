@@ -7,6 +7,10 @@ export default class extends Controller {
   connect() {
     console.log("✅ person-tags controller connected")
 
+    // posts/edit など、targetが存在しない画面でも
+    // body起動されるためガード必須
+    if (!this.hasSelectedListTarget || !this.hasCheckboxTarget) return
+
     // 「確定済み」= hidden checkbox の状態
     this.committedIds = new Set(this.checkedIdsFromCheckboxes())
     // 「下書き」= モーダル内で一時的に選ぶ状態

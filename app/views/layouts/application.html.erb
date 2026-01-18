@@ -43,7 +43,7 @@
   - flex レイアウトでフッターナビを画面下に固定する
 %>
   <body
-    data-controller="person-tags"
+    data-controller="<%= yield(:body_controllers) if content_for?(:body_controllers) %>"
     class="
       <%= content_for?(:transparent_background) ? 'bg-transparent' : 'bg-base-100' %>
       text-base-content min-h-screen flex flex-col

@@ -1,5 +1,8 @@
 <!-- 編集ページヘッダー抑制 -->
 <% content_for :suppress_header, true %>
+<!-- ===== body controller 指定 ===== -->
+<% content_for :body_controllers, "person-tags" %>
+
 <!-- 編集ページカスタムヘッダー -->
 <div class="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
   <!-- キャンセル（戻る）ボタン -->
