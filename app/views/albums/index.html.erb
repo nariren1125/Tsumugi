@@ -128,7 +128,20 @@
               </div>
 
               <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
-              <div>
+              <div
+                data-controller="child-age"
+                data-child-age-ages-by-child-value="<%= @ages_by_child_id.to_json %>"
+              >
+                <select
+                  class="hidden"
+                  data-child-age-target="childSelect"
+                ></select>
+
+                <select
+                  class="hidden"
+                  data-child-age-target="ageSelect"
+                ></select>
+
                 <div class="flex items-center justify-between mb-1 gap-2">
                   <span class="label font-medium text-base-content">子ども年齢</span>
 
