@@ -55,8 +55,9 @@ ja:
       updated: "思い出を更新しました"
       deleted: "思い出を削除しました"
       no_photos_selected: "写真を1枚以上選択してください"
-      draft_saved: "下書きを保存しました"
+      draft_saved: "下書きをアルバムに保存しました"
       draft_save_failed: "下書きの保存に失敗しました"
+      draft_discarded: "下書きを破棄しました"
 
     mypage:
       updated: "マイページを更新しました"

@@ -125,4 +125,10 @@ class PostsController < ApplicationController
   rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
     handle_create_invalid_signature
   end
+
+  # 下書き破棄（sessionクリアして写真選択へ戻る）
+  def discard_draft
+    clear_pending_photos_session
+    redirect_to select_photos_posts_path, notice: t('flash.posts.draft_discarded')
+  end
 end

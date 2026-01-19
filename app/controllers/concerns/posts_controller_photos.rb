@@ -93,6 +93,8 @@ module PostsControllerPhotos
   def handle_draft_success
     clear_pending_photos_session
     redirect_to albums_path, notice: t('flash.posts.draft_saved')
+    # 失敗時
+    flash.now[:alert] = t('flash.posts.draft_failed')
   end
 
   def handle_draft_failure(signed_ids)
