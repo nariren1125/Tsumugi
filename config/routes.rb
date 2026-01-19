@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   resources :posts, only: %i[new create edit update destroy] do
     collection do
       get :select_photos
-      post :confirm_photos
+      post :prepare_uploads
     end
   end
 

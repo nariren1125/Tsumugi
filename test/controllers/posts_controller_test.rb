@@ -6,8 +6,8 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
   end
 
-  test 'should get new' do
+  test 'should redirect new when no pending photos' do
     get new_post_url
-    assert_response :success
+    assert_redirected_to select_photos_posts_url
   end
 end
