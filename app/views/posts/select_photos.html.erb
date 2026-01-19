@@ -1,57 +1,47 @@
-<%# デフォルトヘッダー、デフォルト背景を制御%>
-<% content_for :suppress_header, true %>
-<% content_for :transparent_background, true %>
-
-<%= render "shared/simple_header", title: "新規投稿" %>
-
-<% if current_family_group.present? %>
-  <main
-    data-controller="photo-picker"
-    data-photo-picker-max-files-value="5"
-    class="relative max-w-xl mx-auto px-4 pt-24 pb-40 min-h-[calc(100svh-120px)] flex flex-col items-center"
+<main
+  data-controller="photo-picker"
+  data-photo-picker-max-files-value="5"
+  class="relative max-w-xl mx-auto px-4 min-h-[calc(100svh-120px)]"
+>
+  <!-- ✅ 背景（intro時だけ表示する） -->
+  <div
+    data-photo-picker-target="background"
+    class="absolute inset-0 -z-10 pointer-events-none flex justify-center -translate-y-6"
   >
-    <div
-      data-photo-picker-target="background"
-      class="absolute inset-0 -z-10 pointer-events-none flex justify-center -translate-y-6"
-    >
-      <%= image_tag "post_select_bg.png",
-            class: "h-full max-h-[640px] w-auto object-contain opacity-80",
-            alt: "" %>
+    <%= image_tag "post_select_bg.png",
+          class: "h-full max-h-[640px] w-auto object-contain opacity-80",
+          alt: "" %>
+  </div>
+
+  <!-- =========================================
+       ✅ intro（写真を選ぶ画面）
+       ========================================= -->
+  <section
+    data-photo-picker-target="intro"
+    class="min-h-[calc(100svh-120px)] flex flex-col items-center justify-center py-10"
+  >
+    <div class="w-40 mx-auto mb-4">
+      <%= image_tag "tumugi_photo.png",
+            alt: "ツムとムギが写真を撮っているイラスト",
+            class: "w-full h-auto opacity-90 drop-shadow-sm" %>
     </div>
 
-    <div data-photo-picker-target="intro" class="flex flex-col items-center mt-30">
-      <div class="w-40 mx-auto mb-4">
-        <%= image_tag "tumugi_photo.png",
-              alt: "ツムとムギが写真を撮っているイラスト",
-              class: "w-full h-auto opacity-90 drop-shadow-sm" %>
-      </div>
+    <h2 class="text-lg font-semibold mb-2">
+      思い出の写真を選ぼう
+    </h2>
 
-      <h2 class="text-lg font-semibold mb-2">思い出の写真を選ぼう</h2>
-
-      <p class="text-sm text-base-content/70 mb-6 text-center">
-        投稿できる写真は最大5枚までです。
-      </p>
-
-      <button
-        class="btn btn-accent mt-2 shadow-md rounded-full px-6"
-        data-action="photo-picker#openPicker"
-      >
-        写真を選ぶ
-      </button>
-    </div>
-
-    <div data-photo-picker-target="preview" class="hidden w-full max-w-md mt-6">
-      <div data-photo-picker-target="previewList" class="flex overflow-x-auto snap-x snap-mandatory gap-4 py-6"></div>
-    </div>
+    <p class="text-sm text-base-content/70 mb-6 text-center">
+      投稿できる写真は最大5枚までです。
+    </p>
 
     <button
-      data-photo-picker-target="nextButton"
-      data-action="photo-picker#next"
-      class="btn btn-accent mt-6 hidden"
+      class="btn btn-accent shadow-md rounded-full px-6"
+      data-action="photo-picker#openPicker"
     >
-      次へ
+      写真を選ぶ
     </button>
 
+    <!-- hidden form / input（DirectUpload） -->
     <%= form_with url: prepare_uploads_posts_path,
                   method: :post,
                   multipart: true,
@@ -69,9 +59,43 @@
               action: "change->photo-picker#handleFiles"
             } %>
     <% end %>
-  </main>
-<% else %>
-  <div class="max-w-xl mx-auto px-4 pt-24 pb-24">
-    <%= render "no_family_group" %>
-  </div>
-<% end %>
+  </section>
+
+  <!-- =========================================
+       ✅ preview（選択後のプレビュー画面）
+       ========================================= -->
+  <section
+    data-photo-picker-target="preview"
+    class="hidden pt-6 pb-28"
+  >
+    <div class="space-y-3">
+      <h2 class="text-base font-semibold">
+        選択した写真の確認
+      </h2>
+
+      <!-- ✅ 画像プレビュー（JSが .flex に差し込むので受け皿はここだけ） -->
+      <div class="overflow-x-auto snap-x snap-mandatory">
+        <div class="flex gap-3 py-2">
+          <%# JSでここに画像が入る %>
+        </div>
+      </div>
+
+      <!-- ✅ 文言は「画像の下 / 次へボタンの上」 -->
+      <p class="text-xs text-base-content/70 leading-relaxed">
+        選択した写真に間違いがなければ「次へ」を押してください。
+      </p>
+
+      <!-- ✅ 超過メッセージ（今は未使用でも置き場だけ確保） -->
+      <div class="text-xs text-error hidden"></div>
+
+      <!-- ✅ 次へ（画像と重ならない：w-fullの通常フローに置く） -->
+      <button
+        data-photo-picker-target="nextButton"
+        data-action="photo-picker#next"
+        class="btn btn-accent w-full mt-2"
+      >
+        次へ
+      </button>
+    </div>
+  </section>
+</main>
