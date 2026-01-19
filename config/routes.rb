@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/privacy',     to: 'pages#privacy'
   get '/how_to_use',  to: 'pages#how_to_use'
   get "/faq",     to: "pages#faq"
+  get "/line_unlink", to: "pages#line_unlink"
   get "/contact", to: "pages#contact"
   get "mypage", to: "mypages#show"
   get "users/:id", to: "mypages#show", as: :user

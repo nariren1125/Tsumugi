@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-
   # 利用規約
   def terms; end
 
@@ -14,6 +13,9 @@ class PagesController < ApplicationController
 
   # FAQページ
   def faq; end
+
+  # LINE連携解除案内ページ
+  def line_unlink; end
 
   # お問い合わせページ
   def contact; end

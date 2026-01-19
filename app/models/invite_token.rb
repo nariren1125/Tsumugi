@@ -7,6 +7,7 @@ class InviteToken < ApplicationRecord
 
   private
 
+  # 招待トークンと有効期限を生成
   def generate_token_and_expiry
     self.token ||= SecureRandom.urlsafe_base64(24)
     self.expires_at ||= 24.hours.from_now
