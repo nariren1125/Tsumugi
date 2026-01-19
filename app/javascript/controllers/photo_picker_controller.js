@@ -10,7 +10,7 @@ export default class extends Controller {
     "intro",
     "background",
     "nextButton",
-    "dropNotice", // ✅ 追加：超過トースト
+    "dropNotice",
   ]
 
   static values = { maxFiles: { type: Number, default: 5 } }
@@ -19,6 +19,9 @@ export default class extends Controller {
     console.log("photo-picker connected")
     this.previewObjectUrls = []
     this.trimmedFiles = []
+
+    // ✅ 最低限の二重実行防止だけ
+    this.submitting = false
 
     // ✅ トーストのタイマーを管理（連続選択でのバグ防止）
     this.dropNoticeTimer = null
@@ -40,25 +43,28 @@ export default class extends Controller {
   // ✅ 選び直す：introに戻して、選択状態もリセット
   // =========================
   reselect() {
-    // ✅ input を空にして「同じファイルを再選択しても change が発火する」ようにする
+    // input を空にして「同じファイルを再選択しても change が発火する」ようにする
     if (this.hasInputTarget) this.inputTarget.value = ""
 
-    // ✅ 保持しているファイルもリセット
+    // 保持しているファイルもリセット
     this.trimmedFiles = []
 
-    // ✅ プレビュー画像URL解放
+    // プレビュー画像URL解放
     this.revokePreviewUrls()
 
-    // ✅ UIをintroへ戻す
+    // UIをintroへ戻す
     if (this.hasPreviewTarget) this.previewTarget.classList.add("hidden")
     if (this.hasIntroTarget) this.introTarget.classList.remove("hidden")
     if (this.hasBackgroundTarget) this.backgroundTarget.classList.remove("hidden")
 
-    // ✅ 次へボタンを隠す（プレビューにあるなら、次回選択時に出す）
+    // 次へボタンを隠す
     if (this.hasNextButtonTarget) this.nextButtonTarget.classList.add("hidden")
 
-    // ✅ トーストも消す
+    // トーストも消す
     this.hideDropNotice()
+
+    // ✅ submit状態もリセット
+    this.resetSubmitting()
   }
 
   // =========================
@@ -78,41 +84,54 @@ export default class extends Controller {
       droppedCount = files.length - maxFiles
     }
 
-    // inputの中身も maxFiles に揃える（次へでも同じfilesを使える）
+    // inputの中身も maxFiles に揃える
     const dt = new DataTransfer()
     trimmedFiles.forEach((file) => dt.items.add(file))
     this.inputTarget.files = dt.files
 
-    // コントローラ内にも保持（次へで使う）
+    // コントローラ内にも保持
     this.trimmedFiles = trimmedFiles
 
     // dropped_files_count を更新（サーバに送るなら使える）
     const droppedInput = this.formTarget.querySelector('input[name="dropped_files_count"]')
     if (droppedInput) droppedInput.value = droppedCount
 
-    // ✅ ローカルプレビュー表示（S3待ちゼロ）
+    // ローカルプレビュー表示
     this.renderLocalPreview(trimmedFiles)
 
-    // ✅ 超過があればプレビュー上にトースト表示
+    // 超過トースト
     if (droppedCount > 0) {
       this.showDropNotice(droppedCount, maxFiles)
     } else {
       this.hideDropNotice()
     }
 
-    // ✅ 次へボタン表示
+    // 次へボタン表示
     if (this.hasNextButtonTarget) this.nextButtonTarget.classList.remove("hidden")
+
+    // ✅ 選び直し後にまた押せるように
+    this.resetSubmitting()
   }
 
   // =========================
-  // ✅ 次へ：ここで DirectUpload → signed_id 詰め → prepare_uploadsへPOST
+  // ✅ 次へ：DirectUpload → signed_id詰め → prepare_uploadsへPOST
   // =========================
-  async next() {
+  async next(event) {
+    event?.preventDefault()
+
+    // ✅ 二重実行防止（連打対策）
+    if (this.submitting) return
+    this.submitting = true
+    if (this.hasNextButtonTarget) this.nextButtonTarget.disabled = true
+
     const files = this.trimmedFiles.length
       ? this.trimmedFiles
       : Array.from(this.inputTarget.files || [])
 
-    if (files.length === 0) return
+    if (files.length === 0) {
+      this.resetSubmitting()
+      return
+    }
 
     console.log(`Next clicked. Uploading ${files.length} file(s)...`)
 
@@ -123,9 +142,14 @@ export default class extends Controller {
     } catch (e) {
       console.error(e)
       alert("アップロードに失敗しました。通信状況をご確認ください。")
-      // 失敗時は input を戻して再挑戦できるようにする
       this.inputTarget.disabled = false
+      this.resetSubmitting()
     }
+  }
+
+  resetSubmitting() {
+    this.submitting = false
+    if (this.hasNextButtonTarget) this.nextButtonTarget.disabled = false
   }
 
   // =========================
@@ -134,7 +158,7 @@ export default class extends Controller {
   renderLocalPreview(files) {
     if (!this.hasPreviewTarget) return
 
-    // 以前のURLを解放してから描画し直す（再選択対応）
+    // 以前のURLを解放してから描画し直す
     this.revokePreviewUrls()
 
     const container = this.previewTarget.querySelector(".flex")
@@ -163,7 +187,7 @@ export default class extends Controller {
       container.appendChild(wrapper)
     })
 
-    // ✅ UI切り替え：previewを出して intro/background を隠す
+    // UI切り替え
     this.previewTarget.classList.remove("hidden")
     if (this.hasIntroTarget) this.introTarget.classList.add("hidden")
     if (this.hasBackgroundTarget) this.backgroundTarget.classList.add("hidden")
@@ -176,26 +200,22 @@ export default class extends Controller {
   }
 
   // =========================
-  // ✅ 超過トースト表示
+  // ✅ 超過トースト
   // =========================
   showDropNotice(droppedCount, maxFiles) {
     if (!this.hasDropNoticeTarget) return
 
-    // 連続選択でタイマーが残るのを防ぐ
     this.clearDropNoticeTimers()
 
     this.dropNoticeTarget.textContent =
       `${droppedCount}枚の写真は追加できませんでした（最大${maxFiles}枚まで）`
 
-    // 表示
     this.dropNoticeTarget.classList.remove("hidden")
-    // opacityのトランジションを効かせるために次のフレームで1にする
     requestAnimationFrame(() => {
       this.dropNoticeTarget.classList.remove("opacity-0")
       this.dropNoticeTarget.classList.add("opacity-100")
     })
 
-    // 3秒後にフェードアウト → 完全に隠す
     this.dropNoticeFadeTimer = setTimeout(() => {
       this.dropNoticeTarget.classList.remove("opacity-100")
       this.dropNoticeTarget.classList.add("opacity-0")
@@ -222,7 +242,7 @@ export default class extends Controller {
   }
 
   // =========================
-  // Direct Upload（既存）
+  // Direct Upload
   // =========================
   uploadAll(files) {
     const url = this.inputTarget.getAttribute("data-direct-upload-url")
@@ -233,10 +253,9 @@ export default class extends Controller {
       .querySelectorAll('input[type="hidden"][data-direct-upload-hidden="true"]')
       .forEach((el) => el.remove())
 
-    // ✅ confirm側は signed_id を受け取るので input は送信しない（2重送信防止）
+    // confirm側は signed_id を受け取るので input は送信しない（2重送信防止）
     this.inputTarget.disabled = true
 
-    // すべてアップロード（並列）
     return Promise.all(files.map((file) => this.uploadOne(file, url)))
   }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_14_073924) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_19_081241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -140,8 +140,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_14_073924) do
     t.date "photo_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 1, null: false
     t.index ["album_id"], name: "index_posts_on_album_id"
     t.index ["child_id"], name: "index_posts_on_child_id"
+    t.index ["status"], name: "index_posts_on_status"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

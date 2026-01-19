@@ -45,7 +45,7 @@ class AlbumsController < ApplicationController
   #   子どもごとに「その子のタグが付いた投稿」の photo_date から
   #   birth_date 基準で満年齢を計算し、存在する年齢のみを候補化
   def assign_dynamic_filter_options(family)
-    base_posts = Post.for_family_group(family).where.not(photo_date: nil)
+    base_posts = Post.for_family_group(family).published.where.not(photo_date: nil)
 
     @available_years = extract_available_years(base_posts)
     @ages_by_child_id = build_ages_by_child_id(family, base_posts)
@@ -120,12 +120,32 @@ class AlbumsController < ApplicationController
   def build_grouped_posts(family)
     posts = load_posts(family)
 
-    with_date    = posts.where.not(photo_date: nil)
-    without_date = posts.where(photo_date: nil)
+    drafts    = posts.draft
+    published = posts.published
+
+    with_date    = published.where.not(photo_date: nil)
+    without_date = published.where(photo_date: nil)
 
     grouped = group_by_year(with_date)
 
+    # ✅ 念のため：公開済みで撮影日未設定が残っていれば最後に出す
     append_without_date(grouped, without_date)
+
+    # ✅ 最後尾に「下書き保存した思い出」を追加
+    append_drafts(grouped, drafts)
+  end
+
+  # 下書きグループを最後尾に追加
+  def append_drafts(grouped, drafts)
+    return grouped if drafts.blank?
+    return grouped if hide_draft_group?
+
+    grouped.merge('下書き保存した思い出' => drafts)
+  end
+
+  # 下書きグループを非表示にする条件（必要最低限で安牌）
+  def hide_draft_group?
+    params[:year].present?
   end
 
   # 投稿を写真付きでロード（N+1回避）

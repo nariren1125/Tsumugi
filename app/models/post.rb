@@ -14,9 +14,14 @@ class Post < ApplicationRecord
   # 投稿作成時にchild_idが未設定なら、関連するアルバムのchild_idで埋める
   before_validation :fill_child_id_from_album, on: :create
 
-  validates :title, presence: true, length: { maximum: 100 }
-  validates :content, presence: true, length: { maximum: 500 }
-  validate :photos_count_within_limit
+  # 投稿ステータス
+  enum :status, { draft: 0, published: 1 }
+
+  validates :photo_date, presence: true, unless: :draft?
+  validates :title, presence: true, length: { maximum: 20 }, unless: :draft?
+  validates :content, presence: true, length: { maximum: 500 }, unless: :draft?
+
+  validate :photos_count_within_limit, unless: :draft?
 
   # 家族グループに属する投稿を取得するスコープ
   scope :for_family_group, lambda { |family_group|
