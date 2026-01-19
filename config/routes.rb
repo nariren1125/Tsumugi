@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get '/terms',       to: 'pages#terms'
   get '/privacy',     to: 'pages#privacy'
   get '/how_to_use',  to: 'pages#how_to_use'
+  get "/faq",     to: "pages#faq"
+  get "/contact", to: "pages#contact"
   get "mypage", to: "mypages#show"
   get "users/:id", to: "mypages#show", as: :user
 
