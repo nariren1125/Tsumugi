@@ -1,0 +1,26 @@
+<%# locals: title:, back_path:, back_aria: "戻る" %>
+
+<header class="fixed top-0 left-0 w-full z-50 bg-base-300 shadow-sm border-b border-base-200">
+  <div class="max-w-xl mx-auto px-4 h-14 relative flex items-center">
+
+    <!-- 左：戻る -->
+    <div class="absolute left-4">
+      <%= link_to back_path,
+                  aria: { label: local_assigns[:back_aria] || "戻る" },
+                  class: "btn btn-ghost btn-circle" do %>
+        ←
+      <% end %>
+    </div>
+
+    <!-- 中央：タイトル（完全中央） -->
+    <h2 class="mx-auto text-base font-bold text-center truncate max-w-[70%]">
+      <%= title %>
+    </h2>
+
+    <!-- 右：ミートボール（常に表示） -->
+    <div class="absolute right-4">
+      <%= render "shared/meatball_menu" %>
+    </div>
+
+  </div>
+</header>

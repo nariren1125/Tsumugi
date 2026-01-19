@@ -1,0 +1,4 @@
+ja:
+  errors:
+    messages:
+      invalid_email: "の形式が正しくありません"

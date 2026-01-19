@@ -1,0 +1,46 @@
+<% content_for :suppress_header, true %>
+
+<%= render "shared/help_header",
+      title: "LINE IDの連携解除方法",
+      back_path: faq_path,
+      back_aria: "よくある質問に戻る" %>
+
+<div class="max-w-xl mx-auto px-4 pt-24 pb-28">
+  <div class="bg-base-100 rounded-box shadow p-6 space-y-5">
+
+    <h2 class="text-base font-bold">
+      連携解除方法
+    </h2>
+
+    <p class="text-sm text-base-content/80">
+      下記の手順に沿って操作すると、TsumugiとLINE IDの連携が解除されます。
+    </p>
+
+    <ol class="list-decimal pl-5 space-y-2 text-sm text-base-content/80">
+      <li>
+        <span class="font-semibold">LINEのホーム画面右上</span>にある「設定」をタップします
+      </li>
+      <li>
+        「設定」→「アカウント」→「連動アプリ」→
+        <span class="font-semibold">「Tsumugi」</span>
+        を選択します
+      </li>
+      <li>
+        <span class="font-semibold">「連動を解除」</span>をタップします
+      </li>
+      <li class="text-base-content/70">
+        連携解除しても、思い出のデータが削除されることはありません。
+        また使いたくなったときは、LINEログインを行うことで再び利用できます。
+        <span class="block mt-2">
+          ※ グループを退出している場合は、管理者からの再招待が必要です。
+        </span>
+      </li>
+    </ol>
+  </div>
+
+  <div class="mt-8 text-sm text-base-content/70 text-center">
+    ご不明な点がございましたら、
+    <%= link_to "お問い合わせフォーム", contact_path, class: "link link-info text-sm" %>
+    よりご連絡ください。
+  </div>
+</div>

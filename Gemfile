@@ -70,3 +70,9 @@ gem 'omniauth-rails_csrf_protection'
 
 # ActiveStorageがS3を使うために必要なgem
 gem 'aws-sdk-s3', require: false
+
+# Development environment only
+gem 'letter_opener', group: :development
+
+# 開発環境のみ
+gem 'letter_opener_web', group: :development

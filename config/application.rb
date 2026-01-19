@@ -16,5 +16,10 @@ module Tsumugi
 
     config.autoload_paths << Rails.root.join("app/queries")
     config.eager_load_paths << Rails.root.join("app/queries")
+
+    # app/formsディレクトリをautoload_pathsに追加
+    config.autoload_paths += %W[
+      #{config.root}/app/forms
+    ]
   end
 end

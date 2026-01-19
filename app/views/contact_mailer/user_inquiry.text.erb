@@ -1,0 +1,13 @@
+Tsumugiにお問い合わせが届きました。
+
+【カテゴリ】
+<%= @contact.category.presence || "未選択" %>
+
+【お名前】
+<%= @contact.name.presence || "未入力" %>
+
+【メールアドレス】
+<%= @contact.email.presence || "未入力" %>
+
+【内容】
+<%= @contact.message %>

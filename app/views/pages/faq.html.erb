@@ -1,0 +1,235 @@
+<div class="max-w-xl mx-auto px-4 pt-16 pb-28">
+
+  <h1 class="text-lg font-bold text-base-content mb-6">
+    よくある質問
+  </h1>
+
+  <!-- =========================
+       よく聞かれる質問（優先度：高）
+       ========================= -->
+  <div class="bg-base-100 rounded-box shadow p-4 space-y-5">
+
+    <div>
+      <p class="text-sm font-semibold text-base-content">
+        Q. データを編集・削除できますか？
+      </p>
+      <p class="text-sm text-base-content/80 mt-1">
+        A. ご自身が投稿した思い出は、編集および削除が可能です。
+        ただし、他のメンバーが投稿した思い出を編集・削除することはできません。
+      </p>
+    </div>
+
+    <div class="divider my-1"></div>
+
+    <div>
+      <p class="text-sm font-semibold text-base-content">
+        Q. PCでも利用できますか？
+      </p>
+      <p class="text-sm text-base-content/80 mt-1">
+        A. Tsumugiは、スマートフォンのLINEアプリ内ブラウザでのみご利用いただけます。
+        PCや通常のブラウザからはご利用いただけません。
+      </p>
+    </div>
+
+    <div class="divider my-1"></div>
+
+    <div>
+      <p class="text-sm font-semibold text-base-content">
+        Q. 利用料金はかかりますか？
+      </p>
+      <p class="text-sm text-base-content/80 mt-1">
+        A. いいえ。Tsumugiは無料でご利用いただけます。
+        現在提供している基本機能は、すべて無料でお使いいただけます。
+      </p>
+    </div>
+
+    <div class="divider my-1"></div>
+
+    <div>
+      <p class="text-sm font-semibold text-base-content">
+        Q. 写真や思い出は誰が見られますか？
+      </p>
+      <p class="text-sm text-base-content/80 mt-1">
+        A. 投稿された写真や思い出は、同じ家族グループに参加しているメンバーのみが閲覧できます。
+        外部の方に公開されることはありません。
+      </p>
+    </div>
+
+    <div class="divider my-1"></div>
+
+    <div>
+      <p class="text-sm font-semibold text-base-content">
+        Q. 家族グループを抜けるとどうなりますか？
+      </p>
+      <p class="text-sm text-base-content/80 mt-1">
+        A. グループを退出すると、そのグループ内の思い出や写真は閲覧できなくなります。
+        再度参加するには、グループ管理者からの招待が必要です。
+      </p>
+    </div>
+
+    <div class="divider my-1"></div>
+
+    <div>
+      <p class="text-sm font-semibold text-base-content">
+        Q. LINE ID連携は解除できますか？
+      </p>
+      <p class="text-sm text-base-content/80 mt-1">
+        A. はい、可能です。
+        <%= link_to "こちら", line_unlink_path, class: "link link-info text-sm" %>
+        をご確認ください。
+      </p>
+    </div>
+
+  </div> <!-- ✅ この閉じが抜けてました -->
+
+  <!-- お問い合わせ導線 -->
+  <div class="text-center mt-8">
+    <%= link_to "解決しない場合はこちらから（お問い合わせフォーム）",
+                contact_path,
+                class: "link link-info text-sm" %>
+  </div>
+
+  <!-- =========================
+       カテゴリ別（折りたたみ）
+       ========================= -->
+  <h2 class="text-base font-bold text-base-content mt-10 mb-3">
+    さらに詳しく
+  </h2>
+
+  <div class="space-y-3">
+
+    <!-- グループ・家族について -->
+    <div class="collapse collapse-arrow bg-base-100 rounded-box shadow">
+      <input type="checkbox" />
+      <div class="collapse-title font-semibold text-base-content">
+        グループ・家族について
+      </div>
+      <div class="collapse-content text-sm text-base-content/80 space-y-4">
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. グループの管理者は誰ですか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. 最初にグループを作成した方、または権限を管理者に変更された方です。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 管理者は何ができますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. メンバーの役割・権限の変更、グループ名の変更、メンバーの削除（退会対応）などが行えます。
+            また、グループの削除が可能です。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. どうすれば管理者になれますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. 現在の管理者の方に、グループ設定画面の「家族一覧の編集」から権限を変更してもらってください。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. グループは1つだけですか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. グループ設定画面から新しいグループを作成し、切り替えて利用できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. グループにメンバーを招待するには？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. グループ設定画面の「家族一覧の編集」から招待リンクを発行し、LINEで共有できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 招待リンクに有効期限はありますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. 招待リンクは発行から24時間有効です。
+               期限が切れた場合は、グループ設定画面から再発行できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. グループを削除するとどうなりますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. グループ内の思い出が削除されます。削除は管理者のみ実行できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 家族グループから抜けるにはどうしたらいいですか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. グループ設定画面の「家族一覧の編集」から「退出する」を選択してください。
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 投稿・タグ・下書きについて -->
+    <div class="collapse collapse-arrow bg-base-100 rounded-box shadow">
+      <input type="checkbox" />
+      <div class="collapse-title font-semibold text-base-content">
+        投稿・タグ・下書きについて
+      </div>
+      <div class="collapse-content text-sm text-base-content/80 space-y-4">
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 下書き保存した投稿はどこにありますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. アルバム一覧の最下部に表示されます。編集して内容を入力すると、思い出として投稿できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 写真を間違えて投稿した場合はどうすればいいですか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. ご自身の投稿であれば、編集または削除で修正できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 5枚以上の写真を投稿するとどうなりますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. 5枚以上の写真を選択した場合、最初の5枚のみが選択されます。以降の写真は自動で除外されます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 子どもや人物タグは後から変更できますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. ご自身の投稿であれば、編集画面から変更できます。
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- マイページについて -->
+    <div class="collapse collapse-arrow bg-base-100 rounded-box shadow">
+      <input type="checkbox" />
+      <div class="collapse-title font-semibold text-base-content">
+        マイページについて
+      </div>
+      <div class="collapse-content text-sm text-base-content/80 space-y-4">
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 名前の変更はどこでできますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. マイページの「編集」から名前を変更できます。
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-base-content">Q. 自分の役割はどこで変更できますか？</p>
+          <p class="text-sm text-base-content/80 mt-1">
+            A. マイページの「編集」から役割を変更できます。
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
