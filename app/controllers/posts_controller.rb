@@ -93,7 +93,10 @@ class PostsController < ApplicationController
 
   # 既存投稿の更新
   def update
-    if @post.update(post_params)
+    attrs = post_params
+    attrs[:status] = :published if params[:publish] == '1'
+
+    if @post.update(attrs)
       redirect_to albums_path, notice: t('flash.posts.updated')
     else
       render :edit, status: :unprocessable_entity

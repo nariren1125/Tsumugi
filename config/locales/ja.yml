@@ -73,10 +73,13 @@ ja:
 
   # ActiveRecord のバリデーションメッセージ
   activerecord:
+    models:
+      post: 思い出
     attributes:
       post:
-        title: "タイトル"
-        content: "メッセージ"
+        photo_date: 撮影日
+        title: タイトル
+        content: メッセージ
       user:
         role: "役割"
         roles:
@@ -90,12 +93,16 @@ ja:
       models:
         post:
           attributes:
+            photo_date:
+              blank: "を入力してください"
             title:
               blank: "を入力してください"
-            image:
-              blank: "を選択してください"
             content:
               blank: "を入力してください"
+
+  errors:
+    messages:
+      blank: "を入力してください"
 
   # 招待リンク関連
   invite_tokens:
