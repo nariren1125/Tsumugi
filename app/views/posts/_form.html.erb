@@ -23,25 +23,32 @@
 </div>
 
 <!-- 投稿フォーム本体 -->
-<div class="max-w-xl mx-auto px-4 pt-20 pb-24">
+<div class="max-w-xl mx-auto px-4 pt-20 pb-20">
+  <%# ↑ pt-20 → pt-16（ヘッダー下の余白を少し詰める） %>
+  <%# ↑ pb-24 → pb-20（下部ナビがあるので詰めすぎない範囲で短縮） %>
 
-  <%# 既存の写真がある場合はカルーセル表示 %>
-  <div class="flex justify-center gap-2 mb-4">
-    <div class="flex justify-center gap-2 mb-4">
-      <% Array(@pending_blobs).each do |blob| %>
-        <div class="w-20 aspect-square rounded-md overflow-hidden">
-          <%= image_tag blob, class: "w-full h-full object-cover", loading: "lazy", decoding: "async" %>
-        </div>
-      <% end %>
-    </div>
+  <%# ✅ 既存の写真がある場合はサムネ表示（高さを抑える） %>
+  <div class="flex justify-center gap-2 mb-2">
+    <% Array(@pending_blobs).each do |blob| %>
+      <div class="w-14 aspect-square rounded-md overflow-hidden">
+        <%# w-20 → w-14（縦を圧縮して1画面に寄せる） %>
+        <%= image_tag blob,
+              class: "w-full h-full object-cover",
+              loading: "lazy",
+              decoding: "async" %>
+      </div>
+    <% end %>
   </div>
 
-  <p class="text-xs text-base-content/60 text-center mb-2">
+  <p class="text-[11px] text-base-content/60 text-center">
+    <%# mb-2 → mb-3（サムネとのバランスを取りつつ詰める） %>
     選択した写真（変更できません）
   </p>
 
-  <div class="space-y-4 bg-base-100 rounded-box shadow p-4">
-    <%# ✅ 共通エラーパーツを呼び出し %>
+  <div class="space-y-3 bg-base-100 rounded-box shadow p-4">
+    <%# space-y-4 → space-y-3（フォーム全体を圧縮） %>
+
+    <%# ✅ 共通エラーパーツ %>
     <%= render "shared/form_errors", object: @post %>
 
     <%# turbo: false を指定してTurboフォーム送信を無効化 %>
@@ -50,20 +57,23 @@
                   html: { multipart: true, novalidate: true } do |f| %>
 
       <%# 撮影日 %>
-      <div class="mb-4">
+      <div class="mb-3">
+        <%# mb-4 → mb-3 %>
         <%= f.label :photo_date, "撮影日",
-              class: "label font-medium text-base-content" %>
+              class: "label py-1 font-medium text-base-content" %>
+        <%# label の縦paddingを詰める（daisyUI） %>
         <%= f.date_field :photo_date,
-              class: "input input-bordered w-full",
+              class: "input input-bordered w-full h-10",
               required: true %>
+        <%# input を少し低く（h-10） %>
       </div>
 
       <%# タイトル %>
-      <div class="mb-4">
+      <div class="mb-3">
         <%= f.label :title, "タイトル",
-              class: "label font-medium text-base-content" %>
+              class: "label py-1 font-medium text-base-content" %>
         <%= f.text_field :title,
-              class: "input input-bordered w-full",
+              class: "input input-bordered w-full h-10",
               placeholder: "例：はじめての公園遊び" %>
       </div>
 
@@ -71,19 +81,22 @@
       <%= render "person_tags_field", f: f %>
 
       <%# メッセージ %>
-      <div class="mb-4">
+      <div class="mb-2">
+        <%# mb-4 → mb-2 %>
         <%= f.label :content, "メッセージ",
-              class: "label font-medium text-base-content" %>
+              class: "label py-1 font-medium text-base-content" %>
         <%= f.text_area :content,
-              rows: 3,
+              rows: 2,
               placeholder: "今日の思い出をひとことで",
               class: "textarea textarea-bordered w-full" %>
+        <%# rows: 3 → 2（縦圧縮） %>
       </div>
 
       <%# 送信ボタン %>
-      <div class="mt-6">
+      <div class="mt-3">
+        <%# mt-6 → mt-3 %>
         <%= f.submit "投稿する",
-              class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full mt-2" %>
+              class: "btn btn-accent hover:brightness-110 active:scale-95 transition duration-150 w-full" %>
       </div>
 
     <% end %>
