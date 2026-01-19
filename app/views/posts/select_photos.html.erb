@@ -70,8 +70,8 @@
   </section>
 
   <!-- =========================================
-       ✅ preview（選択後のプレビュー画面）
-       ========================================= -->
+      ✅ preview（選択後のプレビュー画面）
+      ========================================= -->
   <section
     data-photo-picker-target="preview"
     class="hidden pt-6 pb-28"
@@ -81,22 +81,33 @@
         選択した写真の確認
       </h2>
 
-      <!-- ✅ 画像プレビュー（JSが .flex に差し込むので受け皿はここだけ） -->
-      <div class="overflow-x-auto snap-x snap-mandatory">
-        <div class="flex gap-3 py-2">
-          <%# JSでここに画像が入る %>
+      <%# ✅ 画像＋トーストを重ねるため relative を付ける %>
+      <div class="relative">
+        <%# ✅ 超過トースト（JSがここに文言を入れて、時間で消す） %>
+        <div
+          data-photo-picker-target="dropNotice"
+          class="hidden absolute top-2 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-sm
+                alert alert-warning shadow-md text-xs py-2
+                opacity-0 transition-opacity duration-300"
+          role="alert"
+        >
+          <%# JSで textContent を入れる %>
+        </div>
+
+        <%# ✅ 画像プレビュー（JSが .flex に差し込むので受け皿はここだけ） %>
+        <div class="overflow-x-auto snap-x snap-mandatory">
+          <div class="flex gap-3 py-2">
+            <%# JSでここに画像が入る %>
+          </div>
         </div>
       </div>
 
-      <!-- ✅ 文言は「画像の下 / 次へボタンの上」 -->
+      <%# ✅ 注意文（画像の下 / ボタンの上） %>
       <p class="text-xs text-base-content/70 leading-relaxed">
-        ※ 写真を選び直す場合、選んだ写真は消えて、写真選択画面に戻ります。
+        ※「選び直す」を押すと、選んだ写真は消えて写真選択画面に戻ります。
       </p>
 
-      <!-- ✅ 超過メッセージ（今は未使用でも置き場だけ確保） -->
-      <div class="text-xs text-error hidden"></div>
-
-      <!-- ✅ 次へ / 選び直す（横並び） -->
+      <%# ✅ 次へ / 選び直す（横並び） %>
       <div class="mt-3 flex gap-2">
         <button
           type="button"
@@ -106,13 +117,15 @@
           選び直す
         </button>
 
+        <%# ✅ 初期は hidden（選択後にJSで表示する） %>
         <button
           data-photo-picker-target="nextButton"
           data-action="photo-picker#next"
-          class="btn btn-accent flex-1"
+          class="btn btn-accent flex-1 hidden"
         >
           次へ
         </button>
+      </div>
     </div>
   </section>
 </main>
