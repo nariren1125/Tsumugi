@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   resources :posts, only: %i[new create edit update destroy] do
     collection do
       get :select_photos
+      post :prepare_uploads
+
+      # 旧導線（後で消す）
       post :confirm_photos
     end
   end

@@ -2,20 +2,14 @@
 <% content_for :suppress_header, true %>
 <% content_for :transparent_background, true %>
 
-<!-- ===== ヘッダー ===== -->
 <%= render "shared/simple_header", title: "新規投稿" %>
 
 <% if current_family_group.present? %>
-  <!-- ===== メイン（グループあり） ===== -->
   <main
     data-controller="photo-picker"
     data-photo-picker-max-files-value="5"
-    class="relative max-w-xl mx-auto px-4
-           pt-24 pb-40
-           min-h-[calc(100svh-120px)]
-           flex flex-col items-center"
+    class="relative max-w-xl mx-auto px-4 pt-24 pb-40 min-h-[calc(100svh-120px)] flex flex-col items-center"
   >
-    <!-- 🌿 背景（ページ専用） -->
     <div
       data-photo-picker-target="background"
       class="absolute inset-0 -z-10 pointer-events-none flex justify-center -translate-y-6"
@@ -25,20 +19,14 @@
             alt: "" %>
     </div>
 
-    <!-- メインコンテンツ -->
-    <div
-      data-photo-picker-target="intro"
-      class="flex flex-col items-center mt-30"
-    >
+    <div data-photo-picker-target="intro" class="flex flex-col items-center mt-30">
       <div class="w-40 mx-auto mb-4">
         <%= image_tag "tumugi_photo.png",
               alt: "ツムとムギが写真を撮っているイラスト",
               class: "w-full h-auto opacity-90 drop-shadow-sm" %>
       </div>
 
-      <h2 class="text-lg font-semibold mb-2">
-        思い出の写真を選ぼう
-      </h2>
+      <h2 class="text-lg font-semibold mb-2">思い出の写真を選ぼう</h2>
 
       <p class="text-sm text-base-content/70 mb-6 text-center">
         投稿できる写真は最大5枚までです。
@@ -52,14 +40,10 @@
       </button>
     </div>
 
-    <!-- ===== プレビュー（ローカル） ===== -->
     <div data-photo-picker-target="preview" class="hidden w-full max-w-md mt-6">
       <div data-photo-picker-target="previewList" class="flex overflow-x-auto snap-x snap-mandatory gap-4 py-6"></div>
-        <!-- JSで img を差し込む -->
-      </div >
     </div>
 
-    <!-- ===== 次へボタン ===== -->
     <button
       data-photo-picker-target="nextButton"
       data-action="photo-picker#next"
@@ -68,8 +52,7 @@
       次へ
     </button>
 
-    <!-- ===== hidden form / input ===== -->
-    <%= form_with url: confirm_photos_posts_path,
+    <%= form_with url: prepare_uploads_posts_path,
                   method: :post,
                   multipart: true,
                   data: { turbo: false, "photo-picker-target": "form" },
@@ -85,12 +68,9 @@
               "photo-picker-target": "input",
               action: "change->photo-picker#handleFiles"
             } %>
-
     <% end %>
   </main>
-
 <% else %>
-  <!-- ===== グループなし ===== -->
   <div class="max-w-xl mx-auto px-4 pt-24 pb-24">
     <%= render "no_family_group" %>
   </div>

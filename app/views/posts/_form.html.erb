@@ -27,13 +27,13 @@
 
   <%# 既存の写真がある場合はカルーセル表示 %>
   <div class="flex justify-center gap-2 mb-4">
-    <% @post.photos.each do |photo| %>
-      <div class="w-20 aspect-square rounded-md overflow-hidden">
-        <% if photo.image.attached? %>
-          <%= image_tag photo.image, class: "w-full h-full object-cover", loading: "lazy", decoding: "async" %>
-        <% end %>
-      </div>
-    <% end %>
+    <div class="flex justify-center gap-2 mb-4">
+      <% Array(@pending_blobs).each do |blob| %>
+        <div class="w-20 aspect-square rounded-md overflow-hidden">
+          <%= image_tag blob, class: "w-full h-full object-cover", loading: "lazy", decoding: "async" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <p class="text-xs text-base-content/60 text-center mb-2">
