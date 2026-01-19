@@ -3,12 +3,17 @@ import { Controller } from "@hotwired/stimulus"
 import { DirectUpload } from "@rails/activestorage"
 
 export default class extends Controller {
+  // ✅ actions を追加できるなら追加推奨（後述）
   static targets = ["input", "form", "preview", "intro", "background", "nextButton"]
   static values = { maxFiles: { type: Number, default: 5 } }
 
   connect() {
     console.log("photo-picker connected")
+
+    // ローカルプレビュー用のURL（離脱時に解放）
     this.previewObjectUrls = []
+
+    // 選択済み（最大枚数にトリミング済み）の File 配列
     this.trimmedFiles = []
   }
 
@@ -17,9 +22,36 @@ export default class extends Controller {
     this.revokePreviewUrls()
   }
 
+  // -------------------------
+  // UI: ファイル選択を開く
+  // -------------------------
   openPicker() {
     if (!this.hasInputTarget) return
     this.inputTarget.click()
+  }
+
+  // -------------------------
+  // UI: 選び直す（preview -> introへ戻す）
+  // -------------------------
+  reselect() {
+    // 1) 画面切替（introに戻す）
+    if (this.hasPreviewTarget) this.previewTarget.classList.add("hidden")
+    if (this.hasIntroTarget) this.introTarget.classList.remove("hidden")
+    if (this.hasBackgroundTarget) this.backgroundTarget.classList.remove("hidden")
+
+    // 2) 次へボタンを隠す（ビュー側で hidden 運用ならここで確実に閉じる）
+    if (this.hasNextButtonTarget) this.nextButtonTarget.classList.add("hidden")
+
+    // 3) 送信事故防止：hidden signed_id を消す
+    this.clearHiddenSignedIds()
+
+    // 4) input を再選択できる状態に戻す（uploadAllでdisabled=trueにするので戻すのが重要）
+    if (this.hasInputTarget) this.inputTarget.disabled = false
+
+    // 5) プレビューURLを解放して、選択状態もクリア
+    this.revokePreviewUrls()
+    this.trimmedFiles = []
+    if (this.hasInputTarget) this.inputTarget.value = ""
   }
 
   // =========================
@@ -54,12 +86,12 @@ export default class extends Controller {
     // ✅ ローカルプレビュー表示（S3待ちゼロ）
     this.renderLocalPreview(trimmedFiles)
 
-    // ✅ 次へボタン表示
+    // ✅ 次へボタン表示（ビュー側で hidden 運用の場合に必要）
     if (this.hasNextButtonTarget) this.nextButtonTarget.classList.remove("hidden")
   }
 
   // =========================
-  // ✅ 次へ：ここで DirectUpload → signed_id 詰め → confirmへPOST
+  // ✅ 次へ：ここで DirectUpload → signed_id 詰め → prepare_uploadsへPOST
   // =========================
   async next() {
     const files = this.trimmedFiles.length
@@ -78,6 +110,7 @@ export default class extends Controller {
     } catch (e) {
       console.error(e)
       alert("アップロードに失敗しました。通信状況をご確認ください。")
+
       // 失敗時は input を戻して再挑戦できるようにする
       this.inputTarget.disabled = false
     }
@@ -92,6 +125,7 @@ export default class extends Controller {
     // 以前のURLを解放してから描画し直す（再選択対応）
     this.revokePreviewUrls()
 
+    // ✅ controller が .flex を探す前提なので、受け皿は必須
     const container = this.previewTarget.querySelector(".flex")
     if (!container) return
     container.innerHTML = ""
@@ -118,7 +152,7 @@ export default class extends Controller {
       container.appendChild(wrapper)
     })
 
-    // ✅ UI切り替え：confirm_photos 風に寄せる
+    // ✅ UI切り替え（intro -> preview）
     this.previewTarget.classList.remove("hidden")
     if (this.hasIntroTarget) this.introTarget.classList.add("hidden")
     if (this.hasBackgroundTarget) this.backgroundTarget.classList.add("hidden")
@@ -131,18 +165,16 @@ export default class extends Controller {
   }
 
   // =========================
-  // Direct Upload（既存）
+  // Direct Upload
   // =========================
   uploadAll(files) {
     const url = this.inputTarget.getAttribute("data-direct-upload-url")
     if (!url) throw new Error("data-direct-upload-url is missing on file input")
 
     // 既存の hidden signed_id をクリア（再選択時の事故防止）
-    this.formTarget
-      .querySelectorAll('input[type="hidden"][data-direct-upload-hidden="true"]')
-      .forEach((el) => el.remove())
+    this.clearHiddenSignedIds()
 
-    // ✅ confirm側は signed_id を受け取るので input は送信しない（2重送信防止）
+    // ✅ signed_id を送るので input は送信しない（2重送信防止）
     this.inputTarget.disabled = true
 
     // すべてアップロード（並列）
@@ -167,5 +199,16 @@ export default class extends Controller {
         resolve(blob)
       })
     })
+  }
+
+  // -------------------------
+  // helper: hidden signed_id を全削除
+  // -------------------------
+  clearHiddenSignedIds() {
+    if (!this.hasFormTarget) return
+
+    this.formTarget
+      .querySelectorAll('input[type="hidden"][data-direct-upload-hidden="true"]')
+      .forEach((el) => el.remove())
   }
 }
