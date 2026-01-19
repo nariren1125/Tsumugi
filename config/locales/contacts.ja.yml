@@ -1,0 +1,5 @@
+ja:
+  contacts:
+    create:
+      success: "お問い合わせを送信しました。ありがとうございます！"
+      invalid: "入力内容をご確認ください。"

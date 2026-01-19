@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   get '/how_to_use',  to: 'pages#how_to_use'
   get "/faq",     to: "pages#faq"
   get "/line_unlink", to: "pages#line_unlink"
-  get "/contact", to: "pages#contact"
+  get  "/contact", to: "contacts#new"
+  post "/contact", to: "contacts#create"
+
   get "mypage", to: "mypages#show"
   get "users/:id", to: "mypages#show", as: :user
 
@@ -65,5 +67,8 @@ Rails.application.routes.draw do
 
   if Rails.env.development?
     get "/dev_login/:id", to: "sessions#dev_login"
+
+    # Letter Opener Web
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 end
