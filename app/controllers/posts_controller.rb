@@ -87,11 +87,6 @@ class PostsController < ApplicationController
   # ---- 旧導線（残してOK / 今回は使わない想定） ----
   def select_photos; end
 
-  def confirm_photos
-    # Issue4で削除予定。いまは迷子防止だけ
-    redirect_to select_photos_posts_path
-  end
-
   # 既存投稿の更新
   def update
     if @post.update(post_params)
