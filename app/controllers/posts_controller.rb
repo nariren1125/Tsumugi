@@ -16,7 +16,7 @@ class PostsController < ApplicationController
   before_action :authorize_user!, only: %i[edit update destroy]
 
   # new/create/edit/update は人物タグのフォーム表示に必要
-  before_action :set_person_context, only: %i[new create edit update]
+  before_action :set_person_context, only: %i[new create edit update save_draft]
 
   # ----------------------------
   # GET /posts/new
@@ -100,6 +100,27 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     redirect_to albums_path, notice: t('flash.posts.deleted')
+  end
+
+  # 下書き保存（写真含む）
+  def save_draft
+    signed_ids = pending_signed_ids
+    return redirect_to_no_photos if signed_ids.empty?
+
+    @post = current_user.posts.new(post_params.merge(album: temp_album))
+    @post.status = :draft
+
+    if @post.save
+      attach_photos(@post, signed_ids)
+      clear_pending_photos_session
+      redirect_to albums_path, notice: '下書きを保存しました'
+    else
+      @pending_blobs = pending_blobs(signed_ids)
+      flash.now[:alert] = '下書きの保存に失敗しました'
+      render :new, status: :unprocessable_entity
+    end
+  rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
+    handle_create_invalid_signature
   end
 
   private
@@ -254,5 +275,19 @@ class PostsController < ApplicationController
     notify_family_group_members(post)
   rescue StandardError => e
     Rails.logger.warn("[LINE notify failed] post_id=#{post.id} error=#{e.class} message=#{e.message}")
+  end
+
+  def attach_pending_photos!(post, signed_ids)
+    signed_ids.each do |signed_id|
+      blob = ActiveStorage::Blob.find_signed(signed_id)
+      next unless blob
+
+      # Photoモデルがある設計前提（post.photos.create! で紐付け）
+      post.photos.create!(image: blob)
+    end
+  end
+
+  def clear_pending_images_session!
+    session.delete(PostsController::SESSION_KEY)
   end
 end

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     collection do
       get :select_photos
       post :prepare_uploads
+      post :save_draft
     end
   end
 

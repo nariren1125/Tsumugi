@@ -28,6 +28,8 @@ services:
       RAILS_ENV: development
       LINE_CHANNEL_ID: ${LINE_CHANNEL_ID}
       LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
