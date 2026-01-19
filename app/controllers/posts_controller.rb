@@ -72,9 +72,12 @@ class PostsController < ApplicationController
     signed_ids = pending_signed_ids
     return redirect_to_no_photos if signed_ids.empty?
 
-    # Postインスタンスを必ず生成して nil事故を防ぐ
     build_post_for_create
-    return handle_create_success if save_post_and_photos?(signed_ids)
+
+    if save_post_and_photos?(signed_ids)
+      notify_family_group_members_safely(@post) # ✅ ここで通知
+      return handle_create_success
+    end
 
     handle_create_failure(signed_ids)
   rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
@@ -92,7 +95,6 @@ class PostsController < ApplicationController
   # 既存投稿の更新
   def update
     if @post.update(post_params)
-      notify_family_group_members(@post)
       redirect_to albums_path, notice: t('flash.posts.updated')
     else
       render :edit, status: :unprocessable_entity
@@ -250,5 +252,12 @@ class PostsController < ApplicationController
 
   def line_notifier
     @line_notifier ||= LineNotifier.new
+  end
+
+  # create時の通知は「失敗しても投稿は成功扱い」にしたいので安全に実行する
+  def notify_family_group_members_safely(post)
+    notify_family_group_members(post)
+  rescue StandardError => e
+    Rails.logger.warn("[LINE notify failed] post_id=#{post.id} error=#{e.class} message=#{e.message}")
   end
 end
