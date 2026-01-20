@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   # LINE入口・ブロック
-  get "line/entry",   to: "line_entry#show"
+  get "line/entry",   to: "line_entry#entry"
   get "line/blocked", to: "line_entry#blocked"
 
   # LINEログイン

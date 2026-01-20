@@ -176,7 +176,4 @@ class ApplicationController < ActionController::Base
   def allow_public_path?
     PUBLIC_PATHS.include?(request.path)
   end
-
-  # ブラウザ制限（rails標準の allow_browser を利用）
-  allow_browser versions: :modern
 end
