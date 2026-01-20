@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ========================================
 # LINE通知用のサービスクラス
 # ========================================
@@ -21,6 +23,16 @@ class LineNotifier
   end
 
   private
+
+  # ----------------------------------------
+  # URL生成のデフォルト（Service内でも *_url が落ちない保険）
+  # ----------------------------------------
+  def default_url_options
+    Rails.application.routes.default_url_options.presence || {
+      host: ENV.fetch('APP_HOST', 'tumugi.app'),
+      protocol: 'https'
+    }
+  end
 
   # ----------------------------------------
   # ペイロード全体を構築
@@ -48,29 +60,37 @@ class LineNotifier
       type: 'bubble',
       hero: hero_image_section(post),
       body: body_text_section(post),
-      footer: footer_button_section(post)
+      footer: footer_button_section
     }
   end
 
+  # ----------------------------------------
+  # Hero画像
+  # ----------------------------------------
   def hero_image_section(post)
-    photo = post.photos.first
-
-    image_url =
-      (Rails.application.routes.url_helpers.url_for(photo.image) if photo&.image&.attached?)
-
     {
       type: 'image',
-      url: image_url || placeholder_image_url,
+      url: hero_image_url(post),
       size: 'full',
       aspectRatio: '16:9',
       aspectMode: 'cover'
     }
   end
 
+  def hero_image_url(post)
+    photo = post.photos.first
+    return placeholder_image_url unless photo&.image&.attached?
+
+    rails_blob_url(photo.image) # host/protocol は default_url_options に任せる
+  end
+
   def placeholder_image_url
     'https://placehold.co/600x400?text=No+Image'
   end
 
+  # ----------------------------------------
+  # Body
+  # ----------------------------------------
   def body_text_section(post)
     {
       type: 'box',
@@ -102,35 +122,40 @@ class LineNotifier
     }
   end
 
-  def footer_button_section(post)
+  # ----------------------------------------
+  # Footer（ボタン）
+  # ----------------------------------------
+  def footer_button_section
     {
       type: 'box',
       layout: 'vertical',
       spacing: 'sm',
-      contents: [view_post_button(post)],
+      contents: [view_album_button],
       flex: 0
     }
   end
 
-  def view_post_button(_post)
+  def view_album_button
     {
       type: 'button',
       action: {
         type: 'uri',
         label: 'アルバムを開く',
-        uri: 'https://tumugi.app/albums'
+        uri: albums_url
       },
       style: 'link',
       height: 'sm'
     }
   end
 
-  # 通知内の投稿URLを生成
-  def post_url(post)
-    # production環境のホスト名を使用
-    Rails.application.routes.url_helpers.post_url(post, host: 'https://tumugi.app')
+  # （必要なら）通知内の投稿URL生成
+  def post_url_for(post)
+    post_url(post)
   end
 
+  # ----------------------------------------
+  # LINE API送信
+  # ----------------------------------------
   def send_line_request(payload)
     uri = URI.parse('https://api.line.me/v2/bot/message/push')
     http = Net::HTTP.new(uri.host, uri.port)
@@ -147,7 +172,7 @@ class LineNotifier
   def headers
     {
       'Content-Type' => 'application/json',
-      'Authorization' => "Bearer #{ENV.fetch('LINE_CHANNEL_ACCESS_TOKEN', nil)}"
+      'Authorization' => "Bearer #{ENV.fetch('LINE_CHANNEL_ACCESS_TOKEN')}"
     }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
@@ -5,12 +7,13 @@ Rails.application.configure do
 
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
+
   config.assets.compile = false
   config.active_storage.service = :amazon
   config.force_ssl = true
 
   config.logger = ActiveSupport::Logger.new($stdout)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
+    .tap { |logger| logger.formatter = ::Logger::Formatter.new }
     .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 
   config.log_tags = [:request_id]
@@ -23,18 +26,31 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [:id]
 
-  # ActiveStorage / *_url 生成のため
+  # ==================================================
+  # URL生成（*_url / ActiveStorage / LINE通知など）のための host 設定
+  # - APP_HOST は "tumugi.app"（https無し）を想定
+  # ==================================================
+  app_host = ENV.fetch('APP_HOST', 'tumugi.app')
+
+  # url_helpers.root_url などが参照するのは routes 側なのでここが重要
+  Rails.application.routes.default_url_options[:host] = app_host
+  Rails.application.routes.default_url_options[:protocol] = 'https'
+
+  # controller で url_for / rails_blob_url 等を生成する時のデフォルト
   config.action_controller.default_url_options = {
-    host: 'tumugi.app',
+    host: app_host,
     protocol: 'https'
   }
 
-  # メール内URL生成のため
+  # mailer 内で *_url を生成する時のデフォルト
   config.action_mailer.default_url_options = {
-    host: ENV.fetch('APP_HOST', 'tumugi.app'),
+    host: app_host,
     protocol: 'https'
   }
 
+  # ==================================================
+  # ActionMailer（SMTP）
+  # ==================================================
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 
