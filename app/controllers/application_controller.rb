@@ -1,4 +1,24 @@
 class ApplicationController < ActionController::Base
+  # LINE入場券認証を必須化
+  before_action :require_line_entry
+
+  # ===== 定数 =====
+  # 公開ページのパス一覧
+  PUBLIC_PATHS = [
+    '/line/entry',
+    '/line/blocked',
+    '/about',
+    '/terms',
+    '/privacy',
+    '/how_to_use',
+    '/faq',
+    '/line_unlink',
+    '/contact',
+    '/up',
+    '/service-worker',
+    '/manifest'
+  ].freeze
+
   # ===== helper_method =====
   # ビューから current_user / current_family_group / current_membership / current_role を参照できるようにする
   helper_method :current_user, :current_family_group, :current_membership, :current_role
@@ -8,6 +28,15 @@ class ApplicationController < ActionController::Base
   after_action :join_family_group_after_signup, if: lambda {
     current_user.present? && session[:invite_family_group_id].present?
   }
+
+  # LINEリッチメニュー経由で入場券を取得しているか確認し、未取得ならブロックページへリダイレクトする
+  def require_line_entry
+    return if Rails.env.local?
+    return if allow_public_path?
+    return if session[:line_entry_verified]
+
+    redirect_to line_blocked_path
+  end
 
   private
 
@@ -141,6 +170,11 @@ class ApplicationController < ActionController::Base
   # 新しい設計（memberships経由の所属グループ）を優先し、移行期の旧 family_group を最後に参照する
   def fallback_family_group
     current_user.family_groups.first || current_user.family_group
+  end
+
+  # LINE入場券認証関連
+  def allow_public_path?
+    public_paths.include?(request.path)
   end
 
   # ブラウザ制限（rails標準の allow_browser を利用）

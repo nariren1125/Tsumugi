@@ -1,33 +1,21 @@
 Rails.application.routes.draw do
-  get "family_group_memberships/edit"
-  get "family_group_memberships/update"
-  root "home#index"
 
-  # Static Pages
-  get '/about',       to: 'pages#about'
-  get '/terms',       to: 'pages#terms'
-  get '/privacy',     to: 'pages#privacy'
-  get '/how_to_use',  to: 'pages#how_to_use'
-  get "/faq",     to: "pages#faq"
-  get "/line_unlink", to: "pages#line_unlink"
-  get  "/contact", to: "contacts#new"
-  post "/contact", to: "contacts#create"
-
-  get "mypage", to: "mypages#show"
-  get "users/:id", to: "mypages#show", as: :user
+  # LINE入口・ブロック
+  get "line/entry",   to: "line_entry#show"
+  get "line/blocked", to: "line_entry#blocked"
 
   # LINEログイン
   get "login/line", to: redirect("/auth/line"), as: :line_login
   get "/auth/:provider/callback", to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
 
-  # メイン機能
-  resource :mypage, only: [:show, :edit, :update]
+  # メイン動線（LINE経由のみ）
+  root "home#index"
+
+  resource :mypage, only: %i[show edit update]
+  get "users/:id", to: "mypages#show", as: :user
+
   resources :albums, only: %i[index show new create]
-  resources :family_groups, only: %i[new create edit update]
-  resources :children, only: %i[new create edit update destroy]
-  resources :invite_tokens, only: %i[create]
-  resources :family_group_memberships, only: [:edit, :update]
   resources :posts, only: %i[new create edit update destroy] do
     collection do
       post :prepare_uploads
@@ -36,6 +24,11 @@ Rails.application.routes.draw do
       get  :select_photos
     end
   end
+
+  resources :family_groups, only: %i[new create edit update]
+  resources :children, only: %i[new create edit update destroy]
+  resources :invite_tokens, only: %i[create]
+  resources :family_group_memberships, only: %i[edit update]
 
   # 設定画面
   get "family_settings", to: "family_groups#settings"
@@ -52,6 +45,17 @@ Rails.application.routes.draw do
     # 管理者用：グループ管理
     resource :group, only: %i[edit update destroy], path: "group"
   end
+
+  # 公開ページ（アクセスOK）
+  get "/about",      to: "pages#about"
+  get "/terms",      to: "pages#terms"
+  get "/privacy",    to: "pages#privacy"
+  get "/how_to_use", to: "pages#how_to_use"
+  get "/faq",        to: "pages#faq"
+  get "/line_unlink",to: "pages#line_unlink"
+
+  get  "/contact", to: "contacts#new"
+  post "/contact", to: "contacts#create"
 
   # 招待リンク
   get "invite/:token", to: "invite_tokens#show", as: :invite
