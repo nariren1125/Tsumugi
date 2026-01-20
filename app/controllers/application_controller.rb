@@ -1,7 +1,23 @@
 class ApplicationController < ActionController::Base
-
   # LINE入場券認証を必須化
   before_action :require_line_entry
+
+  # ===== 定数 =====
+  # 公開ページのパス一覧
+  PUBLIC_PATHS = [
+    '/line/entry',
+    '/line/blocked',
+    '/about',
+    '/terms',
+    '/privacy',
+    '/how_to_use',
+    '/faq',
+    '/line_unlink',
+    '/contact',
+    '/up',
+    '/service-worker',
+    '/manifest'
+  ].freeze
 
   # ===== helper_method =====
   # ビューから current_user / current_family_group / current_membership / current_role を参照できるようにする
@@ -15,6 +31,7 @@ class ApplicationController < ActionController::Base
 
   # LINEリッチメニュー経由で入場券を取得しているか確認し、未取得ならブロックページへリダイレクトする
   def require_line_entry
+    return if Rails.env.local?
     return if allow_public_path?
     return if session[:line_entry_verified]
 
@@ -157,24 +174,6 @@ class ApplicationController < ActionController::Base
 
   # LINE入場券認証関連
   def allow_public_path?
-    # ✅ 公開OKなURL一覧（routesと一致させる）
-    public_paths = [
-      line_entry_path,
-      line_blocked_path,
-
-      about_path,
-      terms_path,
-      privacy_path,
-      how_to_use_path,
-      faq_path,
-      line_unlink_path,
-
-      contact_path, # GET /contact
-      rails_health_check_path,
-      "/service-worker",
-      "/manifest"
-    ]
-
     public_paths.include?(request.path)
   end
 
