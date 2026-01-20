@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     '/contact',
     '/up',
     '/service-worker',
-    '/manifest'
+    '/manifest.json'
   ].freeze
 
   # ===== helper_method =====
@@ -174,7 +174,7 @@ class ApplicationController < ActionController::Base
 
   # LINE入場券認証関連
   def allow_public_path?
-    public_paths.include?(request.path)
+    PUBLIC_PATHS.include?(request.path)
   end
 
   # ブラウザ制限（rails標準の allow_browser を利用）
