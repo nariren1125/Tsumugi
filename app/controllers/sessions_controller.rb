@@ -89,7 +89,14 @@ class SessionsController < ApplicationController
   # 成功時のレスポンス
   # ============================================
   def login_success
-    redirect_to albums_path, notice: t('flash.login.success')
+    notice =
+      if session.delete(:invite_joined)
+        t('flash.family_group.joined')
+      else
+        t('flash.login.success')
+      end
+
+    redirect_to albums_path, notice: notice
   end
 
   # ============================================
@@ -158,6 +165,9 @@ class SessionsController < ApplicationController
     session[:current_family_group_id] = family_group.id
 
     Rails.logger.info "ユーザー#{user.id}をグループ#{family_group.id}に参加させました"
+
+    # 招待参加フラグ（ログイン成功メッセージより優先するため）
+    session[:invite_joined] = true
 
     # 招待リンクの処理は一度きりにする
     session.delete(:invite_family_group_id)
