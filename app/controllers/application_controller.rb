@@ -130,6 +130,7 @@ class ApplicationController < ActionController::Base
 
     clear_invite_session!
     select_family_group!(family_group)
+    set_invite_join_flash!
     true
   end
 
@@ -138,6 +139,7 @@ class ApplicationController < ActionController::Base
     current_user.family_group_memberships.create!(family_group: family_group)
     clear_invite_session!
     select_family_group!(family_group)
+    set_invite_join_flash!
   end
 
   # 招待に関するセッション情報を削除する
@@ -183,5 +185,10 @@ class ApplicationController < ActionController::Base
     return true if path.start_with?('/invite/')
 
     false
+  end
+
+  # 招待参加が成立したときのフラッシュ（ログイン通知より優先したい）
+  def set_invite_join_flash!
+    flash.now[:notice] = t('flash.family_group.joined')
   end
 end
