@@ -186,9 +186,4 @@ class ApplicationController < ActionController::Base
 
     false
   end
-
-  # 招待参加が成立したときのフラッシュ（ログイン通知より優先したい）
-  def set_invite_join_flash!
-    flash.now[:notice] = t('flash.family_group.joined')
-  end
 end
