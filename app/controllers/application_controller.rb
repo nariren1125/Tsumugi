@@ -174,6 +174,14 @@ class ApplicationController < ActionController::Base
 
   # LINE入場券認証関連
   def allow_public_path?
-    PUBLIC_PATHS.include?(request.path)
+    path = request.path
+
+    # 完全一致で許可する公開パス
+    return true if PUBLIC_PATHS.include?(path)
+
+    # 前方一致で許可する公開パス（動的パス用）
+    return true if path.start_with?('/invite/')
+
+    false
   end
 end
