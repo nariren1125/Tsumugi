@@ -26,6 +26,11 @@ class InviteTokensController < ApplicationController
     # 招待先の家族グループIDをセッションに保存
     store_family_session(invite)
 
+    # 入場券が無ければ blocked へ（sessionは保存済みなのでOK）
+    unless Rails.env.local? || session[:line_entry_verified]
+      return redirect_to line_blocked_path, notice: t('invite_tokens.accepted')
+    end
+
     redirect_to root_path, notice: t('invite_tokens.accepted')
   end
 
