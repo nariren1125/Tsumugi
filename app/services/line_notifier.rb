@@ -141,7 +141,7 @@ class LineNotifier
       action: {
         type: 'uri',
         label: 'アルバムを開く',
-        uri: albums_url
+        uri: line_entry_url(next: albums_path)
       },
       style: 'link',
       height: 'sm'
