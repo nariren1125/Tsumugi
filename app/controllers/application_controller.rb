@@ -25,9 +25,9 @@ class ApplicationController < ActionController::Base
 
   # ===== after_action =====
   # 招待リンク経由でサインアップした直後に、招待されたグループへ membership を作成して参加させる
-  after_action :join_family_group_after_signup, if: lambda {
-    current_user.present? && session[:invite_family_group_id].present?
-  }
+  # after_action :join_family_group_after_signup, if: lambda {
+  # current_user.present? && session[:invite_family_group_id].present?
+  # }
 
   # LINEリッチメニュー経由で入場券を取得しているか確認し、未取得ならブロックページへリダイレクトする
   def require_line_entry
