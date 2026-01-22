@@ -51,6 +51,8 @@ class InviteTokensController < ApplicationController
   # ・LINEで送信するためのURLを生成し、LINEトーク画面へ遷移
   #
   def create
+    Rails.logger.info("[InviteTokens#create] invite_url=#{invite_url_full}")
+
     family_group = invited_family_group
 
     # 招待対象のグループが取得できない場合
@@ -150,7 +152,11 @@ class InviteTokensController < ApplicationController
   # 招待URL生成
   # =========================
   def build_invite_url(invite)
-    invite_url(token: invite.token)
+    invite_url(
+      token: invite.token,
+      host: ENV.fetch('APP_HOST', 'tumugi.app'),
+      protocol: 'https'
+    )
   end
 
   # =========================
@@ -160,6 +166,14 @@ class InviteTokensController < ApplicationController
   # ・改行を含むため URLエンコード必須
   #
   def build_line_message(invite_url_full)
-    ERB::Util.url_encode("家族に参加してください🌿\n\n#{invite_url_full}")
+    ERB::Util.url_encode(
+      "Tsumugi（つむぎ）からの招待です🌿\n\n" \
+      "このリンクを開くと、\n" \
+      "家族グループに参加できます。\n\n" \
+      "はじめての方は、\n" \
+      "Tsumugi公式LINEアカウントを\n" \
+      "追加してからご利用ください 🐿️\n\n" \
+      "#{invite_url_full}"
+    )
   end
 end
