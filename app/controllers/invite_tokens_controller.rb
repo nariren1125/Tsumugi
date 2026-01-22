@@ -168,7 +168,7 @@ class InviteTokensController < ApplicationController
   #
   def build_line_message(invite_url_full)
     text = <<~TEXT
-      Tsumugi（つむぎ）からの招待です🌿
+      Tsumugi（つむぎ）からの招待です🧶
 
       このリンクを開くと、
       家族グループに参加できます。
