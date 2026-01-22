@@ -169,17 +169,17 @@ class InviteTokensController < ApplicationController
   def build_line_message(invite_url_full)
     text = <<~TEXT
       Tsumugi（つむぎ）からの招待です🌿
-  
+
       このリンクを開くと、
       家族グループに参加できます。
-  
+
       はじめての方は、
       Tsumugi公式LINEアカウントを
       追加してからご利用ください 🐿️
-  
+
       #{invite_url_full}
     TEXT
-  
+
     ERB::Util.url_encode(text)
   end
 end
