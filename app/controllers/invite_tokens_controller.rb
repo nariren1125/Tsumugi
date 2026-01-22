@@ -13,34 +13,42 @@ class InviteTokensController < ApplicationController
   # 招待リンクを踏んだときの処理
   # =========================
   #
-  # ・トークンの有効性を確認
-  # ・有効な場合は、参加対象の family_group_id を session に保存
-  # ・実際のグループ参加処理は、ログイン後（SessionsController など）で行う
+  # 【責務】
+  # ・トークンを取得して有効性を確認
+  # ・有効なら session に family_group_id を保存
+  # ・LINEエントリー未通過なら blocked へ
+  # ・問題なければトップページへ
+  #
+  # ※ Rubocop Metrics/AbcSize 対策として、
+  #    分岐・条件判定は private メソッドへ分離している
   #
   def show
-    invite = InviteToken.valid.find_by(token: params[:token])
+    invite = find_valid_invite
 
     # 無効 or 期限切れのトークンの場合
     return redirect_invalid_token unless invite
 
-    # 招待先の家族グループIDをセッションに保存
+    # 招待先の家族グループIDを session に保存
     store_family_session(invite)
 
-    # 入場券が無ければ blocked へ（sessionは保存済みなのでOK）
-    unless Rails.env.local? || session[:line_entry_verified]
-      return redirect_to line_blocked_path, notice: t('invite_tokens.accepted')
-    end
+    # LINEエントリーが必要な環境で、未通過の場合はブロック画面へ
+    return redirect_to line_blocked_path, notice: t('invite_tokens.accepted') if require_line_entry_block?
 
+    # すべて問題なければトップページへ
     redirect_to root_path, notice: t('invite_tokens.accepted')
+  rescue StandardError => e
+    # 想定外エラー時はログを出して無効トークン扱いにする
+    log_show_error(e)
+    redirect_invalid_token
   end
 
   # =========================
   # 招待リンクの発行処理
   # =========================
   #
-  # ・現在選択中の家族グループ（または明示されたID）に対して
-  #   招待トークンを発行する
-  # ・LINE用のURLを生成し、LINEトーク画面へリダイレクト
+  # ・現在選択中、または指定された家族グループに対して
+  #   招待トークンを発行
+  # ・LINEで送信するためのURLを生成し、LINEトーク画面へ遷移
   #
   def create
     family_group = invited_family_group
@@ -54,8 +62,8 @@ class InviteTokensController < ApplicationController
     # 招待URLを生成
     invite_url_full = build_invite_url(invite)
 
-    # LINEで送信するメッセージをエンコード
-    message = ERB::Util.url_encode("家族に参加してください🌿\n\n#{invite_url_full}")
+    # LINE用メッセージを生成（URLエンコード必須）
+    message = build_line_message(invite_url_full)
 
     # LINEのトーク画面へ遷移
     redirect_to "https://line.me/R/msg/text/?#{message}", allow_other_host: true
@@ -64,16 +72,46 @@ class InviteTokensController < ApplicationController
   private
 
   # =========================
+  # 有効な招待トークンを取得
+  # =========================
+  #
+  # ・token が一致
+  # ・スコープ valid（期限切れ・無効を除外）
+  #
+  def find_valid_invite
+    InviteToken.valid.find_by(token: params[:token])
+  end
+
+  # =========================
+  # LINEエントリーが必要か判定
+  # =========================
+  #
+  # ・local 環境では常にスキップ
+  # ・本番 / staging では session[:line_entry_verified] が必須
+  #
+  def require_line_entry_block?
+    !Rails.env.local? && !session[:line_entry_verified]
+  end
+
+  # =========================
+  # show アクションの例外ログ出力
+  # =========================
+  #
+  # ・ユーザーには詳細を見せず
+  # ・ログのみで原因追跡できるようにする
+  #
+  def log_show_error(error)
+    Rails.logger.error("[InviteTokens#show] #{error.class}: #{error.message}")
+    Rails.logger.error(error.backtrace.join("\n")) if error.backtrace
+  end
+
+  # =========================
   # 招待対象の家族グループを決定
   # =========================
   #
   # 優先順位：
-  # 1. params[:family_group_id] があればそれを使用（※必ず所属チェック）
-  # 2. なければ current_family_group（現在選択中のグループ）
-  #
-  # これにより、
-  # ・グループ切り替え後でも正しいグループに招待できる
-  # ・不正な family_group_id の指定を防止できる
+  # 1. params[:family_group_id] があればそれを使用（※所属チェック必須）
+  # 2. なければ current_family_group
   #
   def invited_family_group
     if params[:family_group_id].present?
@@ -94,8 +132,7 @@ class InviteTokensController < ApplicationController
   # 招待された家族グループを session に保存
   # =========================
   #
-  # ・ログイン後にどのグループへ参加するかを判断するために使用
-  # ・実際の membership 作成は別の処理で行う
+  # ・ログイン後に参加処理を行うための一時保存
   #
   def store_family_session(invite)
     session[:invite_family_group_id] = invite.family_group_id
@@ -113,6 +150,16 @@ class InviteTokensController < ApplicationController
   # 招待URL生成
   # =========================
   def build_invite_url(invite)
-    invite_url(invite.token)
+    invite_url(token: invite.token)
+  end
+
+  # =========================
+  # LINE送信用メッセージ生成
+  # =========================
+  #
+  # ・改行を含むため URLエンコード必須
+  #
+  def build_line_message(invite_url_full)
+    ERB::Util.url_encode("家族に参加してください🌿\n\n#{invite_url_full}")
   end
 end
