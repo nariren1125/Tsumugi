@@ -1,3 +1,3 @@
 ActiveAdmin.register Post do
-  include PostsAdmin
+  include Admin::PostsAdmin
 end

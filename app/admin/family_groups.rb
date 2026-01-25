@@ -1,3 +1,3 @@
 ActiveAdmin.register FamilyGroup do
-  include FamilyGroupsAdmin
+  include Admin::FamilyGroupsAdmin
 end

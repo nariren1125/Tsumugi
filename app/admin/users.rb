@@ -1,3 +1,3 @@
 ActiveAdmin.register User do
-  include UsersAdmin
+  include Admin::UsersAdmin
 end

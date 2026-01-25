@@ -1,3 +1,3 @@
 ActiveAdmin.register InviteToken do
-  include InviteTokensAdmin
+  include Admin::InviteTokensAdmin
 end
