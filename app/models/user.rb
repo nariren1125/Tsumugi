@@ -31,4 +31,23 @@ class User < ApplicationRecord
   def role_i18n_in(family_group)
     membership_in(family_group)&.role_i18n
   end
+
+  # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
+  def self.ransackable_attributes(auth_object = nil)
+    %w[
+      id
+      name
+      email
+      line_uid
+      family_group_id
+      role
+      created_at
+      updated_at
+    ]
+  end
+
+  # 関連で検索を許可するならここも（必要最低限）
+  def self.ransackable_associations(auth_object = nil)
+    %w[family_group]
+  end
 end
