@@ -3,7 +3,7 @@ class AdminUser < ApplicationRecord
 
   # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
   # 機微情報（encrypted_password, reset_password_token等）は含めない
-  def self.ransackable_attributes(auth_object = nil)
+  def self.ransackable_attributes(_auth_object = nil)
     %w[
       id
       email
@@ -14,7 +14,7 @@ class AdminUser < ApplicationRecord
     ] & column_names
   end
 
-  def self.ransackable_associations(auth_object = nil)
+  def self.ransackable_associations(_auth_object = nil)
     []
   end
 end

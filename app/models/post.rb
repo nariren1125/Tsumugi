@@ -29,13 +29,33 @@ class Post < ApplicationRecord
   }
 
   # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
-  def self.ransackable_attributes(auth_object = nil)
-    %w[id title body content family_group_id user_id created_at updated_at] & column_names
+  RANSACKABLE_ATTRIBUTES = %w[
+    id
+    title
+    content
+    status
+    photo_date
+    created_at
+    updated_at
+    user_id
+    album_id
+  ].freeze
+
+  # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
+  def self.ransackable_attributes(_auth_object = nil)
+    RANSACKABLE_ATTRIBUTES
   end
-  
+
   # 関連で検索を許可するならここも（必要最低限）
-  def self.ransackable_associations(auth_object = nil)
-    %w[user family_group] & reflect_on_all_associations.map(&:name).map(&:to_s)
+  def self.ransackable_associations(_auth_object = nil)
+    %w[
+      album
+      user
+      child
+      photos
+      person_tags
+      post_person_tags
+    ] & reflect_on_all_associations.map(&:name).map(&:to_s)
   end
 
   private

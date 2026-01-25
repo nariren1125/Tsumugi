@@ -33,7 +33,7 @@ class User < ApplicationRecord
   end
 
   # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
-  def self.ransackable_attributes(auth_object = nil)
+  def self.ransackable_attributes(_auth_object = nil)
     %w[
       id
       name
@@ -47,7 +47,7 @@ class User < ApplicationRecord
   end
 
   # 関連で検索を許可するならここも（必要最低限）
-  def self.ransackable_associations(auth_object = nil)
+  def self.ransackable_associations(_auth_object = nil)
     %w[family_group]
   end
 end
