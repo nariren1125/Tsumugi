@@ -42,4 +42,14 @@ class FamilyGroup < ApplicationRecord
 
     admin_count == 1
   end
+
+  # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id name created_at updated_at] & column_names
+  end
+  
+  # 関連で検索を許可するならここも（必要最低限）
+  def self.ransackable_associations(auth_object = nil)
+    %w[users posts invite_tokens children person_tags] & reflect_on_all_associations.map(&:name).map(&:to_s)
+  end
 end
