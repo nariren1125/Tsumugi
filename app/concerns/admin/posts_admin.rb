@@ -14,14 +14,14 @@ module Admin
           selectable_column
           id_column
 
-          column(:status)     if Post.column_names.include?('status')
-          column(:photo_date) if Post.column_names.include?('photo_date')
-          column(:title)      if Post.column_names.include?('title')
+          # ✅ DBが無くても落ちない（column_names を使わない）
+          column :status
+          column :photo_date
+          column :title
 
           column('FamilyGroup') { |post| post.album&.family_group&.name }
           column('User')       { |post| post.user&.name }
 
-          # ✅ 画像枚数（includes(:photos) 済みなので length 推奨）
           column('Photos')     { |post| post.photos.length }
 
           column :created_at
@@ -29,9 +29,9 @@ module Admin
         end
 
         filter :id
-        filter(:status)     if Post.column_names.include?('status')
-        filter(:title)      if Post.column_names.include?('title')
-        filter(:photo_date) if Post.column_names.include?('photo_date')
+        filter :status
+        filter :title
+        filter :photo_date
         filter :user
         filter :album
         filter :created_at
@@ -40,10 +40,10 @@ module Admin
         show do
           attributes_table do
             row :id
-            row(:status)     if Post.column_names.include?('status')
-            row(:photo_date) if Post.column_names.include?('photo_date')
-            row(:title)      if Post.column_names.include?('title')
-            row(:content)    if Post.column_names.include?('content')
+            row :status
+            row :photo_date
+            row :title
+            row :content
 
             row('FamilyGroup') { |post| post.album&.family_group&.name }
             row('User') { |post| post.user&.name }
@@ -51,7 +51,7 @@ module Admin
           end
 
           panel 'Photos (Preview)' do
-            if resource.photos.any?
+            if resource.photos.loaded? ? resource.photos.any? : resource.photos.exists?
               ul do
                 resource.photos.each do |photo|
                   li do
@@ -59,7 +59,6 @@ module Admin
                     span "(pos: #{photo.try(:position)})  "
 
                     if photo.image.attached?
-                      # vips/image_processing が揃ってる前提（いま揃えた状態）
                       thumb = photo.image.variant(resize_to_limit: [240, 240])
                       span helpers.image_tag(helpers.url_for(thumb), size: '240x240')
                     else
