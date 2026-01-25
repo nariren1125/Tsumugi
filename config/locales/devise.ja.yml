@@ -1,0 +1,15 @@
+ja:
+  devise:
+    failure:
+      unauthenticated: "ログインしてください。"
+      admin_user:
+        unauthenticated: "管理者としてログインしてください。"
+
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      admin_user:
+        signed_in: "管理者としてログインしました。"
+        signed_out: "管理者としてログアウトしました。"
+  active_admin:
+    dashboard: "ダッシュボード"
