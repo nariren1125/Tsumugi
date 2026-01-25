@@ -89,8 +89,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/tsumugi_test
-        run: |
-          run: bin/rails db:prepare
+        run: bin/rails db:prepare
 
       - name: Run tests
         env:
