@@ -28,6 +28,36 @@ class Post < ApplicationRecord
     joins(:album).where(albums: { family_group_id: family_group.id })
   }
 
+  # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
+  RANSACKABLE_ATTRIBUTES = %w[
+    id
+    title
+    content
+    status
+    photo_date
+    created_at
+    updated_at
+    user_id
+    album_id
+  ].freeze
+
+  # ActiveAdmin / Ransack 対応（検索可能カラムの明示）
+  def self.ransackable_attributes(_auth_object = nil)
+    RANSACKABLE_ATTRIBUTES
+  end
+
+  # 関連で検索を許可するならここも（必要最低限）
+  def self.ransackable_associations(_auth_object = nil)
+    %w[
+      album
+      user
+      child
+      photos
+      person_tags
+      post_person_tags
+    ] & reflect_on_all_associations.map(&:name).map(&:to_s)
+  end
+
   private
 
   def photos_count_within_limit

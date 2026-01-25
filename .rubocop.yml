@@ -33,3 +33,33 @@ Style/Documentation:
 # .rubocop.yml
 Metrics/ClassLength:
   Max: 150
+
+# 管理画面のコードは長くなりがちなので除外
+Metrics/BlockLength:
+  Exclude:
+    - "app/admin/**/*.rb"
+    - 'app/concerns/admin/**/*'
+
+# 管理画面のコードは長くなりがちなので除外
+Metrics/MethodLength:
+  Exclude:
+    - "app/admin/**/*.rb"
+    - 'app/concerns/admin/**/*'
+
+# 管理画面のコードは複雑になりがちなので除外
+Metrics/AbcSize:
+  Exclude:
+    - "app/admin/**/*.rb"
+    - 'app/concerns/admin/**/*'
+
+# 管理画面のコードは複雑になりがちなので除外
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/admin/**/*'
+    - 'app/concerns/admin/**/*'
+
+# 管理画面のコードは複雑になりがちなので除外
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/admin/**/*'
+    - 'app/concerns/admin/**/*'

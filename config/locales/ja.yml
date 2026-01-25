@@ -118,3 +118,12 @@ ja:
       default: "%Y/%m/%d"
       short: "%m/%d"
       long: "%Y年%m月%d日"
+
+  time:
+    formats:
+      long: "%Y年%m月%d日 %H:%M"
+    date:
+      formats:
+        default: "%Y/%m/%d"
+        short: "%m/%d"
+        long: "%Y年%m月%d日"

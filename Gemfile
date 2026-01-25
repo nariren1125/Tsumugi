@@ -76,3 +76,18 @@ gem 'letter_opener', group: :development
 
 # 開発環境のみ
 gem 'letter_opener_web', group: :development
+
+# 管理画面
+gem 'activeadmin', '~> 3.2'
+
+# ユーザー認証
+gem 'devise', '~> 4.9'
+
+# 管理画面の裏側のCRUD処理を簡単にする
+gem 'inherited_resources', '~> 1.13'
+
+# CSSプリプロセッサ
+gem 'sassc', '~> 2.4'
+
+# 画像処理ライブラリ
+gem 'image_processing', '~> 1.2'
