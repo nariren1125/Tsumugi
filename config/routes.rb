@@ -17,7 +17,13 @@ Rails.application.routes.draw do
   resource :mypage, only: %i[show edit update]
   get "users/:id", to: "mypages#show", as: :user
 
-  resources :albums, only: %i[index show new create]
+  resources :albums, only: %i[index show new create] do
+    collection do
+      post :switch
+    end
+  end
+
+
   resources :posts, only: %i[new create edit update destroy] do
     collection do
       post :prepare_uploads

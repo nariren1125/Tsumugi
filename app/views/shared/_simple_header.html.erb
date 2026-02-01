@@ -1,8 +1,10 @@
-
-<header class="w-full bg-base-300 shadow-sm px-4 h-14 flex items-center">
-  <h1 class="text-base font-semibold">
-    <%= title %>
-  </h1>
+<header class="w-full bg-base-300 shadow-sm px-4 h-14 flex items-center gap-3 relative z-[1000]">
+  <!-- タイトル領域：ここでは overflow を殺さない -->
+  <div class="min-w-0">
+    <h1 class="text-base font-semibold">
+      <%= title %>
+    </h1>
+  </div>
 
   <div class="ml-auto">
     <%= render "shared/meatball_menu" %>
