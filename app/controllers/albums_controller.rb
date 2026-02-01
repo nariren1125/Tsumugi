@@ -3,8 +3,9 @@ class AlbumsController < ApplicationController
   before_action :require_login
 
   def index
-    family = current_family_group
+    @family_groups = current_user.family_groups.order(:created_at)
 
+    family = current_family_group
     @person_tags, @children = load_tags_and_children(family)
 
     if family
@@ -13,6 +14,14 @@ class AlbumsController < ApplicationController
     else
       assign_empty_filter_options
     end
+  end
+
+  def switch
+    family_group = current_user.family_groups.find(params[:family_group_id])
+    session[:current_family_group_id] = family_group.id
+
+    flash[:notice] = "#{family_group.name}のアルバムに切り替えました"
+    redirect_back(fallback_location: albums_path)
   end
 
   private
