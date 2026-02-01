@@ -10,7 +10,31 @@
 }
 
   /* 色バリエーション */
-  .masking-tape--amber { background-color: #fde68a; }
-  .masking-tape--pink  { background-color: #fbcfe8; }
-  .masking-tape--mint  { background-color: #bbf7d0; }
-  .masking-tape--blue  { background-color: #bfdbfe; }
+  .masking-tape--amber    { background-color: #fde68a; }
+  .masking-tape--pink     { background-color: #fbcfe8; }
+  .masking-tape--mint     { background-color: #bbf7d0; }
+  .masking-tape--blue     { background-color: #bfdbfe; }
+  .masking-tape--lavender { background-color: #e9d5ff; }
+  .masking-tape--peach    { background-color: #fed7aa; }
+  .masking-tape--sage     { background-color: #d1fae5; }
+  .masking-tape--sky      { background-color: #e0f2fe; }
+  .masking-tape--lemon    { background-color: #fef9c3; }
+
+  /* テープの上に月名を印字 */
+  .masking-tape__text {
+    @apply flex items-center justify-center w-full h-full;
+    font-family: "Caveat", system-ui, sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.01em;
+  
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  
+    /* ✅ uppercase を殺す */
+    text-transform: none !important;
+  
+    /* 任意：印字感 */
+    text-shadow: 0 0.5px 0 rgba(255, 255, 255, 0.6);
+  }
