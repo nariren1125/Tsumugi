@@ -242,9 +242,9 @@
     <% if @posts_by_year.present? %>
       <% @posts_by_year.each do |year, posts| %>
         <% if year.is_a?(String) %>
-          <h2 class="text-lg font-semibold mt-8 mb-4"><%= year %></h2>
+          <h2 class="text-lg font-semibold text-base-content/70 mt-4 mb-2"><%= year %></h2>
         <% else %>
-          <h2 class="text-lg font-semibold mt-8 mb-4"><%= year %>年</h2>
+          <h2 class="text-lg font-semibold text-base-content/70 mt-4 mb-2"><%= year %>年</h2>
         <% end %>
 
         <div class="relative mb-8">

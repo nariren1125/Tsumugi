@@ -31,3 +31,50 @@
 .polaroid-caption {
   @apply pt-3 space-y-1;
 }
+
+/* ===== 付箋（Sticky Note） ===== */
+.sticky-note {
+  @apply absolute z-30 px-2 py-1 rounded-sm shadow-sm;
+}
+
+/* ===== 複数写真インジケータ（インスタ風マークのみ） ===== */
+.photo-count-label {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  z-index: 30;
+  pointer-events: none;
+
+  font-size: 10px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 6px;
+
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+/* マーク本体（□が重なったアイコン） */
+.multi-photo-icon::before,
+.multi-photo-icon::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 10px;
+  border: 1.6px solid rgba(255, 255, 255, 0.95);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* 奥 */
+.multi-photo-icon::before {
+  top: 2px;
+  left: 2px;
+}
+
+/* 手前 */
+.multi-photo-icon::after {
+  top: 0;
+  left: 0;
+}

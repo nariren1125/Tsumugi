@@ -34,19 +34,4 @@ module ApplicationHelper
       'bg-base-200 text-base-content'
     end
   end
-
-  # マスキングテープのクラスをランダムに返す
-  def random_masking_tape_class
-    %w[
-      masking-tape--amber
-      masking-tape--pink
-      masking-tape--mint
-      masking-tape--blue
-    ].sample
-  end
-
-  # マスキングテープの回転角度をランダムに返す
-  def random_tape_rotation
-    rand(-15..15)
-  end
 end

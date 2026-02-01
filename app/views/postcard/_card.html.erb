@@ -9,10 +9,22 @@
   <div
     class="masking-tape <%= random_masking_tape_class %>"
     style="transform: rotate(<%= random_tape_rotation %>deg);"
-  ></div>
+  >
+    <% if post.photo_date.present? %>
+      <span class="masking-tape__text">
+        <%= post.photo_date.strftime("%B").capitalize %>
+      </span>
+    <% end %>
+  </div>
 
   <!-- 写真 -->
-  <div class="polaroid-photo">
+  <div class="polaroid-photo relative">
+    <% if post.photos.size > 1 %>
+      <span class="photo-count-label" aria-label="photos <%= post.photos.size %>">
+        photos: <%= post.photos.size %>
+      </span>
+    <% end %>
+
     <% if post.photos.any? && post.photos.first.image.attached? %>
       <%= image_tag post.photos.first.image, class: "w-full h-full object-cover" %>
     <% else %>
