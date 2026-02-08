@@ -55,6 +55,73 @@ class LineMonthlySummaryMessageBuilder
       "・ほか#{active_size - 3}人"
     end
 
-    # body_text / low_total_text / balanced_text / mother_less_text / father_less_text は現状のままでOK
+    # -----------------------------
+    # 本文（短くしてRubocop通す）
+    # -----------------------------
+    def body_text(month:, total_memories:, appear:)
+      return low_total_text(month) if low_total?(total_memories)
+
+      father_count = appear.fetch(:father)
+      mother_count = appear.fetch(:mother)
+
+      return mother_zero_text(month) if mother_count.zero?
+      return mother_less_text(month) if mother_much_less?(father_count, mother_count)
+
+      balanced_text(month)
+    end
+
+    def low_total?(total_memories)
+      total_memories <= 2
+    end
+
+    def mother_much_less?(father_count, mother_count)
+      mother_count * 2 < father_count
+    end
+
+    # --------
+    # 文面
+    # --------
+    def low_total_text(_month)
+      <<~TEXT.strip
+        今月は思い出が少なめでした🌱
+        来月は写真を1枚でも残せると嬉しいですね！
+      TEXT
+    end
+
+    def mother_zero_text(month)
+      <<~TEXT.strip
+        #{month.month}月も、家族の時間を残してくれてありがとう🧶
+        先月はパパとお子さまの思い出がたくさんあって、とても素敵でした📷
+
+        今月は、ママも一緒に写っている写真が少し増えると、
+        あとから見返したときの思い出が、もっと豊かになりそうです😊
+
+        撮る人も、写る人も。
+        ふたりで少しずつ、家族の思い出を紡いでいきましょう🐿️
+      TEXT
+    end
+
+    def mother_less_text(month)
+      <<~TEXT.strip
+        #{month.month}月も、家族の時間を残してくれてありがとう🧶
+        先月はパパとお子さまの思い出がたくさんあって、とても素敵でした📷✨
+
+        今月は、ママも一緒に写っている写真が少し増えると、
+        お互いの“そのときの空気”まで、もっとたくさん残せそうです😊
+
+        撮る人も、写る人も。
+        ふたりで少しずつ、家族の思い出を紡いでいきましょう🐿️
+      TEXT
+    end
+
+    def balanced_text(month)
+      <<~TEXT.strip
+        #{month.month}月も、家族の時間を残してくれてありがとう🧶
+        撮る人も、写る人も。
+        自然に入れ替わりながら思い出が増えていて、とても素敵でした📷✨
+
+        このまま、ふたりで少しずつ、家族の思い出を紡いでいきましょう🐿️
+      TEXT
+    end
   end
 end

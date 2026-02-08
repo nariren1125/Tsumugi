@@ -128,7 +128,8 @@ class MonthlyFamilySummary
   def membership_scope
     {
       family_group_id: @family_group.id,
-      role: %i[father mother]
+      # シンボルを整数値に変換する
+      role: FamilyGroupMembership.roles.values_at(:father, :mother)
     }
   end
 end
