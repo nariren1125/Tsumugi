@@ -22,6 +22,23 @@ class LineNotifier
     send_line_request(payload)
   end
 
+  # ----------------------------------------
+  # LINEユーザーにテキストメッセージを送信
+  # ----------------------------------------
+  def push_text_message(to, text)
+    Rails.logger.info '=== LINE API 実行 (Text) ==='
+    Rails.logger.info "送信先: #{to}"
+
+    payload = {
+      to: to,
+      messages: [
+        { type: 'text', text: text }
+      ]
+    }
+
+    send_line_request(payload)
+  end
+
   private
 
   # ----------------------------------------
@@ -167,23 +184,6 @@ class LineNotifier
     response = http.request(request)
     Rails.logger.info "LINE API レスポンス: #{response.code} #{response.body}"
     response
-  end
-
-  # ----------------------------------------
-  # LINEユーザーにテキストメッセージを送信
-  # ----------------------------------------
-  def push_text_message(to, text)
-    Rails.logger.info '=== LINE API 実行 (Text) ==='
-    Rails.logger.info "送信先: #{to}"
-
-    payload = {
-      to: to,
-      messages: [
-        { type: 'text', text: text }
-      ]
-    }
-
-    send_line_request(payload)
   end
 
   def headers
