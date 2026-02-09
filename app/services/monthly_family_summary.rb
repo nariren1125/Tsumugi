@@ -76,9 +76,10 @@ class MonthlyFamilySummary
   def build_result(total_memories, appear_counts)
     {
       month: @month,
+      group_name: @family_group.name,
       total_memories: total_memories,
       appear: build_appear_stats(appear_counts),
-      post_counts: build_post_counts
+      post: build_post_counts
     }
   end
 
