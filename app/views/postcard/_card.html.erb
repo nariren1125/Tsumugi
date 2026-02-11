@@ -12,7 +12,7 @@
   >
     <% if post.photo_date.present? %>
       <span class="masking-tape__text">
-        <%= post.photo_date.strftime("%B").capitalize %>
+         <%= format_post_date(post.photo_date) %>
       </span>
     <% end %>
   </div>
@@ -39,10 +39,12 @@
     </p>
 
     <% if post.photo_date && post.child&.birth_date %>
-      <% age = ((post.photo_date - post.child.birth_date).to_i / 365.25).floor %>
-      <span class="badge badge-outline badge-sm">
-        <%= age %>歳
-      </span>
+      <% age = calculate_age(post.photo_date, post.child&.birth_date) %>
+      <% if age %>
+        <span class="badge badge-outline badge-sm">
+          <%= age %>歳
+        </span>
+      <% end %>
     <% end %>
   </div>
 

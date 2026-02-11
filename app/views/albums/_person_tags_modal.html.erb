@@ -1,4 +1,3 @@
-
 <!-- モーダルのトグル用チェックボックス -->
 <input
   type="checkbox"
@@ -8,9 +7,8 @@
   data-action="change->person-tags#cancel"
 />
 
-<!-- ★ここに z-[80] を追加 -->
-<div class="modal z-[9999]">
-  <div class="modal-box max-w-md relative z-[10000]">
+<div class="modal z-overlay">
+  <div class="modal-box max-w-md relative z-modal">
     <h3 class="font-semibold text-base mb-2">写っている人を選択</h3>
     <p class="text-xs text-base-content/60 mb-3">
       登録されているメンバーから選べます。

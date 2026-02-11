@@ -1,0 +1,15 @@
+<%# ===== モーダル ===== %>
+<% content_for :modals do %>
+  <%= render "albums/person_tags_modal", person_tags: person_tags if person_tags.present? %>
+  <%= render "albums/child_age_modal",
+    children: children,
+    ages_by_child_id: ages_by_child_id %>
+
+  <% if posts_by_year.present? %>
+    <% posts_by_year.each do |_, posts| %>
+      <% posts.each do |post| %>
+        <%= render "posts/modal", post: post %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

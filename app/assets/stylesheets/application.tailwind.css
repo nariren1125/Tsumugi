@@ -1,95 +1,91 @@
-
 @import "tailwindcss";
 
 /* カスタムコンポーネントのインポート */
 @import "./components/polaroid.css";
 @import "./components/masking_tape.css";
+@import "./components/swiper.css";
 
-
+/* DaisyUIのインポート */
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-    name: "caramellatte";
-    default: false;
-    prefersdark: false;
-    color-scheme: "light";
-    /* 全体の背景色 */
-    --color-base-100: oklch(98% 0.016 73.684);
+  name: "caramellatte";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  /* 全体の背景色 */
+  --color-base-100: oklch(98% 0.016 73.684);
 
-    /* カードの背景色 */
-    --color-base-200: oklch(95% 0.038 75.164);
+  /* カードの背景色 */
+  --color-base-200: oklch(95% 0.038 75.164);
 
-    /* ヘッダー・フッター・固定バー */
-    --color-base-300: oklch(90% 0.076 70.697);
+  /* ヘッダー・フッター・固定バー */
+  --color-base-300: oklch(90% 0.076 70.697);
 
-    /* 文字色 */
-    --color-base-content: oklch(40% 0.123 38.172);
+  /* 文字色 */
+  --color-base-content: oklch(40% 0.123 38.172);
 
-    --color-primary: oklch(0% 0 0);
-    --color-primary-content: oklch(100% 0 0);
+  --color-primary: oklch(0% 0 0);
+  --color-primary-content: oklch(100% 0 0);
 
-    /* サブカラー */
-    --color-secondary: oklch(22.45% 0.075 37.85);
-    --color-secondary-content: oklch(90% 0.076 70.697);
+  /* サブカラー */
+  --color-secondary: oklch(22.45% 0.075 37.85);
+  --color-secondary-content: oklch(90% 0.076 70.697);
 
-    /* メインボタン */
-    --color-accent: oklch(46.44% 0.111 37.85);
-    /* ボタン文字 */
-    --color-accent-content: oklch(90% 0.076 70.697);
+  /* メインボタン */
+  --color-accent: oklch(46.44% 0.111 37.85);
+  /* ボタン文字 */
+  --color-accent-content: oklch(90% 0.076 70.697);
 
-    /* 補助的な要素 */
-    --color-neutral: oklch(55% 0.195 38.402);
-    --color-neutral-content: oklch(98% 0.016 73.684);
-    --color-info: oklch(42% 0.199 265.638);
-    --color-info-content: oklch(90% 0.076 70.697);
-    --color-success: oklch(43% 0.095 166.913);
-    --color-success-content: oklch(90% 0.076 70.697);
-    --color-warning: oklch(82% 0.189 84.429);
-    --color-warning-content: oklch(41% 0.112 45.904);
-    --color-error: oklch(70% 0.191 22.216);
-    --color-error-content: oklch(39% 0.141 25.723);
-    --radius-selector: 2rem;
-    --radius-field: 0.5rem;
-    --radius-box: 1rem;
-    --size-selector: 0.25rem;
-    --size-field: 0.25rem;
-    --border: 2px;
-    --depth: 1;
-    --noise: 1;
-}
-
-/* Swiperのカスタムスタイル */
-.swiper-pagination-bullet {
-    width: 6px !important;
-    height: 6px !important;
-    background-color: rgba(0, 0, 0, 0.4);
-    margin: 0 4px;
-    opacity: 0.6;
-    border-radius: 9999px;
-}
-/* アクティブなページネーションのスタイル */
-.swiper-pagination-bullet-active {
-  background-color: #000 !important;
-  opacity: 1;
-}
-
-/* スライドの高さを自動調整 */
-.swiper-slide {
-  @apply h-auto;
+  /* 補助的な要素 */
+  --color-neutral: oklch(55% 0.195 38.402);
+  --color-neutral-content: oklch(98% 0.016 73.684);
+  --color-info: oklch(42% 0.199 265.638);
+  --color-info-content: oklch(90% 0.076 70.697);
+  --color-success: oklch(43% 0.095 166.913);
+  --color-success-content: oklch(90% 0.076 70.697);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(41% 0.112 45.904);
+  --color-error: oklch(70% 0.191 22.216);
+  --color-error-content: oklch(39% 0.141 25.723);
+  --radius-selector: 2rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 2px;
+  --depth: 1;
+  --noise: 1;
 }
 
 /* 複数行対応の入力フィールド */
 .input-auto-height {
-  height: auto;            /* ← 固定高さをやめる */
-  min-height: 2.75rem;     /* ← 1行分は確保 */
-  align-items: flex-start; /* ← 上寄せで複数行に対応 */
+  height: auto;
+  /* ← 固定高さをやめる */
+  min-height: 2.75rem;
+  /* ← 1行分は確保 */
+  align-items: flex-start;
+  /* ← 上寄せで複数行に対応 */
 }
 
-/* ====== すべての DaisyUI モーダルを最前面に出す ====== */
-.modal {
-  z-index: 9999 !important;
+/* ===== Layer rules (global) ===== */
+.z-header {
+  z-index: 1000;
 }
 
-.modal-box {
-  z-index: 10000 !important;
+.z-dropdown {
+  z-index: 900;
+}
+
+/* overlay / modal */
+.z-overlay {
+  z-index: 1100;
+}
+
+.z-modal {
+  z-index: 1110;
+}
+
+.z-modal-header {
+  z-index: 1120;
 }

@@ -1,0 +1,184 @@
+<div class="mb-6">
+  <div class="collapse collapse-arrow bg-base-200 rounded-xl">
+    <%# いずれかの条件が入っていれば、検索エリアを開いた状態にする %>
+    <input
+      type="checkbox"
+      <%= (params[:year].present? ||
+           params[:child_id].present? ||
+           params[:age_years].present? ||
+           Array(params[:person_tag_ids]).present?) ? "checked" : "" %>
+    />
+
+    <div class="collapse-title text-sm font-semibold">
+      検索機能
+
+      <%# 条件の要約（chips） %>
+      <span class="ml-2 text-xs opacity-70">
+        <% summaries = [] %>
+        <% summaries << "#{params[:year]}年" if params[:year].present? %>
+
+        <% person_ids = Array(params[:person_tag_ids]).reject(&:blank?) %>
+        <% summaries << "メンバー:#{person_ids.size}人" if person_ids.any? %>
+
+        <% if params[:child_id].present? && params[:age_years].present? %>
+          <% child = children.find { |c| c.id.to_s == params[:child_id].to_s } %>
+          <% summaries << "#{child&.name} #{params[:age_years]}歳" %>
+        <% end %>
+
+        <%= summaries.any? ? summaries.join(" / ") : "条件なし" %>
+      </span>
+    </div>
+
+    <div class="collapse-content">
+      <%= form_with url: albums_path, method: :get, local: true do %>
+        <div class="space-y-4">
+          <%# child_id + age_years が揃ったら「年」select をロック %>
+          <% age_mode = params[:child_id].present? && params[:age_years].present? %>
+
+          <!-- ===== 年 ===== -->
+          <div>
+            <label class="block text-sm font-semibold mb-1">年度（年）</label>
+            <select
+              name="year"
+              class="select select-bordered w-full"
+              <%= "disabled" if age_mode %>
+            >
+              <option value="">指定しない</option>
+
+              <%# 実データに存在する年だけ表示 %>
+              <% available_years.each do |y| %>
+                <option value="<%= y %>" <%= "selected" if params[:year].to_s == y.to_s %>>
+                  <%= y %>年
+                </option>
+              <% end %>
+            </select>
+
+            <% if age_mode %>
+              <p class="text-xs opacity-70 mt-1">
+                年齢で絞り込み中のため年はロックされています（年を変更すると年齢指定は解除してください）。
+              </p>
+            <% end %>
+          </div>
+
+          <%# ===== 誰が写ってる？（モーダル + チップ） ===== %>
+          <div>
+            <div class="flex items-center justify-between mb-1 gap-2">
+              <span class="label font-medium text-base-content">誰が写っている？</span>
+
+              <% if person_tags.any? %>
+                <label
+                  for="person-tags-modal"
+                  class="btn btn-sm btn-outline normal-case"
+                  data-action="click->person-tags#open"
+                >
+                  選択する
+                </label>
+              <% end %>
+            </div>
+
+            <%# GETパラメータから選択済みのタグIDを復元 %>
+            <% selected_ids = Array(params[:person_tag_ids]).reject(&:blank?).map(&:to_s) %>
+
+            <!-- 選択結果の表示（ここは person-tags controller が更新するが、初期表示も入れる） -->
+            <div
+              class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
+              data-person-tags-target="selectedList"
+            >
+              <% if person_tags.any? %>
+                <% selected = person_tags.select { |t| selected_ids.include?(t.id.to_s) } %>
+
+                <% if selected.any? %>
+                  <% selected.each do |t| %>
+                    <span class="badge badge-primary badge-sm"><%= t.name %></span>
+                  <% end %>
+                <% else %>
+                  <span class="text-base-content/50">まだ選択されていません</span>
+                <% end %>
+              <% else %>
+                <span class="text-base-content/50">
+                  タグを作成すると、ここに選択した名前が表示されます
+                </span>
+              <% end %>
+            </div>
+
+            <%# hidden checkboxes（フォーム送信用） %>
+            <% if person_tags.any? %>
+              <div class="hidden">
+                <% person_tags.each do |tag| %>
+                  <input
+                    type="checkbox"
+                    name="person_tag_ids[]"
+                    value="<%= tag.id %>"
+                    data-person-tags-target="checkbox"
+                    data-name="<%= tag.name %>"
+                    <%= "checked" if selected_ids.include?(tag.id.to_s) %>
+                  />
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
+          <div>
+            <div class="flex items-center justify-between mb-1 gap-2">
+              <span class="label font-medium text-base-content">子ども年齢</span>
+
+              <% if children.any? %>
+                <label
+                  for="child-age-modal"
+                  class="btn btn-sm btn-outline normal-case"
+                  data-action="click->child-age#open"
+                >
+                  選択する
+                </label>
+              <% end %>
+            </div>
+
+            <div
+              class="input input-bordered input-auto-height w-full px-3 py-2"
+              id="child-age-selected-label"
+            >
+              <span class="text-base-content/50">まだ選択されていません</span>
+            </div>
+
+            <%# hidden（フォーム送信用） %>
+            <input
+              type="hidden"
+              name="child_id"
+              value="<%= params[:child_id].to_s %>"
+              id="child-age-child-hidden"
+            />
+
+            <input
+              type="hidden"
+              name="age_years"
+              value="<%= params[:age_years].to_s %>"
+              id="child-age-age-hidden"
+            />
+          </div>
+
+          <%# ===== 送信ボタン：Tsumugi仕様（左右50:50） ===== %>
+          <div class="flex gap-3">
+            <button
+              type="submit"
+              class="btn btn-accent flex-1 rounded-xl normal-case"
+            >
+              絞り込む
+            </button>
+
+            <%= link_to albums_path, class: "btn btn-outline flex-1 rounded-xl normal-case" do %>
+              リセット
+            <% end %>
+          </div>
+
+          <%# 注意文（年/年齢で絞ると撮影日未設定は除外される） %>
+          <% if params[:year].present? || (params[:child_id].present? && params[:age_years].present?) %>
+            <p class="text-xs opacity-70">
+              ※年／年齢で絞り込む場合、撮影日未設定の思い出は表示されません
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
