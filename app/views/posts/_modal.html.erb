@@ -1,14 +1,14 @@
 <!-- モーダル本体 -->
 <div
   id="modal-<%= post.id %>"
-  class="fixed inset-0 z-[1000] bg-black bg-opacity-80 flex items-center justify-center hidden"
+  class="fixed inset-0 z-modal bg-black bg-opacity-80 flex items-center justify-center hidden"
   data-controller="modal"
   >
   
   <div class="relative bg-base-100 w-full max-w-md h-full overflow-y-auto text-base-content pt-14 pb-24 rounded-lg">
 
    <!-- ヘッダー -->
-  <div class="absolute top-0 left-0 w-full z-[1010] flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
+  <div class="absolute top-0 left-0 z-modal-header w-full flex items-center justify-between bg-base-300 text-base-content px-4 py-3 border-b border-base-200">
     <!-- 戻るボタン -->
     <div class="w-20 flex-shrink-0">
       <button class="text-xl" data-action="click->modal#close" data-modal-id="<%= post.id %>">←</button>
@@ -36,7 +36,7 @@
         <!-- ミートボールメニュー -->
         <div class="dropdown dropdown-end">
           <div tabindex="0" role="button" class="text-xl cursor-pointer">⋯</div>
-          <ul class="dropdown-content z-[100] menu p-2 shadow bg-white text-black rounded-box w-40">
+          <ul class="dropdown-content z-dropdown menu p-2 shadow bg-white text-black rounded-box w-40">
             <% if post.user == current_user %>
               <li>
                 <%= link_to '編集', edit_post_path(post), class: "block px-4 py-2 hover:bg-gray-100" %>
