@@ -4,275 +4,29 @@
 <% content_for :body_controllers, "person-tags" %>
 
 <div class="relative min-h-screen">
-  <!-- ===== ヘッダー ===== -->
-  <% header_title = capture do %>
-  <% if @family_groups.present? && @family_groups.size > 1 %>
-    <div class="relative" data-controller="dropdown">
-      <button
-        type="button"
-        class="btn btn-ghost btn-sm normal-case px-0 gap-1 max-w-[70vw]"
-        data-action="click->dropdown#toggle"
-      >
-        <span class="text-base font-semibold truncate max-w-[60vw] inline-block">
-          <%= album_index_header_title %>
-        </span>
-        <span class="text-base opacity-60">▾</span>
-      </button>
 
-      <div
-        class="absolute top-full left-0 mt-2 min-w-[12rem] max-w-[80vw] rounded-box bg-base-100 shadow z-[9999]
-                opacity-0 scale-95 pointer-events-none transition duration-150 origin-top"
-        data-dropdown-target="menu"
-      >
-        <ul class="menu p-2 whitespace-nowrap">
-          <% @family_groups.each do |fg| %>
-            <% active = (current_family_group&.id == fg.id) %>
-
-            <li>
-              <%= link_to switch_albums_path(family_group_id: fg.id),
-                data: { turbo_method: :post, action: "click->dropdown#close" },
-                class: "flex items-center gap-2 #{active ? 'active font-semibold' : ''}" do %>
-                <span class="w-4 text-center"><%= active ? "✓" : "" %></span>
-                <span class="truncate"><%= fg.name %></span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  <% else %>
-    <span class="text-base font-semibold"><%= album_index_header_title %></span>
-  <% end %>
-<% end %>
-
-<%= render "shared/simple_header", title: header_title %>
-
+  <!-- ===== header ===== -->
+  <%= render "albums/header",
+    family_groups: @family_groups,
+    current_family_group: current_family_group %>
 
   <div class="max-w-xl mx-auto px-4 py-10 pb-24">
     <!-- ===== 検索（省スペース） ===== -->
-    <div class="mb-6">
-      <div class="collapse collapse-arrow bg-base-200 rounded-xl">
-        <%# いずれかの条件が入っていれば、検索エリアを開いた状態にする %>
-        <input
-          type="checkbox"
-          <%= (params[:year].present? ||
-               params[:child_id].present? ||
-               params[:age_years].present? ||
-               Array(params[:person_tag_ids]).present?) ? "checked" : "" %>
-        />
-
-        <div class="collapse-title text-sm font-semibold">
-          検索機能
-
-          <%# 条件の要約（chips） %>
-          <span class="ml-2 text-xs opacity-70">
-            <% summaries = [] %>
-            <% summaries << "#{params[:year]}年" if params[:year].present? %>
-
-            <% person_ids = Array(params[:person_tag_ids]).reject(&:blank?) %>
-            <% summaries << "メンバー:#{person_ids.size}人" if person_ids.any? %>
-
-            <% if params[:child_id].present? && params[:age_years].present? %>
-              <% child = @children.find { |c| c.id.to_s == params[:child_id].to_s } %>
-              <% summaries << "#{child&.name} #{params[:age_years]}歳" %>
-            <% end %>
-
-            <%= summaries.any? ? summaries.join(" / ") : "条件なし" %>
-          </span>
-        </div>
-
-        <div class="collapse-content">
-          <%= form_with url: albums_path, method: :get, local: true do %>
-            <div class="space-y-4">
-              <%# child_id + age_years が揃ったら「年」select をロック %>
-              <% age_mode = params[:child_id].present? && params[:age_years].present? %>
-
-              <!-- ===== 年 ===== -->
-              <div>
-                <label class="block text-sm font-semibold mb-1">年度（年）</label>
-                <select
-                  name="year"
-                  class="select select-bordered w-full"
-                  <%= "disabled" if age_mode %>
-                >
-                  <option value="">指定しない</option>
-
-                  <%# 実データに存在する年だけ表示 %>
-                  <% @available_years.each do |y| %>
-                    <option value="<%= y %>" <%= "selected" if params[:year].to_s == y.to_s %>>
-                      <%= y %>年
-                    </option>
-                  <% end %>
-                </select>
-
-                <% if age_mode %>
-                  <p class="text-xs opacity-70 mt-1">
-                    年齢で絞り込み中のため年はロックされています（年を変更すると年齢指定は解除してください）。
-                  </p>
-                <% end %>
-              </div>
-
-              <%# ===== 誰が写ってる？（モーダル + チップ） ===== %>
-              <div>
-                <div class="flex items-center justify-between mb-1 gap-2">
-                  <span class="label font-medium text-base-content">誰が写っている？</span>
-
-                  <% if @person_tags.any? %>
-                    <label
-                      for="person-tags-modal"
-                      class="btn btn-sm btn-outline normal-case"
-                      data-action="click->person-tags#open"
-                    >
-                      選択する
-                    </label>
-                  <% end %>
-                </div>
-
-                <%# GETパラメータから選択済みのタグIDを復元 %>
-                <% selected_ids = Array(params[:person_tag_ids]).reject(&:blank?).map(&:to_s) %>
-
-                <!-- 選択結果の表示（ここは person-tags controller が更新するが、初期表示も入れる） -->
-                <div
-                  class="input input-bordered input-auto-height w-full flex flex-wrap gap-2 text-xs px-3 py-2"
-                  data-person-tags-target="selectedList"
-                >
-                  <% if @person_tags.any? %>
-                    <% selected = @person_tags.select { |t| selected_ids.include?(t.id.to_s) } %>
-
-                    <% if selected.any? %>
-                      <% selected.each do |t| %>
-                        <span class="badge badge-primary badge-sm"><%= t.name %></span>
-                      <% end %>
-                    <% else %>
-                      <span class="text-base-content/50">まだ選択されていません</span>
-                    <% end %>
-                  <% else %>
-                    <span class="text-base-content/50">
-                      タグを作成すると、ここに選択した名前が表示されます
-                    </span>
-                  <% end %>
-                </div>
-
-                <%# hidden checkboxes（フォーム送信用） %>
-                <% if @person_tags.any? %>
-                  <div class="hidden">
-                    <% @person_tags.each do |tag| %>
-                      <input
-                        type="checkbox"
-                        name="person_tag_ids[]"
-                        value="<%= tag.id %>"
-                        data-person-tags-target="checkbox"
-                        data-name="<%= tag.name %>"
-                        <%= "checked" if selected_ids.include?(tag.id.to_s) %>
-                      />
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
-
-              <%# ===== 子ども年齢（モーダル + 表示 + hidden） ===== %>
-              <div>
-                  <div class="flex items-center justify-between mb-1 gap-2">
-                  <span class="label font-medium text-base-content">子ども年齢</span>
-
-                  <% if @children.any? %>
-                    <label
-                      for="child-age-modal"
-                      class="btn btn-sm btn-outline normal-case"
-                      data-action="click->child-age#open"
-                    >
-                      選択する
-                    </label>
-                  <% end %>
-                </div>
-
-                <div
-                  class="input input-bordered input-auto-height w-full px-3 py-2"
-                  id="child-age-selected-label"
-                >
-                  <span class="text-base-content/50">まだ選択されていません</span>
-                </div>
-
-                <%# hidden（フォーム送信用） %>
-                <input
-                  type="hidden"
-                  name="child_id"
-                  value="<%= params[:child_id].to_s %>"
-                  id="child-age-child-hidden"
-                />
-
-                <input
-                  type="hidden"
-                  name="age_years"
-                  value="<%= params[:age_years].to_s %>"
-                  id="child-age-age-hidden"
-                />
-
-              </div>
-
-              <%# ===== 送信ボタン：Tsumugi仕様（左右50:50） ===== %>
-              <div class="flex gap-3">
-                <%# 絞り込み：アクセント色（主ボタン） %>
-                <button
-                  type="submit"
-                  class="btn btn-accent flex-1 rounded-xl normal-case"
-                >
-                  絞り込む
-                </button>
-
-                <%# リセット：アウトライン（副ボタン） %>
-                <%= link_to albums_path, class: "btn btn-outline flex-1 rounded-xl normal-case" do %>
-                  リセット
-                <% end %>
-              </div>
-
-              <%# 注意文（年/年齢で絞ると撮影日未設定は除外される） %>
-              <% if params[:year].present? || (params[:child_id].present? && params[:age_years].present?) %>
-                <p class="text-xs opacity-70">
-                  ※年／年齢で絞り込む場合、撮影日未設定の思い出は表示されません
-                </p>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
+    <%= render "albums/search",
+    available_years: @available_years,
+    person_tags: @person_tags,
+    children: @children,
+    params: params %>
 
     <%# ===== 結果一覧（※ここも max-w-xl の中！） ===== %>
-    <% if @posts_by_year.present? %>
-      <% @posts_by_year.each do |year, posts| %>
-        <% if year.is_a?(String) %>
-          <h2 class="text-lg font-semibold text-base-content/70 mt-4 mb-2"><%= year %></h2>
-        <% else %>
-          <h2 class="text-lg font-semibold text-base-content/70 mt-4 mb-2"><%= year %>年</h2>
-        <% end %>
+    <%= render "albums/posts_grid", posts_by_year: @posts_by_year %>
 
-        <div class="relative mb-8">
-          <div class="absolute top-4 left-0 w-full h-px bg-base-300"></div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8">
-            <% posts.each do |post| %>
-              <%= render "postcard/card", post: post %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    <% else %>
-      <%= render "albums/empty" %>
-    <% end %>
   </div> <!-- /.max-w-xl -->
 </div>   <!-- /.min-h-screen -->
 
 <%# ==== アルバム一覧ページ専用モーダル（body 直下で描画） ==== %>
-<% content_for :modals do %>
-  <%= render "albums/person_tags_modal", person_tags: @person_tags if @person_tags.present? %>
-  <%= render "albums/child_age_modal", children: @children if @children.present? %>
-
-  <% if @posts_by_year.present? %>
-    <% @posts_by_year.each do |_, posts| %>
-      <% posts.each do |post| %>
-        <%= render "posts/modal", post: post %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "albums/modals",
+    posts_by_year: @posts_by_year,
+    person_tags: @person_tags,
+    children: @children,
+    ages_by_child_id: @ages_by_child_id %>

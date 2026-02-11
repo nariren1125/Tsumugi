@@ -1,0 +1,22 @@
+<%# ===== 結果一覧===== %>
+<% if posts_by_year.present? %>
+  <% posts_by_year.each do |year, posts| %>
+    <% if year.is_a?(String) %>
+      <h2 class="text-lg font-semibold text-base-content/70 mt-4 mb-2"><%= year %></h2>
+    <% else %>
+      <h2 class="text-lg font-semibold text-base-content/70 mt-4 mb-2"><%= year %>年</h2>
+    <% end %>
+
+    <div class="relative mb-8">
+      <div class="absolute top-4 left-0 w-full h-px bg-base-300"></div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8">
+        <% posts.each do |post| %>
+          <%= render "postcard/card", post: post %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <%= render "albums/empty" %>
+<% end %>
