@@ -1,50 +1,96 @@
-test:
-  runs-on: ubuntu-latest
+name: CI
 
-  services:
-    postgres:
-      image: postgres:16
-      env:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: tsumugi_test
-      ports:
-        - 5432:5432
-      options: >-
-        --health-cmd="pg_isready -U postgres"
-        --health-interval=10s
-        --health-timeout=5s
-        --health-retries=5
+on:
+  pull_request:
+  push:
+    branches: [ main ]
 
-  steps:
-    - name: Install packages
-      run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips postgresql-client
+jobs:
+  scan_ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Scan for common Rails security vulnerabilities using static analysis
+        run: bin/brakeman || true
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+  scan_js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Scan for security vulnerabilities in JavaScript dependencies
+        run: bin/importmap audit
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: .ruby-version
-        bundler-cache: true
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Lint code for consistent style
+        run: bin/rubocop -f github
 
-    # 任意だけど安定する
-    - name: Wait for Postgres
-      run: |
-        for i in {1..20}; do
-          pg_isready -h postgres -U postgres && break
-          sleep 1
-        done
+  test:
+    runs-on: ubuntu-latest
 
-    - name: Prepare test database
-      env:
-        RAILS_ENV: test
-        DATABASE_URL: postgres://postgres:postgres@postgres:5432/tsumugi_test
-      run: bin/rails db:prepare
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tsumugi_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-    - name: Run tests
-      env:
-        RAILS_ENV: test
-        DATABASE_URL: postgres://postgres:postgres@postgres:5432/tsumugi_test
-      run: bin/rails test test:system
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips postgresql-client
+
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..20}; do
+            pg_isready -h localhost -U postgres && break
+            sleep 1
+          done
+
+      - name: Prepare test database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/tsumugi_test
+        run: bin/rails db:prepare
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/tsumugi_test
+        run: bin/rails test test:system
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
