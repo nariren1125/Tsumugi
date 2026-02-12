@@ -8,6 +8,9 @@ class Post < ApplicationRecord
   # 写真に対するタグ付けとの関連付け
   has_many :post_person_tags, dependent: :destroy
   has_many :person_tags, through: :post_person_tags
+  # コメントとの関連付け
+  has_many :comments, dependent: :destroy
+
   # PostモデルがPhotoモデルの属性を受け入れるように設定
   accepts_nested_attributes_for :photos, allow_destroy: true
 

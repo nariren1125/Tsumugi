@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_25_024749) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_12_034428) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,6 +86,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_25_024749) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_group_id"], name: "index_children_on_family_group_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "family_group_memberships", force: :cascade do |t|
@@ -190,6 +200,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_25_024749) do
   add_foreign_key "albums", "children"
   add_foreign_key "albums", "family_groups"
   add_foreign_key "children", "family_groups"
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
   add_foreign_key "family_group_memberships", "family_groups"
   add_foreign_key "family_group_memberships", "users"
   add_foreign_key "invite_tokens", "family_groups"

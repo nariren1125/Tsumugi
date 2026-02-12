@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       post :discard_draft
       get  :select_photos
     end
+    resources :comments, only: %i[create destroy]
   end
 
   resources :family_groups, only: %i[new create edit update]
