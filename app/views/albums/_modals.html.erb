@@ -9,6 +9,7 @@
     <% posts_by_year.each do |_, posts| %>
       <% posts.each do |post| %>
         <%= render "posts/modal", post: post %>
+        <%= render "comments/sheet", post: post %>
       <% end %>
     <% end %>
   <% end %>
