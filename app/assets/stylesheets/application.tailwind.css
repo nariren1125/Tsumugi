@@ -89,3 +89,7 @@
 .z-modal-header {
   z-index: 1120;
 }
+
+.z-bottom-sheet {
+  z-index: 1130;
+}

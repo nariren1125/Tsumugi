@@ -95,56 +95,28 @@
       <p class="text-sm text-base-content leading-relaxed whitespace-pre-wrap break-words"><%= post.content %></p>
     </div>
 
-    <!-- コメント -->
-<div id="comments" class="px-4 mt-6">
-  <div class="flex items-center justify-between">
-    <p class="text-sm text-accent font-semibold">コメント</p>
-    <p class="text-xs opacity-60"><%= post.comments.count %>件</p>
-  </div>
+    <!-- コメント（プレビュー） -->
+<div class="px-4 mt-6">
+  <button
+    type="button"
+    class="w-full text-left"
+    data-controller="comments-opener"
+    data-comments-opener-target-id-value="comments-sheet-<%= post.id %>"
+    data-action="click->comments-opener#open"
+  >
+    <div class="flex items-center justify-between">
+      <p class="text-sm text-accent font-semibold">コメント</p>
+      <p class="text-xs opacity-60"><%= post.comments.count %>件</p>
+    </div>
 
-  <div class="mt-3 space-y-3">
-    <% if post.comments.any? %>
-      <% post.comments.includes(:user).order(created_at: :asc).each do |comment| %>
-        <div class="rounded-xl bg-base-200/60 px-3 py-2">
-          <div class="flex items-start justify-between gap-3">
-            <!-- 左：名前 + 本文（インスタ風） -->
-            <div class="min-w-0 text-sm leading-relaxed">
-              <span class="font-semibold"><%= comment.user.name %></span>
-              <span class="ml-2 whitespace-pre-wrap break-words"><%= h(comment.body) %></span>
-            </div>
-
-            <!-- 右：リアクション（UIだけ） -->
-            <button type="button" class="shrink-0 text-sm opacity-70 hover:opacity-100">
-              ❤️
-            </button>
-          </div>
-
-          <% if comment.user == current_user %>
-            <div class="mt-2 text-right">
-              <%= button_to "削除",
-                    post_comment_path(post, comment),
-                    method: :delete,
-                    form: { data: { turbo_confirm: "削除しますか？" } },
-                    class: "text-xs opacity-50 hover:opacity-100" %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
+    <% last_comment = post.comments.includes(:user).order(created_at: :desc).first %>
+    <% if last_comment.present? %>
+      <p class="mt-2 text-sm opacity-70 truncate">
+        <span class="font-semibold"><%= last_comment.user.name %></span>
+        <span class="ml-2"><%= last_comment.body %></span>
+      </p>
     <% else %>
-      <p class="text-xs opacity-60">まだコメントがありません</p>
+      <p class="mt-2 text-sm opacity-60">コメントを追加...</p>
     <% end %>
-  </div>
-
-  <div class="mt-4">
-    <%= form_with model: [post, Comment.new], local: true, class: "space-y-2" do |f| %>
-      <%= f.text_area :body,
-            rows: 3,
-            placeholder: "コメントを書く…",
-            class: "textarea textarea-bordered w-full rounded-xl bg-base-100" %>
-
-      <div class="flex justify-end">
-        <%= f.submit "送信", class: "btn btn-primary rounded-full px-6" %>
-      </div>
-    <% end %>
-  </div>
+  </button>
 </div>
