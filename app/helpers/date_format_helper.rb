@@ -1,5 +1,5 @@
 module DateFormatHelper
-  DATE_MD_FORMAT = '%-m/%-d'
+  DATE_MD_FORMAT = '%-m/%-d'.freeze
 
   def format_post_date(date)
     return nil if date.blank?
