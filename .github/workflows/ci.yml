@@ -75,11 +75,12 @@ jobs:
             sleep 1
           done
 
-      - name: Prepare test database
+      - run: |
+          bin/rails db:create RAILS_ENV=test
+          bin/rails db:schema:load RAILS_ENV=test
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/tsumugi_test
-        run: bin/rails db:prepare
 
       - name: Run tests
         env:
