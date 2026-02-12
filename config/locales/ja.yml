@@ -122,8 +122,15 @@ ja:
   time:
     formats:
       long: "%Y年%m月%d日 %H:%M"
+      short: "%m/%d %H:%M"
+      default: "%Y/%m/%d %H:%M"
     date:
       formats:
         default: "%Y/%m/%d"
         short: "%m/%d"
         long: "%Y年%m月%d日"
+
+  comments:
+    created: "コメントしました"
+    deleted: "コメントを削除しました"
+    forbidden: "権限がありません"
