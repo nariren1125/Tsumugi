@@ -76,9 +76,8 @@
         data-comments-sheet-opener-post-id-value="<%= post.id %>"
         data-action="click->comments-sheet-opener#open"
       >
-        💬 <%= post.comments.count %>
+        💬 <span id="comments-count-<%= post.id %>"><%= post.comments.count %></span>
       </button>
-
 
     <!-- ✅ 写っているメンバー -->
       <% if post.person_tags.any? %>

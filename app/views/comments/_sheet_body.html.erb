@@ -15,8 +15,10 @@
 </div>
 
 <div class="px-4 py-3 border-t border-base-200">
-  <%= form_with model: [post, comment], local: true, class: "flex items-end gap-2" do |f| %>
-  <%= hidden_field_tag :return_to, sheet_post_comments_path(post) %>
+  <%= form_with model: [post, comment],
+      data: { controller: "comments-form", action: "turbo:submit-end->comments-form#reset" },
+      class: "flex items-end gap-2" do |f| %>
+    <%= hidden_field_tag :return_to, sheet_post_comments_path(post) %>
     <%= f.text_area :body, rows: 1, placeholder: "コメントを追加...", class: "textarea textarea-bordered w-full rounded-xl" %>
     <%= f.submit "送信", class: "btn btn-neutral rounded-full px-5" %>
   <% end %>
