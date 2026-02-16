@@ -1,0 +1,10 @@
+<%# シートの中身を再描画 %>
+<%= turbo_stream.replace "comments_sheet_frame" do %>
+  <% @comments = @post.comments.includes(:user).order(created_at: :asc) %>
+  <%= render "comments/sheet_frame", post: @post, comments: @comments, comment: @post.comments.build %>
+<% end %>
+
+<%# 💬件数バッジを更新 %>
+<%= turbo_stream.replace "comments-count-#{@post.id}" do %>
+  <span id="comments-count-<%= @post.id %>"><%= @post.comments.count %></span>
+<% end %>

@@ -69,6 +69,16 @@
         <div class="swiper-pagination mt-2"></div>
       </div>
 
+      <button
+        type="button"
+        class="btn btn-ghost btn-sm"
+        data-controller="comments-sheet-opener"
+        data-comments-sheet-opener-post-id-value="<%= post.id %>"
+        data-action="click->comments-sheet-opener#open"
+      >
+        💬 <span id="comments-count-<%= post.id %>"><%= post.comments.count %></span>
+      </button>
+
     <!-- ✅ 写っているメンバー -->
       <% if post.person_tags.any? %>
         <div class="px-4 mt-4">
@@ -95,28 +105,5 @@
       <p class="text-sm text-base-content leading-relaxed whitespace-pre-wrap break-words"><%= post.content %></p>
     </div>
 
-    <!-- コメント（プレビュー） -->
-<div class="px-4 mt-6">
-  <button
-    type="button"
-    class="w-full text-left"
-    data-controller="comments-opener"
-    data-comments-opener-target-id-value="comments-sheet-<%= post.id %>"
-    data-action="click->comments-opener#open"
-  >
-    <div class="flex items-center justify-between">
-      <p class="text-sm text-accent font-semibold">コメント</p>
-      <p class="text-xs opacity-60"><%= post.comments.count %>件</p>
-    </div>
-
-    <% last_comment = post.comments.includes(:user).order(created_at: :desc).first %>
-    <% if last_comment.present? %>
-      <p class="mt-2 text-sm opacity-70 truncate">
-        <span class="font-semibold"><%= last_comment.user.name %></span>
-        <span class="ml-2"><%= last_comment.body %></span>
-      </p>
-    <% else %>
-      <p class="mt-2 text-sm opacity-60">コメントを追加...</p>
-    <% end %>
-  </button>
+  </div>
 </div>

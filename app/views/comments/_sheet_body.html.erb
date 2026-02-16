@@ -1,0 +1,25 @@
+<div class="px-4 py-3 overflow-y-auto space-y-4">
+  <% if comments.any? %>
+    <% comments.each do |c| %>
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0 text-sm leading-relaxed">
+          <span class="font-semibold"><%= c.user.name %></span>
+          <span class="ml-2 whitespace-pre-wrap break-words"><%= h(c.body) %></span>
+        </div>
+        <button type="button" class="shrink-0 text-sm opacity-70 hover:opacity-100">♡</button>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-sm opacity-60">まだコメントがありません</p>
+  <% end %>
+</div>
+
+<div class="px-4 py-3 border-t border-base-200">
+  <%= form_with model: [post, comment],
+      data: { controller: "comments-form", action: "turbo:submit-end->comments-form#reset" },
+      class: "flex items-end gap-2" do |f| %>
+    <%= hidden_field_tag :return_to, sheet_post_comments_path(post) %>
+    <%= f.text_area :body, rows: 1, placeholder: "コメントを追加...", class: "textarea textarea-bordered w-full rounded-xl" %>
+    <%= f.submit "送信", class: "btn btn-neutral rounded-full px-5" %>
+  <% end %>
+</div>

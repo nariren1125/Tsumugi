@@ -30,3 +30,8 @@
     person_tags: @person_tags,
     children: @children,
     ages_by_child_id: @ages_by_child_id %>
+
+<%# ==== コメント用 bottom sheet（ページに1個だけ） ==== %>
+<% content_for :modals do %>
+  <%= render "comments/sheet_root" %>
+<% end %>
