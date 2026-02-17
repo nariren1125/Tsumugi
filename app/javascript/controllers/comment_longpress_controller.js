@@ -1,8 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["deleteButton"]
     static values = {
+        commentId: Number,
+        destroyUrl: String,
+        canDelete: Boolean,
+        canDelete: Boolean,
         delay: { type: Number, default: 450 },
     }
 
@@ -16,7 +19,7 @@ export default class extends Controller {
 
     pointerDown(event) {
         if (event.pointerType === "mouse" && event.button !== 0) return
-        if (!this.hasDeleteButtonTarget) return
+        if (!this.hasCommentIdValue) return
 
         this.moved = false
         this.startX = event.clientX
@@ -29,7 +32,7 @@ export default class extends Controller {
         this.clearTimer()
         this.timer = window.setTimeout(() => {
             if (this.moved) return
-            this.showOnlyThis()
+            this.openActions()
         }, this.delayValue)
     }
 
@@ -57,17 +60,22 @@ export default class extends Controller {
     }
 
     contextMenu(event) {
-        if (!this.hasDeleteButtonTarget) return
+        if (!this.hasCommentIdValue) return
         event.preventDefault()
-        this.showOnlyThis()
+        this.openActions()
     }
 
-    showOnlyThis() {
-        document
-            .querySelectorAll("[data-comment-longpress-target='deleteButton']")
-            .forEach((el) => el.classList.add("hidden"))
-
-        this.deleteButtonTarget.classList.remove("hidden")
+    // ✅ Instagram風アクションモーダルを開く
+    openActions() {
+        document.dispatchEvent(
+            new CustomEvent("comment-actions:open", {
+                detail: {
+                    commentId: this.commentIdValue,
+                    destroyUrl: this.hasDestroyUrlValue ? this.destroyUrlValue : null,
+                    canDelete: this.hasCanDeleteValue ? this.canDeleteValue : false,
+                },
+            })
+        )
     }
 
     release() {
