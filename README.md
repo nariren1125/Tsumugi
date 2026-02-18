@@ -4,7 +4,7 @@
 > 「撮る人も、写る人も。  家族の思い出を、ふたりで紡ぐ。」
 
 **サービスURL**  
-👉 https://tsumugi.app/
+👉 https://tumugi.app/
 
 ---
 
