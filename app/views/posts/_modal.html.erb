@@ -69,15 +69,8 @@
         <div class="swiper-pagination mt-2"></div>
       </div>
 
-      <button
-        type="button"
-        class="btn btn-ghost btn-sm"
-        data-controller="comments-sheet-opener"
-        data-comments-sheet-opener-post-id-value="<%= post.id %>"
-        data-action="click->comments-sheet-opener#open"
-      >
-        💬 <span id="comments-count-<%= post.id %>"><%= post.comments.count %></span>
-      </button>
+      <!-- ❤️ Like / 💬 Comment -->
+      <%= render "posts/actions", post: post %>
 
     <!-- ✅ 写っているメンバー -->
       <% if post.person_tags.any? %>

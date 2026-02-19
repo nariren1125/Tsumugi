@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_12_034428) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_19_072305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -157,6 +157,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_034428) do
     t.index ["post_id"], name: "index_photos_on_post_id"
   end
 
+  create_table "post_likes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_likes_on_post_id"
+    t.index ["user_id", "post_id"], name: "index_post_likes_on_user_id_and_post_id", unique: true
+    t.index ["user_id"], name: "index_post_likes_on_user_id"
+  end
+
   create_table "post_person_tags", force: :cascade do |t|
     t.bigint "post_id", null: false
     t.bigint "person_tag_id", null: false
@@ -208,6 +218,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_034428) do
   add_foreign_key "notifications", "users"
   add_foreign_key "person_tags", "family_groups"
   add_foreign_key "photos", "posts"
+  add_foreign_key "post_likes", "posts"
+  add_foreign_key "post_likes", "users"
   add_foreign_key "post_person_tags", "person_tags"
   add_foreign_key "post_person_tags", "posts"
   add_foreign_key "posts", "albums"

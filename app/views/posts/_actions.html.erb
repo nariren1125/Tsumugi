@@ -1,0 +1,35 @@
+<div class="px-4 mt-3">
+
+  <div class="flex items-center space-x-6">
+
+    <!-- ❤️ Like -->
+    <%= turbo_frame_tag dom_id(post, :like_button) do %>
+      <%= render "posts/like_button_inline", post: post %>
+    <% end %>
+
+    <!-- 💬 Comment -->
+    <button
+      type="button"
+      class="flex items-center space-x-1 text-base-content/70 hover:text-base-content transition-colors"
+      data-controller="comments-sheet-opener"
+      data-comments-sheet-opener-post-id-value="<%= post.id %>"
+      data-action="click->comments-sheet-opener#open"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke-width="1.8"
+           stroke="currentColor"
+           class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 10h8M8 14h5m9-2a9 9 0 11-4.219-7.591L21 3v4h-4l1.607-1.607A7 7 0 1019 12z" />
+      </svg>
+
+      <span class="text-sm font-medium">
+        <%= post.comments.count %>
+      </span>
+    </button>
+
+  </div>
+
+</div>
