@@ -19,6 +19,8 @@
 
 /* ボタンの中身のスタイル */
 .action-btn {
+    position: relative;
+    /* 疑似要素の基準点にするため追加 */
     background-color: transparent;
     /* スマホでタップ実体をはっきりと認識させるために transparent */
     border: none;
@@ -36,6 +38,18 @@
     line-height: 1;
     -webkit-tap-highlight-color: transparent;
     /* スマホでのタップ時のグレーの網掛けを消す */
+}
+
+/* ★ iOS SafariなどのSVGタップすり抜けバグ対策 ★ */
+/* ボタンの前面に完全に透明な「タップ専用の膜（四角形）」を張ることで、
+   中身のSVGや数値を無視して100%確実に .action-btn 自体をタップさせます */
+.action-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* top:0; right:0; bottom:0; left:0; と同じ（全面を覆う） */
+    z-index: 10;
+    /* SVGよりも手前に配置する */
 }
 
 /* ★アイコンのスタイル（重複を1つにまとめました！） */

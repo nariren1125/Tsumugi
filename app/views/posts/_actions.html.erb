@@ -29,7 +29,7 @@
     class="btn btn-ghost btn-sm action-btn comment-btn inline-action"
     data-controller="comments-sheet-opener"
     data-comments-sheet-opener-post-id-value="<%= post.id %>"
-    data-action="click->comments-sheet-opener#open"
+    data-action="click->comments-sheet-opener#open touchstart->comments-sheet-opener#open"
   >
     <% if post.comments.size > 0 %>
       <%# コメントあり：ドット付きの吹き出し（Phosphor: chat-circle-dots） %>
