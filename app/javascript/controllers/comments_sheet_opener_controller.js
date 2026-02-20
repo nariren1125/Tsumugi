@@ -4,6 +4,15 @@ export default class extends Controller {
     static values = { postId: Number }
 
     open(event) {
+        // click と touchstart が両方発火してシートが開閉するのを防ぐ
+        if (event.type === 'touchstart') {
+            // touchstart で発火した場合は直後の click を無視するためのフラグを立てる
+            this.touchHandled = true
+        } else if (event.type === 'click' && this.touchHandled) {
+            this.touchHandled = false
+            return
+        }
+
         console.log("postId:", this.hasPostIdValue, this.postIdValue)
         const sheet = document.getElementById("comments-sheet")
         const frame = document.getElementById("comments_sheet_frame")
@@ -22,11 +31,13 @@ export default class extends Controller {
         // 属性よりプロパティの方が素直
         frame.src = url
 
-        // iOS Safari では特定の条件下でカスタムイベントの bubbles: true が document まで到達しないバグ等があるため、直接 document に対して発火させます
-        document.dispatchEvent(
-            new CustomEvent("comments:open", {
-                detail: { postId: this.postIdValue },
-            })
-        )
+        // setTimeoutでイベント発火を非同期にし、メインスレッドのブロックやTurboの競合を防ぎます
+        setTimeout(() => {
+            document.dispatchEvent(
+                new CustomEvent("comments:open", {
+                    detail: { postId: this.postIdValue },
+                })
+            )
+        }, 10)
     }
 }
