@@ -3,11 +3,9 @@
     display: flex !important;
     flex-direction: row;
     align-items: center;
-    /* コンテナ全体で縦中央揃え */
     gap: 16px;
     padding: 10px 0;
     height: 32px;
-    /* ★高さを固定してみる（アイコンのサイズに合わせて調整してください） */
 }
 
 /* formタグとbuttonタグ共通のスタイル */
@@ -15,11 +13,8 @@
     display: inline-flex !important;
     margin: 0;
     padding: 0;
-    /* ★余分なパディングをリセット */
     height: 100%;
-    /* ★親コンテナの高さに合わせる */
     align-items: center;
-    /* ★要素内でも縦中央揃え */
 }
 
 /* ボタンの中身のスタイル */
@@ -30,28 +25,32 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    /* ★ここでも縦中央揃えを念押し */
     gap: 6px;
     font-size: 16px;
     color: #555;
     text-decoration: none;
     line-height: 1;
-    /* ★行の高さを1にして余分なスペースをなくす */
 }
 
-/* アイコンと数字の個別調整（必要に応じて） */
+/* ★アイコンのスタイル（重複を1つにまとめました！） */
 .action-btn .icon {
     display: flex;
     align-items: center;
+    transition: transform 0.2s ease, color 0.2s ease;
+    /* ふわっと変わるアニメーション */
+    pointer-events: none;
+    /* スマホのタップ横取り防止 */
 }
 
+/* ★数字のスタイル */
 .action-btn .count {
     font-weight: bold;
     font-size: 14px;
     line-height: 1;
     display: flex;
     align-items: center;
-    /* ★数字も中央揃え */
+    pointer-events: none;
+    /* スマホのタップ横取り防止 */
 }
 
 /* いいねされた時のスタイル */
@@ -59,14 +58,7 @@
     color: #d64c57;
 }
 
-/* --- SVGアイコン用の追加スパイス（アニメーション） --- */
-
-/* アイコンが変化する時に、ふわっと色が変わるようにする */
-.action-btn .icon {
-    display: flex;
-    align-items: center;
-    transition: transform 0.2s ease, color 0.2s ease;
-}
+/* --- SVGアイコン用のアニメーション --- */
 
 /* ホバー（マウスを乗せた時）にアイコンだけ少し大きくして「押せる感」を出す */
 @media (hover: hover) {
