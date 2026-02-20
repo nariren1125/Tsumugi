@@ -37,6 +37,8 @@ Rails.application.routes.draw do
       get :sheet
      end
     end
+    
+    resources :post_likes, only: %i[create destroy]
   end
 
   resources :family_groups, only: %i[new create edit update]

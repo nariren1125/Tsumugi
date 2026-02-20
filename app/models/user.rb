@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :family_group_memberships, dependent: :destroy
   has_many :family_groups, through: :family_group_memberships
   has_many :comments, dependent: :destroy
+  has_many :post_likes, dependent: :destroy
 
   validates :line_uid, presence: true, uniqueness: true
   validates :name, presence: true, length: { maximum: 50 }

@@ -77,6 +77,9 @@ export default class extends Controller {
         if (this.element.classList.contains("hidden")) return
         if (!this.hasPanelTarget || !this.hasBackdropTarget) return
 
+        // ボタンやリンクのクリック時はドラッグを開始しない
+        if (e.target.closest("button, a")) return
+
         this.dragging = true
         this.startY = e.clientY
         this.currentY = 0
