@@ -58,3 +58,38 @@
 .like-btn.liked {
     color: #d64c57;
 }
+
+/* --- SVGアイコン用の追加スパイス（アニメーション） --- */
+
+/* アイコンが変化する時に、ふわっと色が変わるようにする */
+.action-btn .icon {
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* ホバー（マウスを乗せた時）にアイコンだけ少し大きくして「押せる感」を出す */
+@media (hover: hover) {
+    .action-btn:hover .icon {
+        transform: scale(1.1);
+    }
+}
+
+/* いいね時のアニメーション（クリックした瞬間にポンッと跳ねる） */
+.like-btn.liked .icon {
+    animation: heart-pop 0.3s ease-out;
+}
+
+@keyframes heart-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

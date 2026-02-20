@@ -5,13 +5,19 @@
     <% like = current_user.post_likes.find_by(post_id: post.id) %>
     <%# form: { class: "inline-action" } を追加して横並び崩れを防ぎます %>
     <%= button_to post_post_like_path(post, like), method: :delete, form: { data: { turbo: true }, class: "inline-action" }, class: "action-btn like-btn liked" do %>
-      <span class="icon">❤️</span>
+      <%# ❤️ 塗りつぶしのハート（Phosphor: heart-fill） %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 256 256" class="icon active-heart">
+        <path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path>
+      </svg>
       <%# N+1対策のため .count ではなく .size を使用します %>
       <span class="count"><%= post.post_likes.size %></span>
     <% end %>
   <% else %>
     <%= button_to post_post_likes_path(post), method: :post, form: { data: { turbo: true }, class: "inline-action" }, class: "action-btn like-btn" do %>
-      <span class="icon">🤍</span>
+      <%# 🤍 アウトラインのハート（Phosphor: heart） %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 256 256" class="icon">
+        <path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.64,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.69,146.26,204.16,128,214.8Z"></path>
+      </svg>
       <span class="count"><%= post.post_likes.size %></span>
     <% end %>
   <% end %>
@@ -25,7 +31,17 @@
     data-comments-sheet-opener-post-id-value="<%= post.id %>"
     data-action="click->comments-sheet-opener#open"
   >
-    <span class="icon">💬</span>
+    <% if post.comments.size > 0 %>
+      <%# コメントあり：ドット付きの吹き出し（Phosphor: chat-circle-dots） %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 256 256" class="icon">
+        <path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216ZM84,128a12,12,0,1,1-12-12A12,12,0,0,1,84,128Zm44,12a12,12,0,1,1,12-12A12,12,0,0,1,128,140Zm56,0a12,12,0,1,1,12-12A12,12,0,0,1,184,140Z"></path>
+      </svg>
+    <% else %>
+      <%# コメントなし：空の吹き出し（Phosphor: chat-circle） %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 256 256" class="icon">
+        <path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"></path>
+      </svg>
+    <% end %>
     <span class="count" id="comments-count-<%= post.id %>"><%= post.comments.size %></span>
   </button>
 
