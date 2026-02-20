@@ -4,6 +4,7 @@
 @import "./components/polaroid.css";
 @import "./components/masking_tape.css";
 @import "./components/swiper.css";
+@import "./components/actions.css";
 
 /* DaisyUIのインポート */
 @plugin "daisyui";

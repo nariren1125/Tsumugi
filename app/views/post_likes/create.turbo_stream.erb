@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "post_actions_#{@post.id}" do %>
+  <%= render "posts/actions", post: @post %>
+<% end %>

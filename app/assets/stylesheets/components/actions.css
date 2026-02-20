@@ -1,0 +1,60 @@
+/* アクション全体を横並びにするコンテナ */
+.tsumugi-actions {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    /* コンテナ全体で縦中央揃え */
+    gap: 16px;
+    padding: 10px 0;
+    height: 32px;
+    /* ★高さを固定してみる（アイコンのサイズに合わせて調整してください） */
+}
+
+/* formタグとbuttonタグ共通のスタイル */
+.inline-action {
+    display: inline-flex !important;
+    margin: 0;
+    padding: 0;
+    /* ★余分なパディングをリセット */
+    height: 100%;
+    /* ★親コンテナの高さに合わせる */
+    align-items: center;
+    /* ★要素内でも縦中央揃え */
+}
+
+/* ボタンの中身のスタイル */
+.action-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    /* ★ここでも縦中央揃えを念押し */
+    gap: 6px;
+    font-size: 16px;
+    color: #555;
+    text-decoration: none;
+    line-height: 1;
+    /* ★行の高さを1にして余分なスペースをなくす */
+}
+
+/* アイコンと数字の個別調整（必要に応じて） */
+.action-btn .icon {
+    display: flex;
+    align-items: center;
+}
+
+.action-btn .count {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    /* ★数字も中央揃え */
+}
+
+/* いいねされた時のスタイル */
+.like-btn.liked {
+    color: #d64c57;
+}
