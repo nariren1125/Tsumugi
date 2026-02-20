@@ -6,10 +6,11 @@ export default class extends Controller {
     open(event) {
         // click と touchstart が両方発火してシートが開閉するのを防ぐ
         if (event.type === 'touchstart') {
-            // touchstart で発火した場合は直後の click を無視するためのフラグを立てる
             this.touchHandled = true
+            // 少し待ってからフラグを解除することで、直後のclickだけを無視し、次の操作は通すようにする
+            setTimeout(() => { this.touchHandled = false }, 300)
         } else if (event.type === 'click' && this.touchHandled) {
-            this.touchHandled = false
+            // touchHandled中のclickは無視するが、フラグは解除しない（setTimeoutに任せる）
             return
         }
 
