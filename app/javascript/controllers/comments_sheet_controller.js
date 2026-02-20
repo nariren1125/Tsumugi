@@ -15,7 +15,6 @@ export default class extends Controller {
 
         // ---- documentイベント方式を維持 ----
         this.onOpen = (e) => {
-            alert(`🎈 comments:openを受信しました (postId: ${e?.detail?.postId || '無'})`);
             console.log("[comments-sheet] open", e?.detail)
             this.open()
         }
