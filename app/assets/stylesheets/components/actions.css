@@ -19,9 +19,13 @@
 
 /* ボタンの中身のスタイル */
 .action-btn {
-    background: none;
+    background-color: transparent;
+    /* スマホでタップ実体をはっきりと認識させるために transparent */
     border: none;
-    padding: 0;
+    padding: 10px;
+    /* スマホ用にタップ領域（当たり判定）を大きく広げる */
+    margin: -10px;
+    /* 広げた分をマイナスマージンで相殺し、見た目の位置を変えない */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -30,6 +34,8 @@
     color: #555;
     text-decoration: none;
     line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+    /* スマホでのタップ時のグレーの網掛けを消す */
 }
 
 /* ★アイコンのスタイル（重複を1つにまとめました！） */
@@ -39,7 +45,7 @@
     transition: transform 0.2s ease, color 0.2s ease;
     /* ふわっと変わるアニメーション */
     pointer-events: none;
-    /* スマホのタップ横取り防止 */
+    /* スマホのタップ横取り防止（iOSのSVGバブリングバグ対策として非常に有効です） */
 }
 
 /* ★数字のスタイル */
