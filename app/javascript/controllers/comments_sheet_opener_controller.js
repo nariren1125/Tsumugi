@@ -4,17 +4,14 @@ export default class extends Controller {
     static values = { postId: Number }
 
     open(event) {
-        alert("🟢 ボタンのタップを検知しました！");
         console.log("postId:", this.hasPostIdValue, this.postIdValue)
         const sheet = document.getElementById("comments-sheet")
         const frame = document.getElementById("comments_sheet_frame")
         if (!sheet || !frame) {
-            alert("🔴 シートまたはフレームが見つかりません");
             return
         }
 
         if (!this.hasPostIdValue) {
-            alert("🔴 postId がありません");
             console.warn("[comments-sheet-opener] postId missing", this.element)
             return
         }
