@@ -25,9 +25,9 @@ export default class extends Controller {
         // 属性よりプロパティの方が素直
         frame.src = url
 
-        sheet.dispatchEvent(
+        // iOS Safari では特定の条件下でカスタムイベントの bubbles: true が document まで到達しないバグ等があるため、直接 document に対して発火させます
+        document.dispatchEvent(
             new CustomEvent("comments:open", {
-                bubbles: true,
                 detail: { postId: this.postIdValue },
             })
         )
